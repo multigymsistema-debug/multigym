@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: multigym
+      POSTGRES_USER: multigym
+      POSTGRES_PASSWORD: multigym
+    ports:
+      - "5432:5432"
+    volumes:
+      - multigym_pgdata:/var/lib/postgresql/data
+      - ./database/001_initial_schema.sql:/docker-entrypoint-initdb.d/001_initial_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U multigym -d multigym"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  multigym_pgdata:
