@@ -1,21 +1,24 @@
-import 'dotenv/config';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
-import { pool } from './db.js';
-import { registerAuthRoutes } from './auth.js';
-import { migrate } from './migrate.js';
-import { registerModules } from './modules.js';
+import 'dotenv/config';
+import {migrate,pool} from './db.js';
+import {authRoutes,resolveUser} from './auth.js';
+import {moduleRoutes} from './modules.js';
 
-const app = Fastify({ logger: true });
+const app=Fastify({logger:true});
 await app.register(helmet);
-await app.register(cors, { origin: process.env.WEB_ORIGIN ?? 'http://localhost:5173' });
-await app.register(rateLimit, { max: 60, timeWindow: '1 minute' });
-await registerAuthRoutes(app);
+await app.register(cors,{origin:(process.env.FRONTEND_URL??'http://localhost:5173').split(',').map(s=>s.trim()),credentials:true});
+await app.register(rateLimit,{max:120,timeWindow:'1 minute'});
+app.decorateRequest('user',null);
+app.addHook('preHandler',async(req:any,res:any)=>{
+ if(req.url.startsWith('/api/')){const u=await resolveUser(req.headers.authorization?.replace(/^Bearer\s+/i,''));if(!u)return res.code(401).send({error:'Faça login para continuar.'});req.user=u}
+});
 await migrate();
-await registerModules(app);
-app.get('/health', async () => ({ ok: true, service: 'multigym-api' }));
-app.get('/health/db', async (_request, reply) => { try { await pool.query('select 1'); return { ok: true }; } catch { return reply.code(503).send({ ok: false }); } });
-app.setErrorHandler((error, _request, reply) => { app.log.error(error); return reply.code((error as any).statusCode ?? 500).send({ error: 'Não foi possível concluir a operação.' }); });
-await app.listen({ port: Number(process.env.PORT ?? 3333), host: '0.0.0.0' });
+await authRoutes(app);
+await moduleRoutes(app);
+app.get('/health',async()=>({ok:true,service:'multigym-api'}));
+app.get('/health/db',async()=>{await pool.query('select 1');return {ok:true}});
+app.setErrorHandler((e:any,_req,res)=>{app.log.error(e);const code=e.statusCode??(e.name==='ZodError'?400:500);return res.code(code).send({error:e.name==='ZodError'?'Dados inválidos.':'Não foi possível concluir a operação.'})});
+await app.listen({port:Number(process.env.PORT??3333),host:'0.0.0.0'});

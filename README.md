@@ -1,28 +1,21 @@
-# MultiGym
+# MultiGym — sistema de gestão para academias pequenas e studios
 
-Sistema SaaS simples, moderno e seguro para academias pequenas, studios, personal trainers e centros de treinamento.
+Reescrita completa do projeto atual. O objetivo é entregar um produto funcional, simples e preparado para múltiplas academias.
 
-## Primeira entrega
-Esta primeira etapa define a arquitetura, o contrato de segurança e o banco multi-tenant antes da construção das telas e da API.
+## Stack
+- Frontend: React + TypeScript + Vite
+- Backend: Fastify + TypeScript
+- Banco: PostgreSQL 16
+- Autenticação: sessões aleatórias armazenadas apenas por hash + Argon2id
+- Multi-tenant: `gym_id` resolvido pela sessão e filtrado no backend
 
-## Arquitetura planejada
-- **Frontend:** React + TypeScript + Vite, componentes reutilizáveis e layout responsivo.
-- **Backend:** Node.js + TypeScript + Fastify, API REST modular, validação com Zod.
-- **Banco:** PostgreSQL com UUID, integridade referencial, índices por academia e Row-Level Security.
-- **Auth:** sessões/JWT de curta duração, senha com Argon2id, recuperação por token de uso único.
-- **Deploy:** frontend e API separados; banco PostgreSQL gerenciado.
+## Módulos
+Login/cadastro da academia, Dashboard, Alunos, Matrículas, Planos, Treinos e exercícios, Financeiro, Agenda, Relatórios, Configurações, usuários/equipe e logout.
 
-## Executar o banco local
-```bash
-docker compose up -d db
-```
+## Desenvolvimento
+1. Copie `.env.example` para `.env`.
+2. `docker compose up -d db`
+3. `cd backend && npm install && npm run dev`
+4. Em outro terminal: `cd frontend && npm install && npm run dev`
 
-O schema inicial está em `database/001_initial_schema.sql`. Nunca coloque segredos no repositório; use `.env` local e variáveis protegidas no deploy.
-
-## Ordem de implementação
-1. Fundação e banco multi-tenant (entrega atual)
-2. Autenticação e criação da academia
-3. Layout principal e dashboard
-4. Alunos e matrículas
-5. Treinos, financeiro e agenda
-6. Relatórios, configurações, testes e revisão de segurança
+O backend executa as migrações SQL automaticamente ao iniciar.
