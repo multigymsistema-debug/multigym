@@ -1,14 +1,20 @@
 services:
   db:
-    image: postgres:16-alpine
-    restart: unless-stopped
+    image: postgres:16
     environment:
       POSTGRES_DB: multigym
-      POSTGRES_USER: multigym
-      POSTGRES_PASSWORD: multigym
-    ports:
-      - "5432:5432"
-    volumes:
-      - multigym_pgdata:/var/lib/postgresql/data
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/multigym
+      PORT: 3000
+      FRONTEND_URL: http://localhost:5173
+      BIOMETRIC_ENCRYPTION_KEY: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+    depends_on: [db]
+    ports: ["3000:3000"]
 volumes:
-  multigym_pgdata:
+  pgdata:

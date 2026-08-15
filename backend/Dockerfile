@@ -1,11 +1,10 @@
-FROM node:20-slim
+FROM node:22-bookworm-slim
 WORKDIR /app
-COPY package.json ./
-RUN npm install --omit=dev
+COPY package*.json ./
+RUN npm install
 COPY tsconfig.json ./
 COPY schema ./schema
 COPY src ./src
-RUN npm install --include=dev && npm run build
-ENV NODE_ENV=production
-EXPOSE 3333
-CMD ["node","dist/server.js"]
+RUN npm run build
+EXPOSE 3000
+CMD ["npm","start"]

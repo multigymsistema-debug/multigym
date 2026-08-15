@@ -1,9 +1,10 @@
 {
-  "name":"multigym-api",
-  "private":true,
-  "type":"module",
-  "scripts":{"dev":"tsx watch src/server.ts","build":"tsc","start":"node dist/server.js"},
-  "dependencies":{
+  "name": "multigym-api",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {"dev":"tsx watch src/server.ts","build":"tsc","start":"node dist/server.js"},
+  "dependencies": {
     "@fastify/cors":"^10.0.1",
     "@fastify/helmet":"^13.0.1",
     "@fastify/rate-limit":"^10.1.0",

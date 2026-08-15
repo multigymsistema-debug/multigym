@@ -1,0 +1,25 @@
+# MultiGym 2.0 — funcionalidades
+
+- Autenticação por sessão e Argon2
+- Multi-tenant com isolamento por `gym_id`
+- Dashboard operacional e financeiro
+- Alunos + perfil completo
+- Matrículas e planos
+- Histórico financeiro do aluno
+- Check-in manual
+- Check-in por reconhecimento facial com template criptografado e consentimento
+- Revogação de biometria
+- Avaliação física e evolução
+- Biblioteca de exercícios
+- Gerador de treino personalizado baseado em nível, experiência, objetivo, frequência e duração
+- Produtos e estoque
+- Serviços
+- PDV/vendas
+- Pagamentos
+- Caixa: abertura, suprimento, sangria e fechamento com diferença
+- Agenda
+- Relatórios
+- Equipe e perfis
+- Configurações da academia
+- Auditoria de operações
+- Responsividade desktop/tablet/mobile

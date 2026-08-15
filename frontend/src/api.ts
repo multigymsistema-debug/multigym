@@ -1,6 +1,4 @@
-const API=(import.meta.env.VITE_API_URL??'http://localhost:3333').replace(/\/$/,'');
-export function getToken(){return localStorage.getItem('multigym_token')??''}
-export async function api(path:string,options:RequestInit={}){const headers=new Headers(options.headers);if(options.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');const token=getToken();if(token)headers.set('Authorization',`Bearer ${token}`);const r=await fetch(API+path,{...options,headers});let data:any=null;try{data=await r.json()}catch{}if(r.status===401){localStorage.removeItem('multigym_token');localStorage.removeItem('multigym_user');window.location.href='/';throw new Error('Sessão expirada.')}if(!r.ok)throw new Error(data?.error??'Não foi possível concluir a operação.');return data}
-export const post=(p:string,b:any={})=>api(p,{method:'POST',body:JSON.stringify(b)});
-export const put=(p:string,b:any)=>api(p,{method:'PUT',body:JSON.stringify(b)});
-export const del=(p:string)=>api(p,{method:'DELETE'});
+const API=import.meta.env.VITE_API_URL||'http://localhost:3000/api';
+export const token=()=>localStorage.getItem('multigym_token')||'';
+export async function api<T=any>(path:string,options:RequestInit={}){const headers=new Headers(options.headers); headers.set('Content-Type','application/json'); const t=token(); if(t)headers.set('Authorization',`Bearer ${t}`); const r=await fetch(`${API}${path}`,{...options,headers}); const data=await r.json().catch(()=>({})); if(!r.ok)throw new Error(data.error||'Erro na requisição'); return data as T;}
+export const get=<T=any>(p:string)=>api<T>(p); export const post=<T=any>(p:string,b:any)=>api<T>(p,{method:'POST',body:JSON.stringify(b)}); export const put=<T=any>(p:string,b:any)=>api<T>(p,{method:'PUT',body:JSON.stringify(b)}); export const del=<T=any>(p:string)=>api<T>(p,{method:'DELETE'});

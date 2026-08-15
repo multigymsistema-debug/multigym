@@ -1,21 +1,36 @@
 # Publicação
 
-## Backend
-O projeto inclui `render.yaml`. No Render, crie o serviço a partir do repositório e confira:
-- `DATABASE_URL` apontando para o PostgreSQL criado
-- `FRONTEND_URL` com a origem pública do frontend
-- health check `/health`
+## API + PostgreSQL
+Use `render.yaml` ou crie manualmente:
+- PostgreSQL
+- Web Service Node 22 apontando para `backend`
+- Build: `npm install && npm run build`
+- Start: `npm start`
+
+Variáveis obrigatórias:
+- `DATABASE_URL`
+- `FRONTEND_URL`
+- `BIOMETRIC_ENCRYPTION_KEY`
+- `SESSION_DAYS=14`
+
+A API executa a migração SQL em `backend/schema/001_schema.sql` ao iniciar.
 
 ## Frontend
-Defina `VITE_API_URL` com a URL pública do backend antes do build. Para GitHub Pages, o workflow em `.github/workflows/frontend.yml` publica `frontend/dist`.
+No `frontend/.env`:
+`VITE_API_URL=https://SEU-ENDPOINT/api`
 
-## Ordem
-1. Subir PostgreSQL.
-2. Subir API.
-3. Confirmar `/health` e `/health/db`.
-4. Publicar frontend apontando `VITE_API_URL` para a API.
-5. Criar a primeira academia pela tela de cadastro.
-6. Criar os planos em Configurações.
-7. Cadastrar alunos e testar matrícula, pagamento, treino, exercício, agenda e relatório.
+Execute:
+`npm install`
+`npm run download:face-models`
+`npm run build`
 
-Nunca coloque `DATABASE_URL` no frontend.
+Publique a pasta `frontend/dist` no GitHub Pages, Cloudflare Pages, Vercel ou equivalente.
+
+## Segurança antes de abrir ao público
+- Use HTTPS.
+- Troque a chave biométrica.
+- Restrinja `FRONTEND_URL` ao domínio real.
+- Configure backups do PostgreSQL.
+- Revise consentimento e política de privacidade da biometria.
+- Não coloque secrets no frontend.
+- Teste isolamento entre academias com dois tenants.
