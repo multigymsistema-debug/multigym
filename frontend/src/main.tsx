@@ -58,7 +58,7 @@ function PageContent({page,user}:{page:Page,user:User}){
 
 function Dashboard(){
  const [d,setD]=useState<any>(null);const [loading,setLoading]=useState(true);
- const load=()=>api('/api/dashboard').then(setD).finally(()=>setLoading(false));useEffect(load,[]);
+ const load=()=>api('/api/dashboard').then(setD).finally(()=>setLoading(false));useEffect(()=>{load()},[]);
  if(loading)return <Loading/>;if(!d)return null;
  return <><div className="welcomeRow"><div><h2>Visão geral</h2><p>Resumo da sua academia hoje.</p></div><button className="primary" onClick={()=>location.hash='students'}><Plus size={17}/>Novo aluno</button></div>
  <div className="kpis"><Kpi icon={<Users/>} title="Alunos ativos" value={d.students} note="base atual" tone="red"/><Kpi icon={<Clock/>} title="Matrículas vencendo" value={d.enrollmentsExpiring} note="próximos 7 dias" tone="amber"/><Kpi icon={<AlertTriangle/>} title="Matrículas vencidas" value={d.enrollmentsExpired} note="atenção necessária" tone="danger"/><Kpi icon={<CircleDollarSign/>} title="Faturamento do mês" value={money(d.revenue)} note={`${d.revenueGrowth>=0?'+':''}${d.revenueGrowth.toFixed(1)}% vs. mês anterior`} tone="green"/></div>
