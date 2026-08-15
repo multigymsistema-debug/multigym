@@ -2,7 +2,7 @@
   "name": "multigym-api",
   "private": true,
   "type": "module",
-  "scripts": {"dev": "tsx watch src/server.ts", "test": "vitest run", "lint": "eslint ."},
-  "dependencies": {"@fastify/cors":"latest", "@fastify/helmet":"latest", "@fastify/rate-limit":"latest", "fastify":"latest", "pg":"latest", "zod":"latest", "argon2":"latest", "jose":"latest"},
-  "devDependencies": {"@types/node":"latest", "tsx":"latest", "typescript":"latest", "vitest":"latest", "eslint":"latest"}
+  "scripts": {"dev": "tsx watch src/server.ts", "build": "tsc", "start": "node dist/server.js", "test": "vitest run", "lint": "eslint ."},
+  "dependencies": {"@fastify/cors":"latest", "@fastify/helmet":"latest", "@fastify/rate-limit":"latest", "fastify":"latest", "pg":"latest", "zod":"latest", "argon2":"latest", "jose":"latest", "dotenv":"latest"},
+  "devDependencies": {"@types/node":"latest", "@types/pg":"latest", "tsx":"latest", "typescript":"latest", "vitest":"latest", "eslint":"latest"}
 }
