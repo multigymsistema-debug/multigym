@@ -109,7 +109,7 @@ SELECT g.id,v.name,v.muscle FROM gyms g CROSS JOIN (VALUES
 
 CREATE TABLE IF NOT EXISTS checkins(
  id uuid PRIMARY KEY DEFAULT gen_random_uuid(), gym_id uuid NOT NULL REFERENCES gyms(id) ON DELETE CASCADE,
- student_id uuid NOT NULL REFERENCES students(id) ON DELETE CASCADE, checked_at timestamptz NOT NULL DEFAULT now(),
+ student_id uuid NOT NULL REFERENCES students(id) ON DELETE CASCADE, checked_at timestamptz NOT NULL DEFAULT now()
 );
 CREATE UNIQUE INDEX IF NOT EXISTS checkins_student_day ON checkins(gym_id,student_id,((checked_at AT TIME ZONE 'UTC')::date));
 CREATE INDEX IF NOT EXISTS checkins_gym_date ON checkins(gym_id,checked_at);
