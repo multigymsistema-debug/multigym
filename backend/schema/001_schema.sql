@@ -98,6 +98,7 @@ CREATE INDEX IF NOT EXISTS enrollments_gym_end ON enrollments(gym_id,ends_on);
 CREATE INDEX IF NOT EXISTS payments_gym_date ON payments(gym_id,paid_at);
 CREATE INDEX IF NOT EXISTS appointments_gym_date ON appointments(gym_id,starts_at);
 CREATE INDEX IF NOT EXISTS sessions_token ON sessions(token_hash) WHERE revoked_at IS NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS exercises_gym_name ON exercises(gym_id,name);
 
 INSERT INTO exercises(gym_id,name,muscle_group)
 SELECT g.id,v.name,v.muscle FROM gyms g CROSS JOIN (VALUES
