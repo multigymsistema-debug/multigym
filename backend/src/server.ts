@@ -9,6 +9,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import dotenv from 'dotenv';
+import {askGroqNutrition} from './groq.js';
 
 dotenv.config();
 const app = Fastify({ logger: true });
@@ -232,17 +233,18 @@ app.put('/student-api/nutrigym/goals',{preHandler:studentAuth},async(req:any,rep
 app.get('/student-api/nutrigym/checkins',{preHandler:studentAuth},async(req:any)=>{const s=nutritionScope(req);return q(`SELECT id,checkin_date,weight_kg,measurements,notes,created_at FROM nutrigym_checkins WHERE gym_id=$1 AND student_id=$2 ORDER BY checkin_date DESC,created_at DESC LIMIT 100`,[s.gym,s.student]);});
 app.post('/student-api/nutrigym/checkins',{preHandler:studentAuth},async(req:any,reply)=>{const s=nutritionScope(req),b=body(req),day=nutritionDate(b.checkin_date ?? b.date),dateValue=day===null?await studentToday():day,weight=nutritionNumber(b.weight_kg ?? b.weight,1,500),notes=nutritionText(b.notes,500),measurements=b.measurements===undefined?{}:b.measurements;if(dateValue===undefined||weight===undefined||!measurements||typeof measurements!=='object'||Array.isArray(measurements))return reply.code(400).send({error:'Confira os dados do check-in.'});const row=await one(`INSERT INTO nutrigym_checkins(gym_id,student_id,checkin_date,weight_kg,measurements,notes) VALUES($1,$2,$3,$4,$5,$6) RETURNING *`,[s.gym,s.student,dateValue,weight,JSON.stringify(measurements),notes]);return reply.code(201).send(row);});
 
-app.post('/student-api/nutrigym/assistant',{preHandler:studentAuth},async(req:any,reply)=>{const message=nutritionText(body(req).message,500,true);if(message===undefined)return reply.code(400).send({error:'Digite uma dúvida.'});const s=nutritionScope(req),context=await nutritionContext(s.gym,s.student);if(!context.profile)return {text:'Complete seu perfil nutricional para receber orientações gerais. Este assistente não substitui um nutricionista.'};const restrictions=context.profile.allergies||context.profile.restrictions;const latest=context.meals[0];const hint=latest?` Seu último registro foi ${latest.meal_type.toLowerCase()}.`:'';return {text:`Considerando seu objetivo de ${String(context.profile.objective).toLowerCase()}${hint}${restrictions?' Restrições cadastradas serão sempre respeitadas.':''} Posso ajudar a organizar registros e opções práticas dentro do seu contexto. Para diagnóstico ou prescrição, procure seu nutricionista.`,context:{objective:context.profile.objective,has_restrictions:Boolean(restrictions),recent_meals:context.meals.length,active_goals:context.goals.length}};});
+app.post('/student-api/nutrigym/assistant',{preHandler:studentAuth},async(req:any,reply)=>{const message=nutritionText(body(req).message,500,true);if(message===undefined)return reply.code(400).send({error:'Digite uma dúvida.'});const s=nutritionScope(req),context=await nutritionContext(s.gym,s.student);if(!context.profile)return {text:'Complete seu perfil nutricional para receber orientações gerais. Este assistente não substitui um nutricionista.'};const restrictions=context.profile.allergies||context.profile.restrictions;const latest=context.meals[0];const hint=latest?` Seu último registro foi ${latest.meal_type.toLowerCase()}.`:'';const ai=await askGroqNutrition(message,context);return {text:ai||`Considerando seu objetivo de ${String(context.profile.objective).toLowerCase()}${hint}${restrictions?' Restrições cadastradas serão sempre respeitadas.':''} Posso ajudar a organizar registros e opções práticas dentro do seu contexto. Para diagnóstico ou prescrição, procure seu nutricionista.`,provider:ai?'groq':'fallback',context:{objective:context.profile.objective,has_restrictions:Boolean(restrictions),recent_meals:context.meals.length,active_goals:context.goals.length,has_plan:Boolean(context.plan)}};});
 
 
 const nutritionContext=async(gym:string,student:string)=>{
-  const [profile,meals,goals,checkin,workouts]=await Promise.all([
+  const [profile,meals,goals,checkin,workouts,plan]=await Promise.all([
     one(`SELECT objective,activity_level,preferences,restrictions,allergies,dislikes,wake_time,sleep_time,training_time,meals_per_day,budget_level,cooking_time FROM nutrigym_profiles WHERE gym_id=$1 AND student_id=$2`,[gym,student]),
     q(`SELECT meal_type,description,meal_time,calories FROM nutrigym_meals WHERE gym_id=$1 AND student_id=$2 ORDER BY meal_date DESC,created_at DESC LIMIT 10`,[gym,student]),
     q(`SELECT goal_type,value,unit,period FROM nutrigym_goals WHERE gym_id=$1 AND student_id=$2 AND active=true`,[gym,student]),
     one(`SELECT mood,hunger,energy,night_hunger,sleep_quality,checkin_date FROM nutrigym_daily_checkins WHERE gym_id=$1 AND student_id=$2 ORDER BY checkin_date DESC LIMIT 1`,[gym,student]),
-    q(`SELECT w.name,w.objective,w.review_on FROM workouts w WHERE w.gym_id=$1 AND w.student_id=$2 AND w.status='active' ORDER BY w.updated_at DESC LIMIT 3`,[gym,student])
-  ]); return {profile,meals,goals,checkin,workouts};
+    q(`SELECT w.name,w.objective,w.review_on FROM workouts w WHERE w.gym_id=$1 AND w.student_id=$2 AND w.status='active' ORDER BY w.updated_at DESC LIMIT 3`,[gym,student]),
+    one(`SELECT version,title,professional_name,status,content FROM nutrigym_plan_versions WHERE gym_id=$1 AND student_id=$2 AND status='active' ORDER BY version DESC LIMIT 1`,[gym,student])
+  ]); return {profile,meals,goals,checkin,workouts,plan};
 };
 
 app.get('/student-api/nutrigym/plan',{preHandler:studentAuth},async(req:any)=>{const s=nutritionScope(req);return one(`SELECT id,version,title,status,professional_name,content,created_at,approved_at FROM nutrigym_plan_versions WHERE gym_id=$1 AND student_id=$2 AND status='active' ORDER BY version DESC LIMIT 1`,[s.gym,s.student]);});
