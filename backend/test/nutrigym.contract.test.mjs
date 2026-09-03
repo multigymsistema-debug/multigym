@@ -6,6 +6,7 @@ const server=fs.readFileSync(new URL('../src/server.ts',import.meta.url),'utf8')
 const migration=fs.readFileSync(new URL('../schema/002_nutrigym.sql',import.meta.url),'utf8');
 const extended=fs.readFileSync(new URL('../schema/003_nutrigym_plus.sql',import.meta.url),'utf8');
 const chat=fs.readFileSync(new URL('../schema/004_nutrigym_chat.sql',import.meta.url),'utf8');
+const onboarding=fs.readFileSync(new URL('../schema/005_nutrigym_onboarding.sql',import.meta.url),'utf8');
 
 test('NutriGym exposes authenticated student routes',()=>{
   for(const route of ['/student-api/nutrigym','/student-api/nutrigym/profile','/student-api/nutrigym/meals','/student-api/nutrigym/hydration','/student-api/nutrigym/goals','/student-api/nutrigym/checkins']) assert.match(server,new RegExp(`app\\.(get|post|put|delete)\\('${route.replaceAll('/','\\/')}`));
@@ -31,4 +32,5 @@ test('production source has no NutriGym demo persistence',()=>{
   assert.match(extended,/CREATE TABLE IF NOT EXISTS nutrigym_plan_versions/);
   assert.match(server,new RegExp('student-api/nutrigym/assistant/messages'));
   assert.match(chat,/CREATE TABLE IF NOT EXISTS nutrigym_chat_messages/);
+  for(const column of ['focus_areas','motivations','goal_weight_kg','body_type','body_fat_current','body_fat_goal','discomforts']) assert.match(onboarding,new RegExp(`ADD COLUMN IF NOT EXISTS ${column}`));
 });
