@@ -253,16 +253,22 @@ app.post('/student-api/nutrigym/assistant',{preHandler:studentAuth},async(req:an
 
 
 const nutritionContext=async(gym:string,student:string)=>{
-  const [profile,meals,goals,checkin,workouts,plan]=await Promise.all([
-    one(`SELECT objective,activity_level,preferences,restrictions,allergies,dislikes,wake_time,sleep_time,training_time,meals_per_day,budget_level,cooking_time FROM nutrigym_profiles WHERE gym_id=$1 AND student_id=$2`,[gym,student]),
-    q(`SELECT meal_type,description,meal_time,calories FROM nutrigym_meals WHERE gym_id=$1 AND student_id=$2 ORDER BY meal_date DESC,created_at DESC LIMIT 10`,[gym,student]),
+  const [studentData,profile,meals,goals,checkin,checkinHistory,workouts,workoutHistory,assessments,hydration,memories,plan]=await Promise.all([
+    one(`SELECT full_name,birth_date,gender,primary_goal,weekly_frequency,session_duration,training_level,training_experience_months,limitations,preferences FROM students WHERE gym_id=$1 AND id=$2`,[gym,student]),
+    one(`SELECT objective,weight_kg,height_cm,age,sex,activity_level,preferences,restrictions,allergies,dislikes,wake_time,sleep_time,training_time,meals_per_day,budget_level,cooking_time FROM nutrigym_profiles WHERE gym_id=$1 AND student_id=$2`,[gym,student]),
+    q(`SELECT meal_date,meal_type,description,meal_time,calories,protein_g,carbs_g,fat_g FROM nutrigym_meals WHERE gym_id=$1 AND student_id=$2 ORDER BY meal_date DESC,created_at DESC LIMIT 14`,[gym,student]),
     q(`SELECT goal_type,value,unit,period FROM nutrigym_goals WHERE gym_id=$1 AND student_id=$2 AND active=true`,[gym,student]),
     one(`SELECT mood,hunger,energy,night_hunger,sleep_quality,checkin_date FROM nutrigym_daily_checkins WHERE gym_id=$1 AND student_id=$2 ORDER BY checkin_date DESC LIMIT 1`,[gym,student]),
-    q(`SELECT w.name,w.objective,w.review_on FROM workouts w WHERE w.gym_id=$1 AND w.student_id=$2 AND w.status='active' ORDER BY w.updated_at DESC LIMIT 3`,[gym,student]),
+    q(`SELECT checkin_date,weight_kg,measurements,notes FROM nutrigym_checkins WHERE gym_id=$1 AND student_id=$2 ORDER BY checkin_date DESC LIMIT 12`,[gym,student]),
+    q(`SELECT w.name,w.objective,w.review_on,w.starts_on FROM workouts w WHERE w.gym_id=$1 AND w.student_id=$2 AND w.status='active' ORDER BY w.updated_at DESC LIMIT 5`,[gym,student]),
+    q(`SELECT wc.completed_at,w.name,w.objective FROM workout_completions wc JOIN workouts w ON w.id=wc.workout_id WHERE wc.gym_id=$1 AND wc.student_id=$2 ORDER BY wc.completed_at DESC LIMIT 12`,[gym,student]),
+    q(`SELECT measured_at,weight,height,body_fat,muscle_mass,waist,chest,arm,thigh,notes FROM assessments WHERE gym_id=$1 AND student_id=$2 ORDER BY measured_at DESC LIMIT 12`,[gym,student]),
+    q(`SELECT hydration_date,COALESCE(sum(amount_ml),0)::int amount_ml FROM nutrigym_hydration WHERE gym_id=$1 AND student_id=$2 AND hydration_date>=CURRENT_DATE-interval '30 days' GROUP BY hydration_date ORDER BY hydration_date DESC`,[gym,student]),
+    q(`SELECT memory_key,memory_value FROM nutrigym_memories WHERE gym_id=$1 AND student_id=$2 AND active=true ORDER BY updated_at DESC LIMIT 20`,[gym,student]),
     one(`SELECT version,title,professional_name,status,content FROM nutrigym_plan_versions WHERE gym_id=$1 AND student_id=$2 AND status='active' ORDER BY version DESC LIMIT 1`,[gym,student])
-  ]); return {profile,meals,goals,checkin,workouts,plan};
+  ]);
+  return {student:studentData,profile,meals,goals,checkin,checkinHistory,workouts,workoutHistory,assessments,hydration,memories,plan};
 };
-
 app.get('/student-api/nutrigym/plan',{preHandler:studentAuth},async(req:any)=>{const s=nutritionScope(req);return one(`SELECT id,version,title,status,professional_name,content,created_at,approved_at FROM nutrigym_plan_versions WHERE gym_id=$1 AND student_id=$2 AND status='active' ORDER BY version DESC LIMIT 1`,[s.gym,s.student]);});
 app.get('/student-api/nutrigym/daily-checkins',{preHandler:studentAuth},async(req:any,reply)=>{const s=nutritionScope(req),raw=(req.query as any)?.date,day=raw?nutritionDate(raw):await studentToday();if(day===undefined)return reply.code(400).send({error:'Data inválida'});return one(`SELECT id,checkin_date,mood,hunger,energy,night_hunger,sleep_quality,notes,created_at,updated_at FROM nutrigym_daily_checkins WHERE gym_id=$1 AND student_id=$2 AND checkin_date=$3`,[s.gym,s.student,day]);});
 app.put('/student-api/nutrigym/daily-checkins',{preHandler:studentAuth},async(req:any,reply)=>{const s=nutritionScope(req),b=body(req),raw=nutritionDate(b.checkin_date??b.date),day=raw===null?await studentToday():raw,mood=nutritionText(b.mood,20),hunger=nutritionNumber(b.hunger,0,10,true),energy=nutritionNumber(b.energy,0,10,true),night=nutritionNumber(b.night_hunger,0,10,true),sleep=nutritionNumber(b.sleep_quality??b.sleep,0,10,true),notes=nutritionText(b.notes,500);if(day===undefined||[hunger,energy,night,sleep].some(x=>x===undefined)||!['very_good','good','normal','tired','poor_sleep','unwell',null].includes(mood))return reply.code(400).send({error:'Confira o check-in de hábitos.'});return one(`INSERT INTO nutrigym_daily_checkins(gym_id,student_id,checkin_date,mood,hunger,energy,night_hunger,sleep_quality,notes) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT(gym_id,student_id,checkin_date) DO UPDATE SET mood=EXCLUDED.mood,hunger=EXCLUDED.hunger,energy=EXCLUDED.energy,night_hunger=EXCLUDED.night_hunger,sleep_quality=EXCLUDED.sleep_quality,notes=EXCLUDED.notes,updated_at=now() RETURNING *`,[s.gym,s.student,day,mood,hunger,energy,night,sleep,notes]);});
