@@ -34,6 +34,7 @@ async function loadStudentData() {
     const response = await fetch(`${API}/student-api/home`, { headers: { Authorization: `Bearer ${token}` } });
     if (!response.ok) return;
     const data = await response.json();
+    renderRealData(data);
     const name = data.student?.name || 'Aluno';
     const hello = document.querySelector('.hello strong');
     if (hello) hello.textContent = name;
@@ -48,6 +49,28 @@ async function loadStudentData() {
   } catch { /* mantém a tela demonstrativa se a API estiver indisponível */ }
 }
 loadStudentData();
+let studentHome = null;
+let currentWorkout = null;
+let currentExercise = null;
+
+function renderRealData(data) {
+  studentHome = data;
+  const workout = data.workouts?.[0];
+  const hero = document.querySelector('.hero-card');
+  if (hero && workout) { hero.querySelector('h2').textContent = workout.name; hero.querySelector('p').textContent = `${workout.exercises?.length || 0} exercícios`; }
+  const list = document.querySelector('#screen-treino .exercise-list');
+  if (list && workout) list.innerHTML = (workout.exercises || []).map((exercise, index) => `<button class="exercise" data-workout="${workout.id}" data-exercise="${exercise.id || ''}" data-name="${String(exercise.name || '').replace(/"/g, '&quot;')}"><b>${String(index + 1).padStart(2,'0')}</b><span><strong>${exercise.name || 'Exercício'}</strong><small>${exercise.sets || '—'} séries · ${exercise.reps || '—'} repetições · ${exercise.load || 'carga livre'}</small></span><i>›</i></button>`).join('') || '<p class="muted">Nenhum exercício cadastrado neste treino.</p>';
+  const appointments = document.querySelector('#screen-agenda');
+  if (appointments && data.appointments) { const old = appointments.querySelectorAll('.appointment'); old.forEach(x => x.remove()); data.appointments.forEach(a => { const el=document.createElement('div'); el.className='appointment'; el.innerHTML=`<span>${new Date(a.starts_at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span><div><strong>${a.title}</strong><small>${new Date(a.starts_at).toLocaleDateString('pt-BR')}</small></div><em>Agendado</em>`; appointments.appendChild(el); }); }
+}
+
+async function saveSet(event) {
+  event.preventDefault();
+  if (!currentWorkout || !currentExercise?.id) { document.querySelector('#logMessage').textContent = 'Este exercício ainda não possui identificação para registrar a série.'; return; }
+  const payload = { exercise_id: currentExercise.id, set_number: Number(document.querySelector('#setNumber').value), weight: Number(document.querySelector('#setWeight').value), reps: Number(document.querySelector('#setReps').value) };
+  try { const response=await fetch(`${API}/student-api/workouts/${currentWorkout.id}/logs`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${token()}`},body:JSON.stringify(payload)}); const data=await response.json(); if(!response.ok) throw new Error(data.error||'Não foi possível salvar a série.'); document.querySelector('#logMessage').textContent=`Série ${data.set_number} salva com sucesso.`; } catch(error) { document.querySelector('#logMessage').textContent=error.message; }
+}
+document.querySelector('#logSetForm')?.addEventListener('submit', saveSet);
 const nav = [...document.querySelectorAll('.bottom-nav button')];
 function showScreen(name) {
   const target = document.getElementById(`screen-${name}`);
@@ -64,6 +87,8 @@ document.querySelector('#studentLogout')?.addEventListener('click', async () => 
   setAuthenticated(false);
 });
 document.addEventListener('click', event => {
+  const exercise = event.target.closest('[data-exercise]');
+  if (exercise) { currentWorkout = studentHome?.workouts?.find(w => w.id === exercise.dataset.workout); currentExercise = currentWorkout?.exercises?.find(e => String(e.id) === String(exercise.dataset.exercise)) || {id: exercise.dataset.exercise, name: exercise.dataset.name}; document.querySelector('#exerciseTitle').textContent = currentExercise.name || 'Exercício'; document.querySelector('#exerciseProgress').textContent = currentWorkout?.name || 'Treino'; showScreen('treino-exercicio'); return; }
   const button = event.target.closest('[data-screen]');
   if (button) showScreen(button.dataset.screen);
 });
