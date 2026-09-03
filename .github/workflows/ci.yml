@@ -42,7 +42,8 @@ jobs:
           BIOMETRIC_ENCRYPTION_KEY: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
       - name: Wait for API
         run: for i in {1..30}; do curl --fail http://127.0.0.1:3000/health && exit 0 || sleep 2; done; cat /tmp/multigym-api.log; exit 1
-      - run: npm run test:integration
+      - name: Run API integration tests
+        run: npm run test:integration || (cat /tmp/multigym-api.log; exit 1)
         env:
           TEST_API_URL: http://127.0.0.1:3000
   frontend:

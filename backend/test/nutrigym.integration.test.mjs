@@ -28,7 +28,7 @@ test('profiles, meals and tenant/student isolation work end to end',async()=>{
   assert.equal(meal.status,201);mealA=meal.data;
   const own=await json('/student-api/nutrigym',{headers:auth(tokenA)});assert.equal(own.data.student.id,studentA.id);assert.equal(own.data.summary.meals.length,1);
   const other=await json('/student-api/nutrigym',{headers:auth(tokenB)});assert.equal(other.data.student.id,studentB.id);assert.equal(other.data.summary.meals.length,0);
-  const deniedDelete=await json(`/student-api/nutrigym/meals/${mealA.id}`,{method:'DELETE',headers:auth(tokenB)});assert.equal(deniedDelete.status,404);
+  const deniedDelete=await json(`/student-api/nutrigym/meals/${mealA.id}`,{method:'DELETE',headers:auth(tokenB)});assert.equal(deniedDelete.status,404,JSON.stringify(deniedDelete.data));
   const deniedRead=await json(`/student-api/nutrigym/meals?date=${mealA.meal_date}`,{headers:auth(tokenB)});assert.equal(deniedRead.status,200);assert.equal(deniedRead.data.length,0);
   const water=await json('/student-api/nutrigym/hydration',{method:'POST',headers:auth(tokenA),body:JSON.stringify({amount_ml:500,student_id:studentB.id,gym_id:adminB.user.gym_id})});assert.equal(water.status,201);
   const invalid=await json('/student-api/nutrigym/hydration',{method:'POST',headers:auth(tokenA),body:JSON.stringify({amount_ml:-1})});assert.equal(invalid.status,400);
