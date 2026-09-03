@@ -73,6 +73,7 @@ async function saveSet(event) {
   try { const response=await fetch(`${API}/student-api/workouts/${currentWorkout.id}/logs`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${token()}`},body:JSON.stringify(payload)}); const data=await response.json(); if(!response.ok) throw new Error(data.error||'Não foi possível salvar a série.'); document.querySelector('#logMessage').textContent=`Série ${data.set_number} salva com sucesso.`; } catch(error) { document.querySelector('#logMessage').textContent=error.message; }
 }
 document.querySelector('#logSetForm')?.addEventListener('submit', saveSet);
+document.querySelector('#completeWorkout')?.addEventListener('click', async () => { if (!currentWorkout) return; try { const r=await fetch(`${API}/student-api/workouts/${currentWorkout.id}/complete`,{method:'POST',headers:{Authorization:`Bearer ${token()}`}}); const data=await r.json(); if(!r.ok) throw new Error(data.error||'Não foi possível concluir o treino.'); document.querySelector('#logMessage').textContent='Treino concluído e registrado no histórico.'; } catch(error) { document.querySelector('#logMessage').textContent=error.message; } });
 const nav = [...document.querySelectorAll('.bottom-nav button')];
 function showScreen(name) {
   const target = document.getElementById(`screen-${name}`);
@@ -94,7 +95,7 @@ document.querySelector('#studentLogout')?.addEventListener('click', async () => 
 });
 document.addEventListener('click', event => {
   const exercise = event.target.closest('[data-exercise]');
-  if (exercise) { currentWorkout = studentHome?.workouts?.find(w => w.id === exercise.dataset.workout); currentExercise = currentWorkout?.exercises?.find(e => String(e.id) === String(exercise.dataset.exercise)) || {id: exercise.dataset.exercise, name: exercise.dataset.name}; document.querySelector('#exerciseTitle').textContent = currentExercise.name || 'Exercício'; document.querySelector('#exerciseProgress').textContent = currentWorkout?.name || 'Treino'; showScreen('treino-exercicio'); return; }
+  if (exercise) { currentWorkout = studentHome?.workouts?.find(w => w.id === exercise.dataset.workout); currentExercise = currentWorkout?.exercises?.find(e => String(e.id) === String(exercise.dataset.exercise)) || {id: exercise.dataset.exercise, name: exercise.dataset.name}; document.querySelector('#exerciseTitle').textContent = currentExercise.name || 'Exercício'; document.querySelector('#exerciseProgress').textContent = `${currentWorkout?.name || 'Treino'} · carga prescrita: ${currentExercise.load || 'livre'}`; document.querySelector('#exerciseHistory').innerHTML = '<p class="muted">Carregando histórico...</p>'; fetch(`${API}/student-api/workouts/${currentWorkout.id}/logs`,{headers:{Authorization:`Bearer ${token()}`}}).then(r=>r.json()).then(rows=>{const mine=rows.filter(r=>String(r.exercise_id)===String(currentExercise.id));document.querySelector('#exerciseHistory').innerHTML=mine.length?`<div class="info-card"><div><strong>Últimas séries</strong><small>${mine.slice(0,5).map(r=>`${r.set_number}ª · ${r.weight} kg × ${r.reps}`).join('  |  ')}</small></div></div>`:'<p class="muted">Nenhuma série registrada ainda.</p>';}).catch(()=>{}); showScreen('treino-exercicio'); return; }
   const button = event.target.closest('[data-screen]');
   if (button) showScreen(button.dataset.screen);
 });
