@@ -29,6 +29,6 @@ test('production source has no NutriGym demo persistence',()=>{
   assert.match(extended,/CREATE TABLE IF NOT EXISTS nutrigym_memories/);
   assert.match(extended,/CREATE TABLE IF NOT EXISTS nutrigym_shopping_items/);
   assert.match(extended,/CREATE TABLE IF NOT EXISTS nutrigym_plan_versions/);
-  assert.match(server,/student-api\\/nutrigym\\/assistant\\/messages/);
+  assert.match(server,new RegExp('student-api/nutrigym/assistant/messages'));
   assert.match(chat,/CREATE TABLE IF NOT EXISTS nutrigym_chat_messages/);
 });
