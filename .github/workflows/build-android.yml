@@ -34,7 +34,7 @@ jobs:
       - name: Sync app
         run: npx cap sync android
       - name: Enable camera for facial check-in
-        run: sed -i 's#<manifest #<uses-permission android:name="android.permission.CAMERA" />\n    <manifest #' android/app/src/main/AndroidManifest.xml
+        run: sed -i '0,/<manifest /s#<manifest #<manifest #; 0,/<manifest[^>]*>/s#>#>\n    <uses-permission android:name="android.permission.CAMERA" />#' android/app/src/main/AndroidManifest.xml
       - name: Build debug APK
         working-directory: android
         run: ./gradlew assembleDebug
