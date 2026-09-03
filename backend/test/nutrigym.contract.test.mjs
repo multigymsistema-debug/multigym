@@ -5,6 +5,7 @@ import fs from 'node:fs';
 const server=fs.readFileSync(new URL('../src/server.ts',import.meta.url),'utf8');
 const migration=fs.readFileSync(new URL('../schema/002_nutrigym.sql',import.meta.url),'utf8');
 const extended=fs.readFileSync(new URL('../schema/003_nutrigym_plus.sql',import.meta.url),'utf8');
+const chat=fs.readFileSync(new URL('../schema/004_nutrigym_chat.sql',import.meta.url),'utf8');
 
 test('NutriGym exposes authenticated student routes',()=>{
   for(const route of ['/student-api/nutrigym','/student-api/nutrigym/profile','/student-api/nutrigym/meals','/student-api/nutrigym/hydration','/student-api/nutrigym/goals','/student-api/nutrigym/checkins']) assert.match(server,new RegExp(`app\\.(get|post|put|delete)\\('${route.replaceAll('/','\\/')}`));
@@ -28,4 +29,6 @@ test('production source has no NutriGym demo persistence',()=>{
   assert.match(extended,/CREATE TABLE IF NOT EXISTS nutrigym_memories/);
   assert.match(extended,/CREATE TABLE IF NOT EXISTS nutrigym_shopping_items/);
   assert.match(extended,/CREATE TABLE IF NOT EXISTS nutrigym_plan_versions/);
+  assert.match(server,/student-api\\/nutrigym\\/assistant\\/messages/);
+  assert.match(chat,/CREATE TABLE IF NOT EXISTS nutrigym_chat_messages/);
 });
