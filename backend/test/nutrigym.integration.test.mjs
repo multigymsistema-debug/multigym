@@ -32,6 +32,5 @@ test('profiles, meals and tenant/student isolation work end to end',async()=>{
   const deniedRead=await json(`/student-api/nutrigym/meals?date=${mealA.meal_date}`,{headers:auth(tokenB)});assert.equal(deniedRead.status,200);assert.equal(deniedRead.data.length,0);
   const water=await json('/student-api/nutrigym/hydration',{method:'POST',headers:auth(tokenA),body:JSON.stringify({amount_ml:500,student_id:studentB.id,gym_id:adminB.user.gym_id})});assert.equal(water.status,201);
   const invalid=await json('/student-api/nutrigym/hydration',{method:'POST',headers:auth(tokenA),body:JSON.stringify({amount_ml:-1})});assert.equal(invalid.status,400);
+  const out=await json('/student-api/logout',{method:'POST',headers:auth(tokenA)});assert.equal(out.status,200);const after=await json('/student-api/nutrigym',{headers:auth(tokenA)});assert.equal(after.status,401);
 });
-
-test('student logout invalidates the session',async()=>{const out=await json('/student-api/logout',{method:'POST',headers:auth(tokenA)});assert.equal(out.status,200);const after=await json('/student-api/nutrigym',{headers:auth(tokenA)});assert.equal(after.status,401)});
