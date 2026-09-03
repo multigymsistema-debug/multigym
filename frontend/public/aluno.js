@@ -60,6 +60,8 @@ function renderRealData(data) {
   if (hero && workout) { hero.querySelector('h2').textContent = workout.name; hero.querySelector('p').textContent = `${workout.exercises?.length || 0} exercícios`; }
   const list = document.querySelector('#screen-treino .exercise-list');
   if (list && workout) list.innerHTML = (workout.exercises || []).map((exercise, index) => `<button class="exercise" data-workout="${workout.id}" data-exercise="${exercise.id || ''}" data-name="${String(exercise.name || '').replace(/"/g, '&quot;')}"><b>${String(index + 1).padStart(2,'0')}</b><span><strong>${exercise.name || 'Exercício'}</strong><small>${exercise.sets || '—'} séries · ${exercise.reps || '—'} repetições · ${exercise.load || 'carga livre'}</small></span><i>›</i></button>`).join('') || '<p class="muted">Nenhum exercício cadastrado neste treino.</p>';
+  const progressList = document.querySelector('#progressList');
+  if (progressList) { fetch(`${API}/student-api/progress`, {headers:{Authorization:`Bearer ${token()}`}}).then(r=>r.json()).then(rows=>{ progressList.innerHTML = rows.length ? rows.slice().reverse().map(row=>`<div class="info-card"><div><strong>${new Date(`${row.measured_at}T12:00:00`).toLocaleDateString('pt-BR')}</strong><small>Peso: ${row.weight || '—'} kg · Gordura: ${row.body_fat || '—'}%</small></div><span class="status">Avaliação</span></div>`).join('') : '<p class="muted">Nenhuma avaliação registrada.</p>'; }).catch(()=>{progressList.innerHTML='<p class="muted">Não foi possível carregar a evolução.</p>';}); }
   const appointments = document.querySelector('#screen-agenda');
   if (appointments && data.appointments) { const old = appointments.querySelectorAll('.appointment'); old.forEach(x => x.remove()); data.appointments.forEach(a => { const el=document.createElement('div'); el.className='appointment'; el.innerHTML=`<span>${new Date(a.starts_at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span><div><strong>${a.title}</strong><small>${new Date(a.starts_at).toLocaleDateString('pt-BR')}</small></div><em>Agendado</em>`; appointments.appendChild(el); }); }
 }
@@ -81,6 +83,10 @@ function showScreen(name) {
   document.getElementById('pageTitle').textContent = titles[name] || 'MultiGym';
   window.scrollTo({top:0,behavior:'smooth'});
 }
+document.querySelector('#studentCheckin')?.addEventListener('click', async () => {
+  const message = document.querySelector('#checkinMessage');
+  try { const response=await fetch(`${API}/student-api/checkins`,{method:'POST',headers:{Authorization:`Bearer ${token()}`}}); const data=await response.json(); if(!response.ok) throw new Error(data.error||'Não foi possível fazer o check-in.'); message.textContent=data.already?'Você já fez check-in hoje.':'Check-in realizado com sucesso.'; } catch(error) { message.textContent=error.message; }
+});
 document.querySelector('#studentLogout')?.addEventListener('click', async () => {
   try { await fetch(`${API}/student-api/logout`, { method:'POST', headers:{Authorization:`Bearer ${token()}`} }); } catch {}
   localStorage.removeItem('multigym_student_token');
