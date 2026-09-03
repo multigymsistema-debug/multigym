@@ -30,3 +30,12 @@ export async function askGroqNutrition(message:string,context:NutritionContext,i
     return text;
   }catch{return null}finally{clearTimeout(timer)}
 }
+
+type PersonalGymContext={student:any;profile:any;workouts:any[];workoutHistory:any[];logs:any[];assessments:any[]};
+
+export async function askGroqPersonal(message:string,context:PersonalGymContext):Promise<string|null>{
+  const key=process.env.GROQ_API_KEY;if(!key)return null;
+  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),timeoutMs);
+  const system=`Você é o assistente Personal Gym, um personal trainer virtual integrado ao MultiGym. Responda em português brasileiro, com tom humano, profissional, claro e prático. Analise silenciosamente o contexto autorizado do aluno antes de responder. Use somente os dados disponíveis e não invente treino, carga, repetições ou limitações. Ajude a entender o treino do dia, organizar a sessão, melhorar a técnica, controlar ritmo, descanso, aquecimento, progressão e recuperação. Quando o aluno pedir o treino do dia, apresente apenas o treino ativo que estiver no contexto, organizado por exercício, séries, repetições, carga, descanso e instrução. Quando pedir ajuda de execução, explique em passos: preparação, movimento, respiração, erros comuns e sinal para parar. Nunca diagnostique lesões, prescreva tratamento, altere medicamentos, incentive treino com dor aguda ou prometa resultados. Se houver dor forte, falta de ar, tontura, perda de força ou lesão, oriente interromper e buscar avaliação profissional. Não substitua um profissional de educação física. Não use tabelas Markdown nem asteriscos visíveis; use títulos curtos e listas legíveis no celular. Contexto autorizado: ${JSON.stringify(context)}`;
+  try{const response=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Authorization':`Bearer ${key}`,'Content-Type':'application/json'},body:JSON.stringify({model:MODEL,temperature:0.2,max_tokens:800,messages:[{role:'system',content:system},{role:'user',content:message.slice(0,700)}]}),signal:controller.signal});if(!response.ok)return null;const data:any=await response.json();const text=String(data?.choices?.[0]?.message?.content||'').trim();if(!text||text.length>3500||unsafeOutput.test(text))return 'Posso ajudar com a organização do treino e a execução dos exercícios, mas esse pedido precisa de avaliação profissional. Se quiser, descreva o exercício ou a dificuldade técnica.';return text}catch{return null}finally{clearTimeout(timer)}
+}
