@@ -14,7 +14,7 @@ test('profiles, meals and tenant/student isolation work end to end',async()=>{
   assert.equal(a.status,200);assert.equal(b.status,200);adminA=a.data;adminB=b.data;
   const sa=await json('/api/students',{method:'POST',headers:auth(adminA.token),body:JSON.stringify({full_name:'Aluno A',email:`student-a-${unique}@test.local`})});
   const sb=await json('/api/students',{method:'POST',headers:auth(adminB.token),body:JSON.stringify({full_name:'Aluno B',email:`student-b-${unique}@test.local`})});
-  assert.equal(sa.status,201);assert.equal(sb.status,201);studentA=sa.data;studentB=sb.data;
+  assert.equal(sa.status,201,JSON.stringify(sa.data));assert.equal(sb.status,201,JSON.stringify(sb.data));studentA=sa.data;studentB=sb.data;
   for(const [admin,student,email] of [[adminA,studentA,`student-a-${unique}@test.local`],[adminB,studentB,`student-b-${unique}@test.local`]]){
     const access=await json(`/api/students/${student.id}/portal-access`,{method:'POST',headers:auth(admin.token),body:JSON.stringify({email,password:'Student@123'})});assert.equal(access.status,204);
   }
