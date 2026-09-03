@@ -24,7 +24,9 @@ Execute:
 `npm run download:face-models`
 `npm run build`
 
-Publique a pasta `frontend/dist` no GitHub Pages, Cloudflare Pages, Vercel ou equivalente.
+Publique a pasta `frontend/dist` no GitHub Pages, Cloudflare Pages, Vercel ou equivalente. O portal do aluno fica disponível em `/nutrigym` (o build inclui o mesmo app React e a configuração `VITE_API_URL`).
+
+O endereço publicado atualmente pelo repositório é `https://multigymsistema-debug.github.io/multigym/`. Para o portal, use o caminho `/nutrigym/`. Antes de abrir para alunos, configure `VITE_API_URL` com a URL HTTPS real da API e `FRONTEND_URL` com a origem exata do site.
 
 ## Segurança antes de abrir ao público
 - Use HTTPS.

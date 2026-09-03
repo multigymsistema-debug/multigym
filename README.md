@@ -21,5 +21,10 @@ A biometria é opcional. O sistema sempre mantém check-in manual. O fluxo exige
 
 Antes da produção, configure uma chave aleatória de 32 bytes hex em `BIOMETRIC_ENCRYPTION_KEY`, HTTPS e política de retenção/privacidade adequada à LGPD.
 
+## NutriGym
+O portal do aluno fica em `/nutrigym` e usa a mesma API, PostgreSQL e sessões do MultiGym. O aluno entra com o identificador da academia e o acesso criado pela equipe em **Alunos → acesso do portal**. Perfil, refeições, hidratação, metas e check-ins são persistidos no PostgreSQL e sempre escopados pelo aluno autenticado e pela academia da sessão.
+
+As tabelas do módulo estão em `backend/schema/002_nutrigym.sql`. Todas as rotas começam com `/student-api/nutrigym` e exigem a sessão do aluno; `student_id`, `gym_id` e `x-tenant-id` enviados pelo cliente não são fontes de autorização.
+
 ## Produção
 Consulte `DEPLOY.md`. O frontend pode ser publicado como site estático e a API/PostgreSQL no Render ou infraestrutura equivalente.
