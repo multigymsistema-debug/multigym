@@ -1,0 +1,7 @@
+{
+  "appId": "br.com.multigym.app",
+  "appName": "MultiGym",
+  "webDir": "frontend/dist",
+  "server": {"url":"https://multigym-web.onrender.com","cleartext":false},
+  "android": {"allowMixedContent":false}
+}
