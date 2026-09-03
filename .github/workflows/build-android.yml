@@ -25,6 +25,8 @@ jobs:
       - name: Build web app
         working-directory: frontend
         run: npm run build
+      - name: Prepare native build package
+        run: npm init -y
       - name: Install Capacitor
         run: npm install --no-save @capacitor/core @capacitor/cli @capacitor/android
       - name: Create Android project
