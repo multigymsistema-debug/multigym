@@ -34,7 +34,16 @@ jobs:
       - name: Sync app
         run: npx cap sync android
       - name: Enable camera for facial check-in
-        run: python3 -c "p='android/app/src/main/AndroidManifest.xml';s=open(p).read();i=s.index('>');s=s[:i+1]+'\n    <uses-permission android:name=\"android.permission.CAMERA\" />'+s[i+1:];open(p,'w').write(s)"
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path("android/app/src/main/AndroidManifest.xml")
+          s=p.read_text()
+          if "android.permission.CAMERA" not in s:
+              s=re.sub(r"(<manifest\b[^>]*>)", r"\1\n    <uses-permission android:name=\"android.permission.CAMERA\" />", s, count=1)
+              p.write_text(s)
+          PY
       - name: Build debug APK
         working-directory: android
         run: ./gradlew assembleDebug
