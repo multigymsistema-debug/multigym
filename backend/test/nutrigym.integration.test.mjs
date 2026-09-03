@@ -24,12 +24,13 @@ test('profiles, meals and tenant/student isolation work end to end',async()=>{
   const before=await json('/student-api/nutrigym',{headers:auth(tokenA)});assert.equal(before.status,200);assert.equal(before.data.profile,null);assert.equal(before.data.student.id,studentA.id);
   const profile=await json('/student-api/nutrigym/profile',{method:'PUT',headers:auth(tokenA),body:JSON.stringify({student_id:studentB.id,gym_id:adminB.user.gym_id,objective:'Emagrecimento',weight_kg:80,height_cm:180,age:30,water_goal_ml:2500,calories_goal:2200})});
   assert.equal(profile.status,200);assert.equal(profile.data.objective,'Emagrecimento');
-  const meal=await json('/student-api/nutrigym/meals',{method:'POST',headers:auth(tokenA),body:JSON.stringify({student_id:studentB.id,gym_id:adminB.user.gym_id,meal_type:'Almoço',description:'Arroz, feijão e frango',calories:650})});
+  const mealDate=new Date().toISOString().slice(0,10);
+  const meal=await json('/student-api/nutrigym/meals',{method:'POST',headers:auth(tokenA),body:JSON.stringify({student_id:studentB.id,gym_id:adminB.user.gym_id,meal_date:mealDate,meal_type:'Almoço',description:'Arroz, feijão e frango',calories:650})});
   assert.equal(meal.status,201);mealA=meal.data;
   const own=await json('/student-api/nutrigym',{headers:auth(tokenA)});assert.equal(own.data.student.id,studentA.id);assert.equal(own.data.summary.meals.length,1);
   const other=await json('/student-api/nutrigym',{headers:auth(tokenB)});assert.equal(other.data.student.id,studentB.id);assert.equal(other.data.summary.meals.length,0);
   const deniedDelete=await json(`/student-api/nutrigym/meals/${mealA.id}`,{method:'DELETE',headers:auth(tokenB)});assert.equal(deniedDelete.status,404,JSON.stringify(deniedDelete.data));
-  const deniedRead=await json(`/student-api/nutrigym/meals?date=${mealA.meal_date}`,{headers:auth(tokenB)});assert.equal(deniedRead.status,200);assert.equal(deniedRead.data.length,0);
+  const deniedRead=await json(`/student-api/nutrigym/meals?date=${mealDate}`,{headers:auth(tokenB)});assert.equal(deniedRead.status,200);assert.equal(deniedRead.data.length,0);
   const water=await json('/student-api/nutrigym/hydration',{method:'POST',headers:auth(tokenA),body:JSON.stringify({amount_ml:500,student_id:studentB.id,gym_id:adminB.user.gym_id})});assert.equal(water.status,201);
   const invalid=await json('/student-api/nutrigym/hydration',{method:'POST',headers:auth(tokenA),body:JSON.stringify({amount_ml:-1})});assert.equal(invalid.status,400);
   const out=await json('/student-api/logout',{method:'POST',headers:auth(tokenA)});assert.equal(out.status,200);const after=await json('/student-api/nutrigym',{headers:auth(tokenA)});assert.equal(after.status,401);
