@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 const base=process.env.TEST_API_URL||'http://127.0.0.1:3000';
-const json=async(path,options={})=>{const r=await fetch(base+path,{...options,headers:{'Content-Type':'application/json',...(options.headers||{})}});const data=await r.json().catch(()=>null);return {status:r.status,data};};
+const json=async(path,options={})=>{const headers={...(options.body?{'Content-Type':'application/json'}:{}),...(options.headers||{})};const r=await fetch(base+path,{...options,headers});const data=await r.json().catch(()=>null);return {status:r.status,data};};
 const auth=(token)=>({Authorization:`Bearer ${token}`});
 const unique=`${Date.now()}`;
 let adminA,adminB,studentA,studentB,tokenA,tokenB,mealA;
