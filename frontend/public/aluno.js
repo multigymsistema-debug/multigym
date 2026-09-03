@@ -95,6 +95,8 @@ document.querySelector('#skipTimer')?.addEventListener('click',()=>{clearInterva
 document.querySelector('#showDemo')?.addEventListener('click',()=>{const guide=exerciseGuide(currentExercise?.name||'');applyExerciseGuide(currentExercise?.name||'');document.querySelector('#demoFigure').innerHTML=guide[0];document.querySelector('#demoText').textContent=guide[1];document.querySelector('#demoBox').hidden=false;});
 document.querySelector('#closeDemo')?.addEventListener('click',()=>document.querySelector('#demoBox').hidden=true);
 window.addEventListener('online', async()=>{const queue=JSON.parse(localStorage.getItem('multigym_offline_logs')||'[]');const rest=[];for(const item of queue){try{const r=await fetch(`${API}/student-api/workouts/${item.workoutId}/logs`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${token()}`},body:JSON.stringify(item.payload)});if(!r.ok)rest.push(item);}catch{rest.push(item);}}localStorage.setItem('multigym_offline_logs',JSON.stringify(rest));});
+let nutriWater=Number(localStorage.getItem('nutri_water')||0),nutriMeals=Number(localStorage.getItem('nutri_meals')||0);function refreshNutri(){const w=document.querySelector('#nutriWater'),m=document.querySelector('#nutriMeals'),a=document.querySelector('#nutriAdherence');if(w)w.textContent=`${nutriWater} ml / 2.500 ml`;if(m)m.textContent=`${nutriMeals} / 5`;if(a)a.textContent=`${Math.min(100,Math.round((nutriMeals/5)*70+(nutriWater/2500)*30))}%`;};document.querySelector('#addWater')?.addEventListener('click',()=>{nutriWater=Math.min(5000,nutriWater+250);localStorage.setItem('nutri_water',nutriWater);refreshNutri();});document.querySelector('#addMeal')?.addEventListener('click',()=>{nutriMeals=Math.min(5,nutriMeals+1);localStorage.setItem('nutri_meals',nutriMeals);refreshNutri();});refreshNutri();
+
 document.querySelector('#completeWorkout')?.addEventListener('click', async () => { if (!currentWorkout) return; try { const r=await fetch(`${API}/student-api/workouts/${currentWorkout.id}/complete`,{method:'POST',headers:{Authorization:`Bearer ${token()}`}}); const data=await r.json(); if(!r.ok) throw new Error(data.error||'Não foi possível concluir o treino.'); document.querySelector('#logMessage').textContent='Treino concluído e registrado no histórico.'; } catch(error) { document.querySelector('#logMessage').textContent=error.message; } });
 const nav = [...document.querySelectorAll('.bottom-nav button')];
 function showScreen(name) {
@@ -102,7 +104,7 @@ function showScreen(name) {
   if (!target) return;
   screens.forEach(screen => screen.classList.toggle('active', screen === target));
   nav.forEach(button => button.classList.toggle('active', button.dataset.screen === name || (name === 'treino-exercicio' && button.dataset.screen === 'treino')));
-  const titles = {home:'Início',treino:'Treinos','treino-exercicio':'Treino',agenda:'Agenda',perfil:'Perfil',evolucao:'Evolução',finance:'Financeiro',checkin:'Check-in'};
+  const titles = {home:'Início',nutrigym:'NutriGym',treino:'Treinos','treino-exercicio':'Treino',agenda:'Agenda',perfil:'Perfil',evolucao:'Evolução',finance:'Financeiro',checkin:'Check-in'};
   document.getElementById('pageTitle').textContent = titles[name] || 'MultiGym';
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -121,3 +123,4 @@ document.addEventListener('click', event => {
   const button = event.target.closest('[data-screen]');
   if (button) { if(button.dataset.screen==='treino-exercicio' && !currentExercise && studentHome?.workouts?.[0]) { currentWorkout=studentHome.workouts[0]; currentExercise=currentWorkout.exercises?.[0]; document.querySelector('#exerciseTitle').textContent=currentExercise?.name||'Exercício'; applyExerciseGuide(currentExercise?.name); } showScreen(button.dataset.screen); }
 });
+
