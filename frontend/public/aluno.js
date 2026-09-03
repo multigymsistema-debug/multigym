@@ -61,6 +61,8 @@ function renderRealData(data) {
   if (hero && workout) { hero.querySelector('h2').textContent = workout.name; hero.querySelector('p').textContent = `${workout.exercises?.length || 0} exercícios`; }
   const list = document.querySelector('#screen-treino .exercise-list');
   if (list && workout) list.innerHTML = (workout.exercises || []).map((exercise, index) => `<button class="exercise" data-workout="${workout.id}" data-exercise="${exercise.id || ''}" data-name="${String(exercise.name || '').replace(/"/g, '&quot;')}"><b>${String(index + 1).padStart(2,'0')}</b><span><strong>${exercise.name || 'Exercício'}</strong><small>${exercise.sets || '—'} séries · ${exercise.reps || '—'} repetições · ${exercise.load || 'carga livre'}</small></span><i>›</i></button>`).join('') || '<p class="muted">Nenhum exercício cadastrado neste treino.</p>';
+  const financeList = document.querySelector('#financeList');
+  if (financeList) financeList.innerHTML = data.payments?.length ? data.payments.map(p=>`<div class="info-card"><div><strong>R$ ${Number(p.amount||0).toFixed(2).replace('.',',')}</strong><small>${p.paid_at ? new Date(p.paid_at).toLocaleDateString('pt-BR') : 'Pendente'} · ${p.method || '—'}</small></div><span class="${p.status==='paid'?'paid':'status'}">${p.status==='paid'?'Pago':'Pendente'}</span></div>`).join('') : '<p class="muted">Nenhum pagamento registrado.</p>';
   const progressList = document.querySelector('#progressList');
   if (progressList) { fetch(`${API}/student-api/progress`, {headers:{Authorization:`Bearer ${token()}`}}).then(r=>r.json()).then(rows=>{ progressList.innerHTML = rows.length ? rows.slice().reverse().map(row=>`<div class="info-card"><div><strong>${new Date(`${row.measured_at}T12:00:00`).toLocaleDateString('pt-BR')}</strong><small>Peso: ${row.weight || '—'} kg · Gordura: ${row.body_fat || '—'}%</small></div><span class="status">Avaliação</span></div>`).join('') : '<p class="muted">Nenhuma avaliação registrada.</p>'; }).catch(()=>{progressList.innerHTML='<p class="muted">Não foi possível carregar a evolução.</p>';}); }
   const workoutHistory = document.querySelector('#workoutHistory');
@@ -83,7 +85,7 @@ function showScreen(name) {
   if (!target) return;
   screens.forEach(screen => screen.classList.toggle('active', screen === target));
   nav.forEach(button => button.classList.toggle('active', button.dataset.screen === name || (name === 'treino-exercicio' && button.dataset.screen === 'treino')));
-  const titles = {home:'Início',treino:'Treinos','treino-exercicio':'Treino',agenda:'Agenda',perfil:'Perfil',evolucao:'Evolução'};
+  const titles = {home:'Início',treino:'Treinos','treino-exercicio':'Treino',agenda:'Agenda',perfil:'Perfil',evolucao:'Evolução',finance:'Financeiro',checkin:'Check-in'};
   document.getElementById('pageTitle').textContent = titles[name] || 'MultiGym';
   window.scrollTo({top:0,behavior:'smooth'});
 }
