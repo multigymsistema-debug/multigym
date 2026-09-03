@@ -10,6 +10,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import dotenv from 'dotenv';
 import {askGroqNutrition} from './groq.js';
+import {askOpenAIVision} from './vision.js';
 
 dotenv.config();
 const app = Fastify({ logger: true });
@@ -240,7 +241,7 @@ app.post('/student-api/nutrigym/assistant',{preHandler:studentAuth},async(req:an
   const s=nutritionScope(req),context=await nutritionContext(s.gym,s.student);
   if(!context.profile) return {text:'Complete seu perfil nutricional para receber orientações gerais. Este assistente não substitui um nutricionista.'};
   const restrictions=context.profile.allergies||context.profile.restrictions,latest=context.meals[0],hint=latest?` Seu último registro foi ${latest.meal_type.toLowerCase()}.`:'';
-  const ai=await askGroqNutrition(message,context,imageDataUrl), fallback=imageDataUrl?'A análise por foto não conseguiu ser concluída agora. Descreva os alimentos por texto para receber uma orientação aproximada.':`Considerando seu objetivo de ${String(context.profile.objective).toLowerCase()}${hint}${restrictions?' Restrições cadastradas serão sempre respeitadas.':''} Posso ajudar a organizar registros e opções práticas dentro do seu contexto. Para diagnóstico ou prescrição, procure seu nutricionista.`;
+  const ai=imageDataUrl?await askOpenAIVision(message,context,imageDataUrl):await askGroqNutrition(message,context), fallback=imageDataUrl?'A análise por foto não conseguiu ser concluída agora. Descreva os alimentos por texto para receber uma orientação aproximada.':`Considerando seu objetivo de ${String(context.profile.objective).toLowerCase()}${hint}${restrictions?' Restrições cadastradas serão sempre respeitadas.':''} Posso ajudar a organizar registros e opções práticas dentro do seu contexto. Para diagnóstico ou prescrição, procure seu nutricionista.`;
   const text=ai||fallback; await q(`INSERT INTO nutrigym_chat_messages(gym_id,student_id,role,content,has_image) VALUES($1,$2,'user',$3,$4),($1,$2,'assistant',$5,false)`,[s.gym,s.student,message,Boolean(imageDataUrl),text]);
   return {text,provider:ai?'groq':'fallback',context:{objective:context.profile.objective,has_restrictions:Boolean(restrictions),recent_meals:context.meals.length,active_goals:context.goals.length,has_plan:Boolean(context.plan),image_requested:Boolean(imageDataUrl)}};
 });
