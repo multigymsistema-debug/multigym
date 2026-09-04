@@ -10,7 +10,6 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import dotenv from 'dotenv';
 import {askGroqNutrition,askGroqPersonal} from './groq.js';
-import {askOpenAIVision} from './vision.js';
 
 dotenv.config();
 const app = Fastify({ logger: true });
