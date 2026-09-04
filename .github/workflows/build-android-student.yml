@@ -1,0 +1,58 @@
+name: Build MultiGym Student Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'frontend/**'
+      - 'capacitor.student.config.json'
+      - '.github/workflows/build-android-student.yml'
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install web dependencies
+        working-directory: frontend
+        run: npm install
+      - name: Build web app
+        working-directory: frontend
+        run: npm run build
+      - name: Prepare native build package
+        run: npm init -y
+      - name: Install Capacitor
+        run: npm install --no-save @capacitor/core @capacitor/cli @capacitor/android
+      - name: Select student app configuration
+        run: cp capacitor.student.config.json capacitor.config.json
+      - name: Create student Android project
+        run: npx cap add android
+      - name: Sync student app
+        run: npx cap sync android
+      - name: Enable camera for student check-in
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path("android/app/src/main/AndroidManifest.xml")
+          s=p.read_text()
+          if "android.permission.CAMERA" not in s:
+              s=re.sub(r'(<manifest\b[^>]*>)', r'\1\n    <uses-permission android:name="android.permission.CAMERA" />', s, count=1)
+              p.write_text(s)
+          PY
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+      - name: Upload student APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: multigym-student-android-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk

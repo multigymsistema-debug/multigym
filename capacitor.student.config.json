@@ -1,0 +1,12 @@
+{
+  "appId": "br.com.multigym.aluno",
+  "appName": "MultiGym Aluno",
+  "webDir": "frontend/dist",
+  "server": {
+    "url": "https://multigym-web.onrender.com/?student=1",
+    "cleartext": false
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}
