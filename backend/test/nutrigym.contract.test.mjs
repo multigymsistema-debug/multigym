@@ -47,3 +47,12 @@ test('Critical admin writes validate ownership before linking records',()=>{
   assert.match(server,/id=ANY\(\$2::uuid\[\]\)/);
   assert.match(server,/Exercício não pertence a este treino/);
 });
+
+test('Public pre-enrollment creates a student without enrollment and exposes admin review routes',()=>{
+  const pre=fs.readFileSync(new URL('../schema/007_pre_enrollment.sql',import.meta.url),'utf8');
+  assert.match(pre,/CREATE TABLE IF NOT EXISTS pre_enrollments/);
+  assert.match(server,/api\/public\/gyms\/:slug/);
+  assert.match(server,/api\/public\/pre-enrollments/);
+  assert.match(server,/app\.get\('\/api\/pre-enrollments'/);
+  assert.match(server,/registration_source/);
+});
