@@ -1,0 +1,10 @@
+ALTER TABLE nutrigym_meals ADD COLUMN IF NOT EXISTS image_data text;
+ALTER TABLE nutrigym_meals ADD COLUMN IF NOT EXISTS foods jsonb NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE nutrigym_meals ADD COLUMN IF NOT EXISTS confidence varchar(10);
+ALTER TABLE nutrigym_meals ADD COLUMN IF NOT EXISTS confidence_score numeric(4,3);
+ALTER TABLE nutrigym_meals ADD COLUMN IF NOT EXISTS source varchar(30) NOT NULL DEFAULT 'manual_text';
+ALTER TABLE nutrigym_meals ADD COLUMN IF NOT EXISTS ai_analyzed boolean NOT NULL DEFAULT false;
+ALTER TABLE nutrigym_meals ADD COLUMN IF NOT EXISTS manual_correction boolean NOT NULL DEFAULT false;
+ALTER TABLE nutrigym_meals ADD COLUMN IF NOT EXISTS corrections jsonb NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE nutrigym_meals ADD COLUMN IF NOT EXISTS analysis_notes varchar(1000);
+CREATE INDEX IF NOT EXISTS nutrigym_meals_source_idx ON nutrigym_meals(gym_id,student_id,source,meal_date DESC);
