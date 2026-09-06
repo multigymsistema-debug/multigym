@@ -1,0 +1,5 @@
+.receipt-prompt-overlay{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:rgba(15,23,42,.56);backdrop-filter:blur(3px)}
+.receipt-prompt{position:relative;width:min(420px,100%);padding:30px;border:1px solid #e4e8ef;border-radius:20px;background:#fff;box-shadow:0 24px 80px rgba(15,23,42,.24);text-align:center;color:#202735}
+.receipt-prompt-close{position:absolute;right:14px;top:12px;border:0;background:transparent;color:#657080;font-size:25px;cursor:pointer}
+.receipt-prompt-icon{display:grid;place-items:center;width:48px;height:48px;margin:0 auto 14px;border-radius:50%;background:#e8f7ef;color:#16834a;font-size:25px;font-weight:800}
+.receipt-prompt h2{margin:0 0 8px;font-size:21px}.receipt-prompt p{margin:0;color:#657080}.receipt-prompt-actions{display:flex;justify-content:center;gap:10px;margin-top:24px}.receipt-prompt-actions button{margin:0;padding:11px 15px;border-radius:9px;cursor:pointer;font-weight:700}.receipt-prompt-secondary{border:1px solid #d9dee7;background:#fff;color:#4c5868}.receipt-prompt-primary{border:0;background:#b51c2d;color:#fff}
