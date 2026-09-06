@@ -1,0 +1,35 @@
+ALTER TABLE nutrigym_meals ADD COLUMN IF NOT EXISTS analysis_trace_id uuid;
+CREATE TABLE IF NOT EXISTS nutrigym_meal_vision_diagnostics (
+  trace_id uuid PRIMARY KEY,
+  gym_id uuid NOT NULL REFERENCES gyms(id) ON DELETE CASCADE,
+  student_id uuid NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+  started_at timestamptz NOT NULL,
+  finished_at timestamptz,
+  image_width int,
+  image_height int,
+  aspect_ratio numeric(10,5),
+  image_bytes int,
+  data_url_chars int,
+  mime_type varchar(80),
+  image_source varchar(20),
+  jpeg_quality numeric(4,3),
+  image_resized boolean,
+  model varchar(160),
+  provider_started_at timestamptz,
+  provider_finished_at timestamptz,
+  provider_duration_ms int,
+  provider_status int,
+  provider_finish_reason varchar(40),
+  response_chars int,
+  raw_response text,
+  parse_status varchar(40),
+  parse_recovered boolean NOT NULL DEFAULT false,
+  normalized_response jsonb,
+  stage varchar(60) NOT NULL,
+  code varchar(80) NOT NULL,
+  error_details jsonb NOT NULL DEFAULT '{}'::jsonb,
+  expires_at timestamptz NOT NULL DEFAULT now()+interval '7 days',
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS meal_vision_diagnostics_lookup_idx ON nutrigym_meal_vision_diagnostics(gym_id,created_at DESC);
+CREATE INDEX IF NOT EXISTS meal_vision_diagnostics_code_idx ON nutrigym_meal_vision_diagnostics(gym_id,code,created_at DESC);

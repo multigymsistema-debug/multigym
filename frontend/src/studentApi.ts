@@ -7,7 +7,7 @@ export async function studentApi<T=any>(path:string,options:RequestInit={}){
   const t=studentToken(); if(t)headers.set('Authorization',`Bearer ${t}`);
   const response=await fetch(`${API_ROOT}${path}`,{...options,headers});
   const data=await response.json().catch(()=>({}));
-  if(!response.ok)throw new Error(data.error||'Não foi possível concluir a operação.');
+  if(!response.ok){const error=new Error(data.error||'Não foi possível concluir a operação.');(error as any).traceId=data.trace_id;throw error;}
   return data as T;
 }
 export const studentGet=<T=any>(path:string)=>studentApi<T>(path);
