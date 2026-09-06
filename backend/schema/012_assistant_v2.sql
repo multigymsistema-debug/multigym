@@ -8,4 +8,5 @@ CREATE TABLE IF NOT EXISTS assistant_events (
   created_at timestamptz NOT NULL DEFAULT now(),
   FOREIGN KEY (gym_id, student_id) REFERENCES students(gym_id, id) ON DELETE CASCADE
 );
+ALTER TABLE assistant_events ADD COLUMN IF NOT EXISTS consumed_at timestamptz;
 CREATE INDEX IF NOT EXISTS assistant_events_student_idx ON assistant_events(gym_id,student_id,created_at DESC);
