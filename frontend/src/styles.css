@@ -33,3 +33,4 @@
 .student-source-badge{display:inline-block;margin-left:7px;color:#2467ae;font-style:normal;font-size:10px;font-weight:700}
 .pre-consent{display:flex!important;grid-template-columns:none!important;align-items:flex-start;gap:8px!important;font-weight:500!important;line-height:1.4}.pre-consent input{width:16px!important;margin-top:2px}.pre-consent span{font-size:11px;color:#61748d}
 .pre-consent{display:flex!important;align-items:flex-start;gap:8px!important;font-weight:500!important;line-height:1.4}.pre-consent input{width:16px!important;margin-top:2px}.pre-consent span{font-size:11px;color:#61748d}
+.pre-logo{overflow:hidden}.pre-logo img{width:100%;height:100%;object-fit:contain;border-radius:12px;background:#fff;padding:4px}.pre-logo span{display:block}
