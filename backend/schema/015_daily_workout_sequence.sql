@@ -2,6 +2,11 @@ ALTER TABLE workouts ADD COLUMN IF NOT EXISTS routine_day integer;
 ALTER TABLE workouts ADD COLUMN IF NOT EXISTS routine_cycle integer;
 CREATE INDEX IF NOT EXISTS workouts_student_routine_idx ON workouts(gym_id,student_id,routine_cycle,routine_day,starts_on);
 
+UPDATE workouts w
+SET status='inactive',updated_at=now()
+WHERE w.status='active'
+  AND EXISTS (SELECT 1 FROM workout_completions wc WHERE wc.workout_id=w.id AND wc.student_id=w.student_id);
+
 WITH ranked AS (
   SELECT id,
          row_number() OVER (PARTITION BY gym_id, student_id ORDER BY COALESCE(starts_on, CURRENT_DATE), created_at, id) AS day_number
