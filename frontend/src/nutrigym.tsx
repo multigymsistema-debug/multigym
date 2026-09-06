@@ -1,7 +1,7 @@
 import React,{useEffect,useMemo,useRef,useState} from 'react';
 import {studentApi,studentDel,studentGet,studentPost,studentPut,studentToken} from './studentApi';
 
-type NutritionData={student:any;date:string;profile:any;goals:any[];checkins:any[];hydration:any[];summary:any};
+type NutritionData={student:any;date:string;profile:any;goals:any[];checkins:any[];hydration:any[];summary:any;proactive_event?:{type:string;message:string}|null};
 const brDate=(value:any)=>value?new Date(`${String(value).slice(0,10)}T12:00:00`).toLocaleDateString('pt-BR'):'—';
 const number=(value:any)=>Number(value||0);
 const fmt=(value:any,unit='')=>`${number(value).toLocaleString('pt-BR',{maximumFractionDigits:1})}${unit}`;
