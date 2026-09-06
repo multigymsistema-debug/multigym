@@ -2,7 +2,7 @@ export type AssistantDecision={shouldRespond:boolean;responseType:'CHAT_RESPONSE
 export function decideAssistantAction(input:{assistant:'nutrigym'|'personalgym';intent:string;event?:any;context?:any;history?:any[]}):AssistantDecision{
   const event=String(input.event?.event_type||input.event?.type||'');
   if(input.intent==='SAFETY'||input.intent==='PROFESSIONAL_REFERRAL')return {shouldRespond:true,responseType:'CHAT_RESPONSE',priority:'high',reason:'safety_or_referral'};
-  if(input.intent==='QUESTION'||input.intent==='RECOMMENDATION'||input.intent==='PROGRESS'||input.intent==='DAILY_SUMMARY'||input.intent==='WORKOUT_INFO'||input.intent==='EXERCISE_TECHNIQUE'||input.intent==='TRAINING_PROGRESS'||input.intent==='NEXT_WORKOUT')return {shouldRespond:true,responseType:'CHAT_RESPONSE',priority:'normal',reason:'student_requested_response'};
+  if(input.intent==='QUESTION'||input.intent==='RECOMMENDATION'||input.intent==='PROGRESS'||input.intent==='DAILY_SUMMARY'||input.intent==='DAILY_SUMMARY'||input.intent==='WORKOUT_INFO'||input.intent==='EXERCISE_TECHNIQUE'||input.intent==='TRAINING_PROGRESS'||input.intent==='NEXT_WORKOUT')return {shouldRespond:true,responseType:'CHAT_RESPONSE',priority:'normal',reason:'student_requested_response'};
   if(event==='WORKOUT_COMPLETED'||event==='NEW_WORKOUT_AVAILABLE')return {shouldRespond:true,responseType:'EVENT_FEEDBACK',priority:'normal',reason:'important_training_event'};
   if(event==='WORKOUT_STARTED'||event==='EXERCISE_COMPLETED')return {shouldRespond:true,responseType:'EVENT_FEEDBACK',priority:'low',reason:'session_progress'};
   if(event==='SET_COMPLETED')return {shouldRespond:false,responseType:'SILENT',priority:'low',reason:'avoid_set_feedback_spam'};
