@@ -30,15 +30,13 @@ jobs:
       - name: Prepare native build package
         run: npm init -y
       - name: Install Capacitor
-        run: npm install --no-save @capacitor/core @capacitor/cli @capacitor/android @capacitor/camera @capacitor/filesystem @capacitor/share
+        run: npm install --no-save @capacitor/core @capacitor/cli @capacitor/android @capacitor/camera @capacitor/filesystem @capacitor/share @capacitor/assets
       - name: Select student app configuration
         run: cp capacitor.student.config.json capacitor.config.json
       - name: Create student Android project
         run: npx cap add android
       - name: Sync student app
         run: npx cap sync android
-      - name: Install official MultiGym icon generator
-        run: npm install --no-save @capacitor/assets
       - name: Generate official MultiGym launcher icon
         run: |
           mkdir -p resources
