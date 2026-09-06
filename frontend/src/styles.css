@@ -54,3 +54,16 @@
 .nutri-meal-wrap{border-bottom:1px solid #edf0ef}.nutri-meal-wrap .nutri-meal{border-bottom:0}.nutri-meal-icon{overflow:hidden;flex-shrink:0}.nutri-meal-icon img{width:100%;height:100%;object-fit:cover;border-radius:50%}.nutri-analysis-link{border:0;background:transparent;color:#b51c27;font-size:10px;cursor:pointer;padding:5px 3px;white-space:nowrap}.nutri-meal-details{display:grid;gap:6px;margin:0 0 10px 45px;padding:10px 12px;background:#f8faf9;border-radius:9px;color:#5f6d66;font-size:10px}.nutri-meal-details img{width:100%;max-height:150px;object-fit:cover;border-radius:8px;margin-bottom:3px}.nutri-meal-details strong{font-size:11px;color:#29352f}.nutri-meal-details span{padding-top:3px;border-top:1px solid #e7eeea}
 .meal-type-select{display:grid;gap:6px;color:#65736c;font-size:11px;font-weight:700;margin:14px 0 8px}.meal-type-select select{border:1px solid #dfe7e3;border-radius:9px;padding:10px;background:#fff;font:inherit;color:#29352f}
 .meal-food-ambiguity{display:block;color:#9b711d;font-size:10px;font-style:normal;margin-top:4px}.meal-food-main em{max-width:100%}
+
+/* Identidade visual oficial MultiGym — logo vermelho e grafite */
+.brand-logo-full{display:block;width:184px;height:48px;object-fit:contain;object-position:left center}
+.auth-art .brand-logo-full,.sidebar .brand-logo-full{background:#fff;border-radius:10px;padding:5px 9px}
+.auth-art .brand-logo-full{width:245px;height:66px}
+.mobile-brand .brand-logo-full{width:205px;height:54px}
+.nutri-logo{gap:10px}
+.nutri-logo img{display:block;width:158px;height:48px;object-fit:contain;object-position:left center}
+.nutri-logo>small{display:block;color:#87918e;font-size:10px;font-weight:500;margin-left:-3px}
+.student-logo{gap:10px}
+.student-logo img{display:block;width:158px;height:48px;object-fit:contain;object-position:left center}
+.student-logo>small{display:block;color:#8b958f;font-size:10px;font-weight:500;margin-left:-5px}
+@media(max-width:760px){.brand-logo-full{width:158px;height:42px}.sidebar .brand-logo-full{width:174px}.student-logo img,.nutri-logo img{width:132px;height:42px}}
