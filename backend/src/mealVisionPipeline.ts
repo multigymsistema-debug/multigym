@@ -1,6 +1,6 @@
 // @ts-nocheck
 export type VisionDiagnostic={trace_id:string;stage:string;code:string;message:string;details?:any;food_index?:number;field?:string;food_name?:string;received_value?:any};
-export type PipelineResult<T=any>={ok:true;value:T;diagnostic?:VisionDiagnostic}|{ok:false;diagnostic:VisionDiagnostic;safe_reason:string;parse_recovered?:boolean};
+export type PipelineResult<T=any>={ok:true;value:T;diagnostic?:VisionDiagnostic;parse_recovered?:boolean}|{ok:false;diagnostic:VisionDiagnostic;safe_reason:string;parse_recovered?:boolean};
 const fail=(trace_id:string,stage:string,code:string,message:string,details:any={},safe_reason='Não conseguimos validar a análise da refeição.'):PipelineResult=>({ok:false,diagnostic:{trace_id,stage,code,message,details},safe_reason});
 const valueSnippet=(v:any)=>typeof v==='string'?v.slice(0,240):v;
 const has=(o:any,k:string)=>Object.prototype.hasOwnProperty.call(o,k);
