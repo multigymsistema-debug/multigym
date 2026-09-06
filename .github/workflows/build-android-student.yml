@@ -35,6 +35,13 @@ jobs:
         run: cp capacitor.student.config.json capacitor.config.json
       - name: Create student Android project
         run: npx cap add android
+      - name: Install official MultiGym icon generator
+        run: npm install --no-save @capacitor/assets
+      - name: Generate official MultiGym launcher icon
+        run: |
+          mkdir -p resources
+          cp frontend/public/logo-symbol.png resources/icon.png
+          npx capacitor-assets generate --android
       - name: Sync student app
         run: npx cap sync android
       - name: Enable camera for student check-in
