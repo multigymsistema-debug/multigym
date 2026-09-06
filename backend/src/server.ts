@@ -16,9 +16,10 @@ import {validateMealAnalysis,imageDataUrlValid} from './mealVisionPipeline.js';
 
 dotenv.config();
 const app = Fastify({ logger: true, bodyLimit: 7_000_000 });
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const pool = new Pool({connectionString:process.env.DATABASE_URL,max:Math.max(5,Math.min(50,Number(process.env.DB_POOL_MAX||20))),idleTimeoutMillis:30000,connectionTimeoutMillis:5000});
 const PORT = Number(process.env.PORT || 3000);
 const SESSION_DAYS = Number(process.env.SESSION_DAYS || 14);
+pool.on('error',(error)=>app.log.error({error},'database pool error'));
 const FRONTEND_URL = process.env.FRONTEND_URL || '*';
 const FRONTEND_ORIGINS = new Set(FRONTEND_URL==='*' ? [] : FRONTEND_URL.split(',').map(x=>x.trim()).filter(Boolean));
 // The repository's Pages origin is a known public deployment target; extra origins stay configurable.
@@ -55,6 +56,7 @@ await app.register(helmet,{contentSecurityPolicy:false});
 await app.register(rateLimit,{max:120,timeWindow:'1 minute'});
 
 app.get('/health',async()=>({ok:true,service:'multigym-api',version:'2.0.0'}));
+app.get('/health/ready',async(req,reply)=>{try{await pool.query('SELECT 1');return {ok:true,service:'multigym-api',ready:true,version:'2.0.0'};}catch{ return reply.code(503).send({ok:false,service:'multigym-api',ready:false});}});
 
 app.post('/api/auth/register',async(req,reply)=>{
   const b=body(req); if(!b.gymName||!b.name||!b.email||!b.password) return reply.code(400).send({error:'Preencha academia, nome, e-mail e senha'});
