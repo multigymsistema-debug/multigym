@@ -28,7 +28,7 @@ jobs:
       - name: Prepare native build package
         run: npm init -y
       - name: Install Capacitor
-        run: npm install --no-save @capacitor/core @capacitor/cli @capacitor/android
+        run: npm install --no-save @capacitor/core @capacitor/cli @capacitor/android @capacitor/camera @capacitor/filesystem @capacitor/share
       - name: Create Android project
         run: npx cap add android
       - name: Sync app
