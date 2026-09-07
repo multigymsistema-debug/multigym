@@ -158,3 +158,4 @@
 .chat-message-time{display:block;text-align:right;color:#8b95a3;font-size:8px;line-height:10px;margin-top:3px}
 .nutri-bubble-row.user .chat-message-time{color:#9e4550}
 .personal-bubble-row.user .chat-message-time{color:#52709a}
+.generated-saved-badge{display:inline-flex;align-items:center;gap:6px;color:#216a3a;background:#edf8ef;border:1px solid #c9e7d0;border-radius:9px;padding:9px 11px;font-size:11px;font-weight:700}
