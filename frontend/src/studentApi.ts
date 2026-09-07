@@ -14,3 +14,4 @@ export const studentGet=<T=any>(path:string)=>studentApi<T>(path);
 export const studentPost=<T=any>(path:string,body:any)=>studentApi<T>(path,{method:'POST',body:JSON.stringify(body)});
 export const studentPut=<T=any>(path:string,body:any)=>studentApi<T>(path,{method:'PUT',body:JSON.stringify(body)});
 export const studentDel=<T=any>(path:string)=>studentApi<T>(path,{method:'DELETE'});
+export async function studentAudio(path:string,body:any){const headers=new Headers({'Content-Type':'application/json'}),t=studentToken();if(t)headers.set('Authorization',`Bearer ${t}`);const response=await fetch(`${API_ROOT}${path}`,{method:'POST',headers,body:JSON.stringify(body)});if(!response.ok){const data=await response.json().catch(()=>({}));throw new Error(data.error||'Não foi possível gerar o áudio.')}return response.blob();}
