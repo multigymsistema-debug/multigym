@@ -94,3 +94,10 @@
 @keyframes avatarTalk{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-4px) rotate(-.6deg)}}
 @keyframes bubbleTalk{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
 @media(max-width:520px){.visual-avatar-stage{height:205px;grid-template-columns:145px 1fr;gap:8px;padding:8px 10px 0}.visual-stage-character{height:205px}.visual-stage-bubble{font-size:11px;padding:11px 12px}.visual-stage-bubble:before{left:-8px;border-width:7px 8px 7px 0}}
+
+/* Voz na conversa: captura quando disponível e resposta falada pelo avatar */
+.voice-suggestion{border-color:#c91521!important;background:#fff1f2!important;color:#a61c26!important;font-weight:800}
+.voice-mic{width:38px;height:38px;flex:0 0 38px;border:1px solid #ead7d9;border-radius:50%;background:#fff1f2;color:#a61c26;font-size:17px;cursor:pointer}
+.voice-mic:hover,.voice-suggestion:hover{filter:brightness(.97)}
+.personal-chat .voice-suggestion{border-color:#cbdcf4!important;background:#edf5ff!important;color:#28528f!important}
+.personal-chat .voice-mic{border-color:#cbdcf4;background:#edf5ff;color:#28528f}
