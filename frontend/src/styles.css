@@ -79,3 +79,18 @@
 @keyframes avatarPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
 .nutri-chat-head>div:not(.visual-avatar):not(.chat-head-actions),.personal-chat-head>div:not(.visual-avatar):not(.chat-head-actions){flex:1;min-width:0;margin-left:9px}
 @media(max-width:520px){.visual-avatar{width:52px;height:52px;flex-basis:52px}.visual-avatar-status{font-size:7px;padding:2px 5px}}
+
+/* Palco do avatar completo — visual do assistente antes da camada de voz */
+.visual-avatar-stage{height:245px;display:grid;grid-template-columns:minmax(170px,230px) 1fr;align-items:center;gap:14px;padding:10px 18px 0;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.12)}
+.visual-stage-personal{background:linear-gradient(135deg,#0d326d 0%,#194f9e 62%,#2c73c8 100%)}
+.visual-stage-nutri{background:linear-gradient(135deg,#fff7f1 0%,#fff 58%,#eef8f2 100%)}
+.visual-stage-character{height:245px;align-self:end;display:flex;align-items:flex-end;justify-content:center}
+.visual-stage-character img{height:100%;width:100%;object-fit:contain;object-position:center bottom;display:block;filter:drop-shadow(0 10px 9px rgba(0,0,0,.16))}
+.visual-stage-bubble{position:relative;max-width:245px;padding:14px 16px;border-radius:16px;background:#fff;color:#263a58;font-size:12px;line-height:1.4;box-shadow:0 8px 25px rgba(10,30,60,.16)}
+.visual-stage-bubble:before{content:'';position:absolute;left:-10px;top:32px;border-width:8px 10px 8px 0;border-style:solid;border-color:transparent #fff transparent transparent}
+.visual-stage-nutri .visual-stage-bubble{color:#35413d}
+.visual-stage-active .visual-stage-character{animation:avatarTalk 1.1s ease-in-out infinite}
+.visual-stage-active .visual-stage-bubble{animation:bubbleTalk 1.1s ease-in-out infinite}
+@keyframes avatarTalk{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-4px) rotate(-.6deg)}}
+@keyframes bubbleTalk{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+@media(max-width:520px){.visual-avatar-stage{height:205px;grid-template-columns:145px 1fr;gap:8px;padding:8px 10px 0}.visual-stage-character{height:205px}.visual-stage-bubble{font-size:11px;padding:11px 12px}.visual-stage-bubble:before{left:-8px;border-width:7px 8px 7px 0}}
