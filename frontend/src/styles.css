@@ -140,3 +140,21 @@
 .chat-message-speaker{display:block;font-size:9px;font-weight:700;color:#6b82a1;margin-bottom:3px}
 .nutri-bubble-row.user .chat-message-speaker{color:#ffe1e3}
 .personal-bubble-row.user .chat-message-speaker{color:#28528f}
+/* Layout de conversa no estilo mensageiro: avatar e balão em cada fala. */
+.nutri-chat-messages,.personal-chat-messages{background:#fff;padding:14px 10px 10px;scroll-behavior:smooth}
+.nutri-bubble-row,.personal-bubble-row{align-items:flex-end;gap:7px;margin:0 0 14px}
+.chat-message-avatar{width:56px;min-width:56px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;overflow:hidden}
+.chat-message-avatar img{width:56px;height:70px;object-fit:cover;object-position:center top;display:block}
+.chat-message-avatar-user{height:58px;min-width:46px;width:46px;justify-content:flex-start;overflow:visible}
+.chat-message-avatar-user img{width:44px;height:44px;object-fit:contain;padding:6px;border:1px solid #e8d2d5;border-radius:50%;background:#fff}
+.chat-message-avatar-user b{font-size:9px;line-height:12px;color:#b01624;margin-top:2px}
+.nutri-bubble,.personal-bubble{position:relative;max-width:calc(100% - 68px);box-shadow:0 1px 2px rgba(30,45,70,.08)}
+.nutri-bubble-row.user .nutri-bubble,.personal-bubble-row.user .personal-bubble{margin-left:auto}
+.nutri-bubble-row.assistant .nutri-bubble:before,.personal-bubble-row.assistant .personal-bubble:before{content:'';position:absolute;left:-7px;bottom:10px;border-width:6px 7px 6px 0;border-style:solid;border-color:transparent #fff transparent transparent}
+.nutri-bubble-row.user .nutri-bubble:after,.personal-bubble-row.user .personal-bubble:after{content:'';position:absolute;right:-7px;bottom:10px;border-width:6px 0 6px 7px;border-style:solid;border-color:transparent transparent transparent #c91521}
+.personal-bubble-row.user .personal-bubble:after{border-left-color:#dcecff}
+.nutri-bubble-row.user .nutri-bubble,.personal-bubble-row.user .personal-bubble{padding-right:12px}
+@media(max-width:520px){.chat-message-avatar{width:48px;min-width:48px;height:62px}.chat-message-avatar img{width:48px;height:62px}.chat-message-avatar-user{width:42px;min-width:42px;height:54px}.chat-message-avatar-user img{width:40px;height:40px}.nutri-bubble,.personal-bubble{max-width:calc(100% - 58px)}}
+.chat-message-time{display:block;text-align:right;color:#8b95a3;font-size:8px;line-height:10px;margin-top:3px}
+.nutri-bubble-row.user .chat-message-time{color:#9e4550}
+.personal-bubble-row.user .chat-message-time{color:#52709a}
