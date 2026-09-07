@@ -67,3 +67,15 @@
 .student-logo img{display:block;width:158px;height:48px;object-fit:contain;object-position:left center}
 .student-logo>small{display:block;color:#8b958f;font-size:10px;font-weight:500;margin-left:-5px}
 @media(max-width:760px){.brand-logo-full{width:158px;height:42px}.sidebar .brand-logo-full{width:174px}.student-logo img,.nutri-logo img{width:132px;height:42px}}
+
+/* Avatar visual — primeira fase do Personal Gym e NutriGym */
+.visual-avatar{position:relative;width:58px;height:58px;flex:0 0 58px;border-radius:50%;overflow:hidden;background:#fff;border:2px solid rgba(255,255,255,.75);box-shadow:0 5px 14px rgba(0,0,0,.18)}
+.visual-avatar img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;display:block}
+.visual-avatar-personal img{object-position:50% 8%}
+.visual-avatar-nutri img{object-position:50% 8%}
+.visual-avatar-status{position:absolute;bottom:0;left:50%;transform:translate(-50%,50%);white-space:nowrap;border-radius:12px;padding:3px 7px;background:#fff;color:#1d8a4a;font-size:8px;font-weight:800;box-shadow:0 2px 7px rgba(0,0,0,.16)}
+.visual-avatar-active{animation:avatarPulse 1.4s ease-in-out infinite}
+.visual-avatar-active .visual-avatar-status{color:#c40016}
+@keyframes avatarPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.nutri-chat-head>div:not(.visual-avatar):not(.chat-head-actions),.personal-chat-head>div:not(.visual-avatar):not(.chat-head-actions){flex:1;min-width:0;margin-left:9px}
+@media(max-width:520px){.visual-avatar{width:52px;height:52px;flex-basis:52px}.visual-avatar-status{font-size:7px;padding:2px 5px}}
