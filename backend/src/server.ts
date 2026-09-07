@@ -57,7 +57,6 @@ await app.register(rateLimit,{max:120,timeWindow:'1 minute'});
 
 app.get('/health',async()=>({ok:true,service:'multigym-api',version:'2.0.0'}));
 app.get('/health/ready',async(req,reply)=>{try{await pool.query('SELECT 1');return {ok:true,service:'multigym-api',ready:true,version:'2.0.0'};}catch{ return reply.code(503).send({ok:false,service:'multigym-api',ready:false});}});
-app.get('/health/tts',async(_,reply)=>{const key=process.env.ELEVENLABS_API_KEY;if(!key)return {configured:false,provider:'elevenlabs'};try{const r=await fetch('https://api.elevenlabs.io/v1/user',{headers:{'xi-api-key':key}});return {configured:true,provider:'elevenlabs',provider_ok:r.ok,status:r.status};}catch{return reply.code(502).send({configured:true,provider:'elevenlabs',provider_ok:false});}});
 
 app.post('/api/auth/register',async(req,reply)=>{
   const b=body(req); if(!b.gymName||!b.name||!b.email||!b.password) return reply.code(400).send({error:'Preencha academia, nome, e-mail e senha'});
