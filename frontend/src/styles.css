@@ -101,3 +101,6 @@
 .voice-mic:hover,.voice-suggestion:hover{filter:brightness(.97)}
 .personal-chat .voice-suggestion{border-color:#cbdcf4!important;background:#edf5ff!important;color:#28528f!important}
 .personal-chat .voice-mic{border-color:#cbdcf4;background:#edf5ff;color:#28528f}
+.speak-message{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;margin:6px 0 0 5px;border:1px solid #e4e9e6;border-radius:50%;background:#fff;color:#a61c26;font-size:12px;cursor:pointer;vertical-align:middle}
+.personal-bubble .speak-message{color:#28528f;border-color:#cbdcf4}
+.speak-message:hover{transform:scale(1.06)}
