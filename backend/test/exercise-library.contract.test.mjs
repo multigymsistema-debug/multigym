@@ -86,3 +86,11 @@ test('cadastro e edição aceitam fotos e vídeos com limites seguros',()=>{
   assert.ok(server.includes('exerciseMediaAuditValue(b.illustration_url)'));
   assert.ok(server.includes('isValidExerciseMedia(b.illustration_url)'));
 });
+
+test('layout móvel mantém abas, ações e cartões dentro da viewport',()=>{
+  assert.ok(exerciseStyles.includes('.tabs{width:100%;max-width:100%;overflow-x:auto;'));
+  assert.ok(exerciseStyles.includes('.profile-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))'));
+  assert.ok(exerciseStyles.includes('.profile-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))'));
+  assert.ok(exerciseStyles.includes('.student-header nav button{flex:0 0 auto}'));
+  assert.ok(exerciseStyles.includes('.table-card{overflow-x:auto}'));
+});
