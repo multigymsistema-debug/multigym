@@ -5,6 +5,9 @@ import fs from 'node:fs';
 const server=fs.readFileSync(new URL('../src/server.ts',import.meta.url),'utf8');
 const migration=fs.readFileSync(new URL('../schema/022_exercise_catalog_seed.sql',import.meta.url),'utf8');
 const frontend=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),'utf8');
+const exerciseMedia=fs.readFileSync(new URL('../../frontend/src/exerciseMedia.ts',import.meta.url),'utf8');
+const studentPortal=fs.readFileSync(new URL('../../frontend/src/nutrigym.tsx',import.meta.url),'utf8');
+const exerciseStyles=fs.readFileSync(new URL('../../frontend/src/styles.css',import.meta.url),'utf8');
 const abdutoraVideo=fs.readFileSync(new URL('../../frontend/public/exercises/abdutora.mp4',import.meta.url));
 
 test('biblioteca completa é semeada uma vez e sem sobrescrever exercícios editados',()=>{
@@ -44,11 +47,16 @@ test('configurações filtram exercícios pelo nome sem diferenciar acentos',()=
   assert.match(frontend,/filteredRows\.map\(row=>/);
 });
 
-test('vídeo da abdutora é exibido como vídeo e existe no pacote público',()=>{
-  assert.match(frontend,/'abducao de quadril':'\/exercises\/abdutora\.mp4'/);
-  assert.match(frontend,/'abdutora':'\/exercises\/abdutora\.mp4'/);
-  assert.match(frontend,/'cadeira abdutora':'\/exercises\/abdutora\.mp4'/);
-  assert.match(frontend,/isExerciseVideo=/);
+test('catálogo e sessão do aluno usam as mesmas ilustrações e reproduzem vídeos',()=>{
+  assert.match(exerciseMedia,/'abducao de quadril':'\/exercises\/abdutora\.mp4'/);
+  assert.match(exerciseMedia,/'abdutora':'\/exercises\/abdutora\.mp4'/);
+  assert.match(exerciseMedia,/'cadeira abdutora':'\/exercises\/abdutora\.mp4'/);
+  assert.ok(exerciseMedia.includes('data:video\\/'));
+  assert.match(frontend,/import \{isExerciseVideo,standardExerciseImage\} from '\.\/exerciseMedia'/);
+  assert.match(studentPortal,/exercise\.illustration_url\|\|standardExerciseImage\(exercise\.name\)/);
+  assert.ok(studentPortal.includes('<video src={asset} controls playsInline preload="metadata"'));
+  assert.ok(exerciseStyles.includes('.exercise-illustration.realistic img,.exercise-illustration.realistic video{'));
+  assert.ok(studentPortal.includes('<img src={asset} alt={`Execução de ${exercise.name}: início e final`}/>'));
   assert.match(frontend,/<video src=\{preview\} controls playsInline/);
   assert.match(frontend,/<video src=\{media\} controls playsInline/);
   assert.ok(abdutoraVideo.length>0);
