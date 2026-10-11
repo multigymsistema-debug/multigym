@@ -54,9 +54,15 @@ test('catálogo e sessão do aluno usam as mesmas ilustrações e reproduzem ví
   assert.ok(exerciseMedia.includes('data:video\\/'));
   assert.match(frontend,/import \{isExerciseVideo,standardExerciseImage\} from '\.\/exerciseMedia'/);
   assert.match(studentPortal,/exercise\.illustration_url\|\|standardExerciseImage\(exercise\.name\)/);
+  assert.ok(server.includes("'illustration_url',x.illustration_url"),'as rotas do aluno recebem a mídia do exercício cadastrado');
   assert.ok(studentPortal.includes('<video src={asset} controls playsInline preload="metadata"'));
   assert.ok(exerciseStyles.includes('.exercise-illustration.realistic img,.exercise-illustration.realistic video{'));
   assert.ok(studentPortal.includes('<img src={asset} alt={`Execução de ${exercise.name}: início e final`}/>'));
+  assert.ok(studentPortal.includes('Ilustração não cadastrada no catálogo'));
+  assert.ok(!studentPortal.includes('Iniciar demonstração'));
+  assert.ok(!studentPortal.includes('animation-toggle'));
+  assert.ok(exerciseStyles.includes('.student-session-head h1{font-size:18px'));
+  assert.ok(exerciseStyles.includes('.student-session-head p{font-size:11px'));
   assert.match(frontend,/<video src=\{preview\} controls playsInline/);
   assert.match(frontend,/<video src=\{media\} controls playsInline/);
   assert.ok(abdutoraVideo.length>0);
