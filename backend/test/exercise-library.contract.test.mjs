@@ -5,6 +5,7 @@ import fs from 'node:fs';
 const server=fs.readFileSync(new URL('../src/server.ts',import.meta.url),'utf8');
 const migration=fs.readFileSync(new URL('../schema/022_exercise_catalog_seed.sql',import.meta.url),'utf8');
 const frontend=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),'utf8');
+const abdutoraVideo=fs.readFileSync(new URL('../../frontend/public/exercises/abdutora.mp4',import.meta.url));
 
 test('biblioteca completa é semeada uma vez e sem sobrescrever exercícios editados',()=>{
   assert.match(server,/const EXERCISE_CATALOG_VERSION=2/);
@@ -35,4 +36,15 @@ test('configurações filtram exercícios pelo nome sem diferenciar acentos',()=
   assert.match(frontend,/get<any\[]>\('\/exercises'\)\.then\(data=>setEx\(visibleExerciseChoices\(data\)\)\)/);
   assert.match(frontend,/normalizeExerciseSearch\(row\.name\)\.includes\(normalizeExerciseSearch\(search\)\)/);
   assert.match(frontend,/filteredRows\.map\(row=>/);
+});
+
+test('vídeo da abdutora é exibido como vídeo e existe no pacote público',()=>{
+  assert.match(frontend,/'abducao de quadril':'\/exercises\/abdutora\.mp4'/);
+  assert.match(frontend,/'abdutora':'\/exercises\/abdutora\.mp4'/);
+  assert.match(frontend,/'cadeira abdutora':'\/exercises\/abdutora\.mp4'/);
+  assert.match(frontend,/isExerciseVideo=/);
+  assert.match(frontend,/<video src=\{preview\} controls playsInline/);
+  assert.match(frontend,/<video src=\{media\} controls playsInline/);
+  assert.ok(abdutoraVideo.length>0);
+  assert.ok(abdutoraVideo.includes(Buffer.from('avc1')),'MP4 usa codec de vídeo compatível');
 });
