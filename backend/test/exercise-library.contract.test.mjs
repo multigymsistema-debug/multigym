@@ -1,0 +1,38 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+
+const server=fs.readFileSync(new URL('../src/server.ts',import.meta.url),'utf8');
+const migration=fs.readFileSync(new URL('../schema/022_exercise_catalog_seed.sql',import.meta.url),'utf8');
+const frontend=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),'utf8');
+
+test('biblioteca completa é semeada uma vez e sem sobrescrever exercícios editados',()=>{
+  assert.match(server,/const EXERCISE_CATALOG_VERSION=2/);
+  assert.match(server,/await ensureExerciseLibrary\(gym\.id,client\)/);
+  assert.match(server,/await ensureAllExerciseLibraries\(\)/);
+  assert.match(server,/await deactivateDuplicateExerciseAliases\(\)/);
+  assert.match(server,/UPDATE exercises e SET active=false FROM duplicates d/);
+  assert.match(server,/ON CONFLICT\(gym_id,name\) DO NOTHING/);
+  assert.match(server,/WHERE COALESCE\(v\.version,0\)<\$1/);
+  assert.match(migration,/CREATE TABLE IF NOT EXISTS gym_exercise_catalog_versions/);
+});
+
+test('catálogo inclui as variações pedidas e não repete nomes',()=>{
+  const match=server.match(/const exerciseCatalog=\[([\s\S]*?)\]\.map\(/);
+  assert.ok(match,'exerciseCatalog encontrado');
+  const names=[...match[1].matchAll(/\[\s*(?:'([^']+)'|"([^"]+)")/g)].map(x=>x[1]||x[2]);
+  const normalize=value=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  assert.equal(names.length,135);
+  assert.equal(new Set(names.map(normalize)).size,names.length);
+  for(const name of ['Crucifixo com halteres','Puxada frontal com pegada neutra','Adução de quadril na máquina','Elevação de panturrilhas no leg press','Circuito de exercícios com peso corporal','Supino inclinado com halteres','Crucifixo na máquina','Remada baixa sentada','Rosca direta com barra'])assert.ok(names.includes(name),`faltou ${name}`);
+  for(const duplicate of ['Supino inclinado','Crucifixo','Remada baixa','Rosca direta'])assert.ok(!names.includes(duplicate),`duplicata permaneceu: ${duplicate}`);
+});
+
+test('configurações filtram exercícios pelo nome sem diferenciar acentos',()=>{
+  assert.match(frontend,/Pesquisar exercício pelo nome/);
+  assert.match(frontend,/retiredDuplicateExerciseAliases\.has\(normalizeExerciseSearch\(row\.name\)\)/);
+  assert.match(frontend,/visibleExerciseChoices\(rows\)/);
+  assert.match(frontend,/get<any\[]>\('\/exercises'\)\.then\(data=>setEx\(visibleExerciseChoices\(data\)\)\)/);
+  assert.match(frontend,/normalizeExerciseSearch\(row\.name\)\.includes\(normalizeExerciseSearch\(search\)\)/);
+  assert.match(frontend,/filteredRows\.map\(row=>/);
+});
