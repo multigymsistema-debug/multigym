@@ -55,6 +55,11 @@ test('vídeo da abdutora é exibido como vídeo e existe no pacote público',()=
   assert.ok(abdutoraVideo.includes(Buffer.from('avc1')),'MP4 usa codec de vídeo compatível');
 });
 
+test('edição de exercício não depende de coluna updated_at inexistente',()=>{
+  assert.ok(server.includes("const updatedAtClause=table==='exercises'?'':',updated_at=now()'"));
+  assert.ok(server.includes('SET ${sets}${updatedAtClause} WHERE id=$'));
+});
+
 test('cadastro e edição aceitam fotos e vídeos com limites seguros',()=>{
   assert.match(frontend,/accept="image\/png,image\/jpeg,image\/webp,video\/mp4,video\/webm"/);
   assert.match(frontend,/const readMedia=/);
