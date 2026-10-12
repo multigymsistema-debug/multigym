@@ -85,7 +85,7 @@ function MagicMirror({student,onClose}:{student:any;onClose:()=>void}){
     if(sourceRatio>target){cw=sh*target;sx=(sw-cw)/2}else{ch=sw/target;sy=(sh-ch)/2}
     ctx.drawImage(source,sx,sy,cw,ch,0,0,1080,1920);
     if(logoImage){
-      const maxW=140,maxH=100,pad=38;
+      const maxW=700,maxH=500,pad=38;
       const ratio=Math.min(maxW/logoImage.naturalWidth,maxH/logoImage.naturalHeight);
       const w=logoImage.naturalWidth*ratio,h=logoImage.naturalHeight*ratio;
       ctx.save();ctx.globalAlpha=.92;ctx.shadowColor='rgba(0,0,0,.38)';ctx.shadowBlur=12;ctx.shadowOffsetX=1;ctx.shadowOffsetY=2;
