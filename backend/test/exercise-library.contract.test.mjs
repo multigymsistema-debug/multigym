@@ -41,8 +41,14 @@ test('configurações filtram exercícios pelo nome sem diferenciar acentos',()=
   assert.match(frontend,/retiredDuplicateExerciseAliases\.has\(normalizeExerciseSearch\(row\.name\)\)/);
   assert.match(frontend,/visibleExerciseChoices\(rows\)/);
   assert.match(frontend,/get<any\[]>\('\/exercises\?include_media=false'\)\.then\(data=>setEx\(visibleExerciseChoices\(data\)\)\)/);
-  assert.match(frontend,/get<any\[]>\('\/exercises\?include_media=true'\)\.then\(setRows\)/);
-  assert.ok(server.includes("const columns=table==='exercises'&&!includeMedia?'id,gym_id,name,muscle_group,equipment,difficulty,instructions,active,created_at':'*'"));
+  assert.match(frontend,/get<any\[]>\('\/exercises\?include_media=false'\)/);
+  assert.match(frontend,/get<any>\(`\/exercises\/\$\{encodeURIComponent\(row\.id\)\}\/media`\)/);
+  assert.match(frontend,/preload="none"/);
+  assert.match(frontend,/Carregando exercícios…/);
+  assert.ok(server.includes("const columns=table==='exercises'&&!includeMedia?'id,gym_id,name,muscle_group,equipment,difficulty,instructions,active,created_at,(COALESCE(length(illustration_url),0)>0) AS has_illustration':'*'"));
+  assert.ok(server.includes("app.get('/api/exercises/:id/media'"));
+  assert.ok(server.includes('WHERE id=$1 AND gym_id=$2'));
+  assert.ok(server.includes('COALESCE($${i+1},${f})'));
   assert.match(frontend,/normalizeExerciseSearch\(row\.name\)\.includes\(normalizeExerciseSearch\(search\)\)/);
   assert.match(frontend,/filteredRows\.map\(row=>/);
 });
@@ -66,7 +72,7 @@ test('catálogo e sessão do aluno usam as mesmas ilustrações e reproduzem ví
   assert.ok(exerciseStyles.includes('.student-session-head h1{font-size:18px'));
   assert.ok(exerciseStyles.includes('.student-session-head p{font-size:11px'));
   assert.match(frontend,/<video src=\{preview\} controls playsInline/);
-  assert.match(frontend,/<video src=\{media\} controls playsInline/);
+  assert.match(frontend,/<video src=\{src\} controls playsInline preload="none"/);
   assert.ok(abdutoraVideo.length>0);
   assert.ok(abdutoraVideo.includes(Buffer.from('avc1')),'MP4 usa codec de vídeo compatível');
 });
