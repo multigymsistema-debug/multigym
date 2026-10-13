@@ -1,0 +1,9 @@
+ONNX Model Zoo MobileNet v2 int8
+
+The model file mobilenetv2-12-int8.onnx and its ImageNet synset labels are distributed from the ONNX Model Zoo:
+https://github.com/onnx/models/tree/main/validated/vision/classification/mobilenet
+Model source: https://github.com/onnx/models/raw/refs/heads/main/validated/vision/classification/mobilenet/model/mobilenetv2-12-int8.onnx
+Label source: https://github.com/onnx/models/raw/refs/heads/main/validated/vision/classification/synset.txt
+The ONNX Model Zoo repository identifies this model and repository content as Apache License 2.0. The corresponding license text is included in LICENSE.txt.
+
+This is a generic ImageNet 1,000-class classifier, not a food-specific or nutrition model. It does not measure ingredients, quantities, portions, or nutrients. Food suggestions are tentative and require the student's review.
