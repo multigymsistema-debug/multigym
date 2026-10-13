@@ -122,11 +122,12 @@ export async function suggestFoodsFromPhoto(source: string): Promise<FoodSuggest
   if (!inputName || !outputName) throw new Error('O modelo local não possui entradas compatíveis.');
   const tensor = new ort.Tensor('float32', createInput(image), [1, 3, SIZE, SIZE]);
   const result = await session.run({ [inputName]: tensor });
-  const scores = result[outputName]?.data;
-  if (!scores || scores.length !== labels.length) throw new Error('A resposta do modelo local está incompleta.');
+  const output = result[outputName]?.data;
+  if (!output || output.length !== labels.length) throw new Error('A resposta do modelo local está incompleta.');
+  const scores = Array.from(output, value => Number(value));
 
-  const max = Math.max(...Array.from(scores, Number));
-  const exps = Array.from(scores, value => Math.exp(Number(value) - max));
+  const max = Math.max(...scores);
+  const exps = scores.map(value => Math.exp(value - max));
   const denominator = exps.reduce((sum, value) => sum + value, 0);
   const ranked = exps.map((value, index) => ({ index, probability: value / denominator }))
     .sort((a, b) => b.probability - a.probability).slice(0, 12);
