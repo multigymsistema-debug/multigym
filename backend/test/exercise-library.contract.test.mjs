@@ -11,7 +11,7 @@ const exerciseStyles=fs.readFileSync(new URL('../../frontend/src/styles.css',imp
 const abdutoraVideo=fs.readFileSync(new URL('../../frontend/public/exercises/abdutora.mp4',import.meta.url));
 
 test('biblioteca completa é semeada uma vez e sem sobrescrever exercícios editados',()=>{
-  assert.match(server,/const EXERCISE_CATALOG_VERSION=3/);
+  assert.match(server,/const EXERCISE_CATALOG_VERSION=4/);
   assert.match(server,/await ensureExerciseLibrary\(gym\.id,client\)/);
   assert.match(server,/await ensureAllExerciseLibraries\(\)/);
   assert.ok(server.includes("UPDATE exercises SET illustration_url=$1 WHERE gym_id=$2 AND lower(trim(name))=ANY($3::text[])") );
@@ -30,10 +30,14 @@ test('catálogo inclui as variações pedidas e não repete nomes',()=>{
   assert.ok(match,'exerciseCatalog encontrado');
   const names=[...match[1].matchAll(/\[\s*(?:'([^']+)'|"([^"]+)")/g)].map(x=>x[1]||x[2]);
   const normalize=value=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-  assert.equal(names.length,135);
+  assert.equal(names.length,130);
   assert.equal(new Set(names.map(normalize)).size,names.length);
-  for(const name of ['Crucifixo com halteres','Puxada frontal com pegada neutra','Adução de quadril na máquina','Elevação de panturrilhas no leg press','Circuito de exercícios com peso corporal','Supino inclinado com halteres','Crucifixo na máquina','Remada baixa sentada','Rosca direta com barra'])assert.ok(names.includes(name),`faltou ${name}`);
+  for(const name of ['Crucifixo na máquina','Puxada frontal com pegada neutra','Adução de quadril na máquina','Elevação de panturrilhas no leg press','Circuito de exercícios com peso corporal','Supino inclinado com halteres','Remada baixa sentada','Rosca direta com barra'])assert.ok(names.includes(name),`faltou ${name}`);
   for(const duplicate of ['Supino inclinado','Crucifixo','Remada baixa','Rosca direta'])assert.ok(!names.includes(duplicate),`duplicata permaneceu: ${duplicate}`);
+  const deactivated=['Crucifixo com halteres','Pullover com halter','Coice de glúteo com halter','Elevação pélvica com barra','Elevação pélvica com halter'];
+  for(const name of deactivated)assert.ok(!names.includes(name),`exercício desativado permaneceu no catálogo: ${name}`);
+  assert.match(server,/const retiredExerciseNames=\[/);
+  assert.ok(server.includes('UPDATE exercises SET active=false WHERE gym_id=$1 AND active=true AND lower(trim(name))=ANY($2::text[]) RETURNING id'));
 });
 
 test('configurações filtram exercícios pelo nome sem diferenciar acentos',()=>{
