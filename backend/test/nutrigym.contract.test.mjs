@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const server=fs.readFileSync(new URL('../src/server.ts',import.meta.url),'utf8');
+const groq=fs.readFileSync(new URL('../src/groq.ts',import.meta.url),'utf8');
+const studentNutri=fs.readFileSync(new URL('../../frontend/src/nutrigym.tsx',import.meta.url),'utf8');
 const migration=fs.readFileSync(new URL('../schema/002_nutrigym.sql',import.meta.url),'utf8');
 const extended=fs.readFileSync(new URL('../schema/003_nutrigym_plus.sql',import.meta.url),'utf8');
 const chat=fs.readFileSync(new URL('../schema/004_nutrigym_chat.sql',import.meta.url),'utf8');
@@ -55,4 +57,14 @@ test('Public pre-enrollment creates a student without enrollment and exposes adm
   assert.match(server,/api\/public\/pre-enrollments/);
   assert.match(server,/app\.get\('\/api\/pre-enrollments'/);
   assert.match(server,/registration_source/);
+});
+
+
+test('manual meal logging remains available when AI analysis or quota is unavailable',()=>{
+  assert.match(server,/estimateMealNutrition\(String\(description\),String\(type\),false\)/);
+  assert.doesNotMatch(server,/if\(!hasManual&&!await allowAi\(s\.gym,'meal_estimate'\)\)return reply\.code\(429\)/);
+  assert.match(groq,/estimateMealNutrition\(description:string,mealType:string,useAi=true\)/);
+  assert.match(groq,/if\(!useAi\)return fallback\(\)/);
+  assert.match(studentNutri,/meal_type:mealType,description:manualDescription/);
+  assert.match(studentNutri,/estimativa local por porções médias/);
 });
