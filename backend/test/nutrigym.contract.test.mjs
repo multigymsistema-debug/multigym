@@ -67,5 +67,5 @@ test('manual meal logging remains available when AI analysis or quota is unavail
   assert.match(groq,/if\(!useAi\)return fallback\(\)/);
   assert.match(studentNutri,/meal_type:mealType,description/);
   assert.ok(studentNutri.includes("const saveManual=async(event:React.FormEvent)=>{event.preventDefault();if(manualDescription.trim())await sendMeal(manualDescription.trim())}"));
-  assert.match(studentNutri,/estimativa local por porções médias/);
+  assert.match(server,/Valores estimados automaticamente por porção média/);
 });
