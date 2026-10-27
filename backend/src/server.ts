@@ -41,7 +41,7 @@ const slugify = (s:string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-
 const requireAuth = async (req:Req, reply:FastifyReply) => {
   const header = req.headers.authorization || '';
   if (!header.startsWith('Bearer ')) return reply.code(401).send({error:'Não autenticado'});
-  const token=header.slice(7); const row=await one(`SELECT u.id,u.gym_id,u.name,u.email,u.role,u.status,g.name gym_name FROM sessions s JOIN users u ON u.id=s.user_id JOIN gyms g ON g.id=s.gym_id WHERE s.token_hash=$1 AND s.revoked_at IS NULL AND s.expires_at>now() AND u.status='active'`,[hashToken(token)]);
+  const token=header.slice(7); const row=await one(`SELECT u.id,u.gym_id,u.name,u.email,u.role,u.status,g.name gym_name FROM sessions s JOIN users u ON u.id=s.user_id JOIN gyms g ON g.id=s.gym_id WHERE s.token_hash=$1 AND s.revoked_at IS NULL AND s.expires_at>now() AND u.status='active' AND g.active=true`,[hashToken(token)]);
   if(!row) return reply.code(401).send({error:'Sessão expirada'}); req.user=row;
 };
 const requireRoles=(roles:string[])=>async(req:Req,reply:FastifyReply)=>{if(!req.user||!roles.includes(req.user.role))return reply.code(403).send({error:'Sem permissão para esta operação'});};
