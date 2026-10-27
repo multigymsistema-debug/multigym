@@ -40,6 +40,7 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/multigym_test
           FRONTEND_URL: http://localhost:5173
           BIOMETRIC_ENCRYPTION_KEY: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+          MASTER_INITIAL_PASSWORD: CI-Only-Temporary-Password-8374!
       - name: Wait for API
         run: for i in {1..30}; do curl --fail http://127.0.0.1:3000/health && exit 0 || sleep 2; done; cat /tmp/multigym-api.log; exit 1
       - name: Run API integration tests

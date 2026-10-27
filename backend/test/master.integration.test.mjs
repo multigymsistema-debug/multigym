@@ -1,0 +1,19 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+const base=process.env.TEST_API_URL||'http://127.0.0.1:3000';
+const temporary='CI-Only-Temporary-Password-8374!';
+const req=async(path,{method='GET',body,token}={})=>{const headers={};if(body!==undefined)headers['Content-Type']='application/json';if(token)headers.Authorization=`Bearer ${token}`;const r=await fetch(base+path,{method,headers,body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,data:await r.json().catch(()=>null)}};
+test('Master forces password rotation and can block, archive and delete a gym with audit trail',async()=>{
+ assert.equal((await req('/api/master/gyms')).status,401);
+ const login=await req('/api/master/login',{method:'POST',body:{email:'fabio17dejesusjunior@gmail.com',password:temporary}});assert.equal(login.status,200,JSON.stringify(login.data));const token=login.data.token;
+ const me=await req('/api/master/me',{token});assert.equal(me.status,200);assert.equal(me.data.master.must_change_password,true);
+ assert.equal((await req('/api/master/gyms',{token})).status,403);
+ assert.equal((await req('/api/master/change-password',{method:'POST',token,body:{new_password:'Master-Test-Password-Strong-2026!'}})).status,200);
+ const list=await req('/api/master/gyms',{token});assert.equal(list.status,200);assert.ok(Array.isArray(list.data));
+ const suffix=Date.now(),created=await req('/api/auth/register',{method:'POST',body:{gymName:`master-test-${suffix}`,name:'Admin Teste',email:`master-test-${suffix}@example.test`,password:'Academy-Test-Password-5531!'}});assert.equal(created.status,200,JSON.stringify(created.data));const gym=created.data.user.gym_id;
+ const blocked=await req(`/api/master/gyms/${gym}`,{method:'PATCH',token,body:{active:false}});assert.equal(blocked.status,200);assert.equal(blocked.data.active,false);assert.equal((await req('/api/me',{token:created.data.token})).status,401);
+ const unblocked=await req(`/api/master/gyms/${gym}`,{method:'PATCH',token,body:{active:true}});assert.equal(unblocked.status,200);assert.equal(unblocked.data.active,true);
+ const archived=await req(`/api/master/gyms/${gym}/archive`,{method:'POST',token});assert.equal(archived.status,200);assert.equal(archived.data.active,false);assert.ok(archived.data.archived_at);
+ const removed=await req(`/api/master/gyms/${gym}`,{method:'DELETE',token});assert.equal(removed.status,200);assert.equal(removed.data.deleted,true);
+ await req('/api/master/logout',{method:'POST',token});assert.equal((await req('/api/master/gyms',{token})).status,401);
+});

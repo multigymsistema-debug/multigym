@@ -5,6 +5,7 @@ import {LayoutDashboard,Users,ClipboardList,Dumbbell,WalletCards,CalendarDays,Ba
 import {api,get,post,put,del} from './api';
 import {isExerciseVideo,standardExerciseImage} from './exerciseMedia';
 import {StudentPortal} from './nutrigym';
+import {MasterPortal} from './MasterPortal';
 import './styles.css';
 import './receipt-prompt.css';
 
@@ -159,6 +160,7 @@ let content:React.ReactNode=page==='dashboard'?<Dashboard/>:page==='students'?<S
 
 function App(){const portalParams=new URLSearchParams(window.location.search),demo=portalParams.has('demo');const demoUser={id:'demo-admin',gym_id:'demo-gym',name:'Administrador Demo',email:'admin@aroeiragfitness.com.br',role:'admin',gym_name:'Aroeira G Fitness'};const [user,setUser]=useState<User|null>(demo?demoUser:null),[page,setPage]=useState<Page>('dashboard'),[studentId,setStudentId]=useState<string|null>(null);useEffect(()=>{if(demo)return;if(localStorage.getItem('multigym_token'))get('/me').then(r=>setUser(r.user)).catch(()=>localStorage.removeItem('multigym_token'))},[demo]);if(portalParams.has('pre-matricula'))return <PreEnrollmentPublic slug={portalParams.get('gym')||''}/>;const path=window.location.pathname.replace(/\/+$/,'')||'/';const isStudentPath=path==='/aluno'||path.startsWith('/aluno/');if(isStudentPath||path.startsWith('/nutrigym')||portalParams.has('nutrigym')||portalParams.has('student')){const section=portalParams.get('section');const pathPage:any={'/aluno/personalgym':'personalgym','/aluno/nutrigym':'nutrigym','/aluno/perfil':'profile','/aluno/treinos':'workouts','/aluno/agenda':'schedule'};const initialPage=pathPage[path]|| (portalParams.has('nutrigym')?'nutrigym':section||'home');return <StudentPortal initialPage={initialPage}/>;}if(!user)return <Auth onLogin={setUser}/>;const logout=async()=>{try{await api('/auth/logout',{method:'POST'})}catch{}localStorage.removeItem('multigym_token');setUser(null)};let content:React.ReactNode; if(studentId)content=<StudentDetail id={studentId} onBack={()=>setStudentId(null)}/>;else switch(page){case'dashboard':content=<Dashboard go={setPage}/>;break;case'announcements':content=<AnnouncementsAdmin/>;break;case'pre-enrollments':content=<PreEnrollments/>;break;case'students':content=<Students onOpen={setStudentId}/>;break;case'plans':content=<Plans/>;break;case'enrollments':content=<Enrollments/>;break;case'workouts':content=<Workouts/>;break;case'nutrigym':content=<NutriGymAdmin/>;break;case'finance':content=<Finance/>;break;case'products':content=<Products/>;break;case'services':content=<Services/>;break;case'sales':content=<Sales/>;break;case'cash':content=<Cash/>;break;case'checkin':content=<Checkin/>;break;case'agenda':content=<Agenda/>;break;case'reports':content=<Reports/>;break;case'team':content=<Team/>;break;case'settings':content=<SettingsPage user={user}/>;break;}return <Shell user={user} page={page} setPage={setPage} onLogout={logout}>{content}</Shell>}
 
-createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>);
+function AppRouter(){return new URLSearchParams(window.location.search).has('master')?<MasterPortal/>:<App/>;}
+createRoot(document.getElementById('root')!).render(<React.StrictMode><AppRouter/></React.StrictMode>);
 
 
