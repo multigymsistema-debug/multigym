@@ -65,6 +65,7 @@ test('manual meal logging remains available when AI analysis or quota is unavail
   assert.doesNotMatch(server,/if\(!hasManual&&!await allowAi\(s\.gym,'meal_estimate'\)\)return reply\.code\(429\)/);
   assert.match(groq,/estimateMealNutrition\(description:string,mealType:string,useAi=true\)/);
   assert.match(groq,/if\(!useAi\)return fallback\(\)/);
-  assert.match(studentNutri,/meal_type:mealType,description:manualDescription/);
+  assert.match(studentNutri,/meal_type:mealType,description/);
+  assert.ok(studentNutri.includes("const saveManual=async(event:React.FormEvent)=>{event.preventDefault();if(manualDescription.trim())await sendMeal(manualDescription.trim())}"));
   assert.match(studentNutri,/estimativa local por porções médias/);
 });
