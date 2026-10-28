@@ -6,7 +6,7 @@ const migration=fs.readFileSync(new URL('../schema/026_mercadopago_enrollment_or
 const ui=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),'utf8');
 test('Orders Pix keeps sandbox credentials server-side and uses pending state',()=>{
  assert.match(server,/MP_ORDERS_ACCESS_TOKEN/); assert.match(server,/MP_ORDERS_ENV!=='sandbox'/); assert.match(server,/X-Idempotency-Key/);
- assert.match(server,/status='pending'/); assert.match(server,/method:\{id:'pix',type:'bank_transfer'\}/);
+ assert.match(server,/status='pending'/); assert.match(server,/payment_method:\{id:'pix',type:'bank_transfer'\}/);
  assert.match(server,/multigym-enrollment:/);
 });
 test('Payment reconciliation validates external reference and amount before marking paid',()=>{
