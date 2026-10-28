@@ -6,7 +6,7 @@ const migration=await readFile(new URL('../schema/025_saas_trials.sql',import.me
 test('new academies receive full platform access for ten days',()=>{
  assert.match(server,/VALUES\(\$1,'trial','trial',now\(\),now\(\)\+interval '10 days'\)/);
  assert.match(server,/entitlement\.trial_started_at&&entitlement\.expires_at&&new Date\(entitlement\.expires_at\)>new Date\(\)/);
- assert.match(server,/if\(sub\.trial_started_at&&new Date\(sub\.expires_at\)\.getTime\(\)>Date\.now\(\)\)return true/);
+ assert.match(server,/if\(sub\.status==='trial'\)return new Date\(sub\.expires_at\)\.getTime\(\)>Date\.now\(\)/);
 });
 test('existing academies start a single trial in the migration',()=>{
  assert.match(migration,/trial_started_at timestamptz/);
