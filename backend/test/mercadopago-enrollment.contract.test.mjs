@@ -6,7 +6,7 @@ const migration=fs.readFileSync(new URL('../schema/026_mercadopago_enrollment_or
 const ui=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),'utf8');
 test('Orders Pix keeps sandbox credentials server-side and uses pending state',()=>{
  assert.match(server,/MP_ORDERS_ACCESS_TOKEN/); assert.match(server,/MP_ORDERS_ENV!=='sandbox'/); assert.match(server,/X-Idempotency-Key/);
- assert.match(server,/status='pending'/); assert.match(server,/payment_method:\{id:'pix',type:'bank_transfer'\}/);
+ assert.match(server,/status='pending'/); assert.ok(server.includes("payment_method:{id:'pix',type:'bank_transfer'}"));
  assert.match(server,/multigym-enrollment:/);
 });
 test('Payment reconciliation validates external reference and amount before marking paid',()=>{
@@ -17,7 +17,7 @@ test('Payment reconciliation validates external reference and amount before mark
  assert.match(server,/INSERT INTO cash_movements/);
 });
 test('pending Orders have dedicated storage and enrollment pending status',()=>{
- assert.match(migration,/UNIQUE\(order_id\)/); assert.match(migration,/UNIQUE\(enrollment_id\)/);
+ assert.match(migration,/order_id varchar\(100\) NOT NULL UNIQUE/); assert.match(migration,/UNIQUE\(enrollment_id\)/);
  assert.match(migration,/status IN \('active','expiring','expired','cancelled','pending'\)/);
 });
 test('UI presents QR and copy-paste and polls until confirmation',()=>{
