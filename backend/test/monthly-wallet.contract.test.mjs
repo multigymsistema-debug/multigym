@@ -18,7 +18,7 @@ test('Wallet requests are limited to online settled funds and reserve pending or
 });
 test('Master can only resolve pending withdrawal requests and actions are audited',()=>{
  assert.match(server,/WHERE id=\$4 AND status='pending' RETURNING id,gym_id,amount,status/);
- assert.match(server,/monthly_wallet_withdrawal_\+status/);
+ assert.match(server,/monthly_wallet_withdrawal_'\+status/);
 });
 test('Student billing is separate from SaaS and UI exposes settings, wallet, student Pix and Master review',()=>{
  assert.match(migration,/gym_online_billing_settings/);assert.match(migration,/gym_monthly_wallet_withdrawals/);
