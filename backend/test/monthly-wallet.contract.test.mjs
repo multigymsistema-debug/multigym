@@ -25,5 +25,5 @@ test('Student billing is separate from SaaS and settings, wallet, student Pix an
  assert.match(migration,/gym_online_billing_settings/);assert.match(migration,/gym_monthly_wallet_withdrawals/);
  assert.doesNotMatch(migration,/gym_saas_plans|gym_saas_subscriptions/);
  assert.match(ui,/Saldo Mensalidades/);assert.match(ui,/online-billing\/settings/);
- assert.match(student,/Mensalidades e faturas/); assert.match(student,/Pagar fatura/); assert.match(student,/Pix/);assert.match(master,/Saques de mensalidades/);
+ assert.match(student,/Mensalidades e faturas/); assert.match(student,/Pagar fatura/); assert.match(student,/Gerar cobrança Pix/);assert.match(master,/Saques de mensalidades/);
 });
