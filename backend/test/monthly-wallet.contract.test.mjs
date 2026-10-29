@@ -7,7 +7,7 @@ const ui=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),
 const student=fs.readFileSync(new URL('../../frontend/src/nutrigym.tsx',import.meta.url),'utf8');
 const master=fs.readFileSync(new URL('../../frontend/src/MasterPortal.tsx',import.meta.url),'utf8');
 test('Only matching and confirmed Asaas monthly charges enter the ledger',()=>{
- assert.match(server,/String\(remote\.externalReference\|\|''\)\)!==String\(linked\.external_reference\)/);
+ assert.match(server,/String\(remote\.externalReference\|\|''\)!==String\(linked\.external_reference\)/);
  assert.match(server,/money\(remote\.value\)!==money\(linked\.amount\)/);
  assert.match(server,/String\(remote\.__event\|\|''\)==='PAYMENT_RECEIVED'&&String\(remote\.status\)==='RECEIVED'/);
  assert.match(server,/UPDATE payments SET status='paid',paid_at=now\(\)/);
