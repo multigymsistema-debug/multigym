@@ -20,6 +20,6 @@ test('pending Orders have dedicated storage and enrollment pending status',()=>{
  assert.match(migration,/order_id varchar\(100\) NOT NULL UNIQUE/); assert.match(migration,/UNIQUE\(enrollment_id\)/);
  assert.match(migration,/status IN \('active','expiring','expired','cancelled','pending'\)/);
 });
-test('UI presents QR and copy-paste and polls until confirmation',()=>{
- assert.match(ui,/qr_code_base64|qrBase64/); assert.match(ui,/qr_code\|\|/); assert.match(ui,/setInterval\(poll,8000\)/);
+test('UI presents hosted enrollment checkout and polls until confirmation',()=>{
+ assert.match(ui,/checkout\.checkout\?\.payment_url/); assert.match(ui,/Pagar com Pix ou cartão \(Asaas\)/); assert.match(ui,/setInterval\(poll,8000\)/);
 });
