@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const server=fs.readFileSync(new URL('../../../server_asaas_work.ts',import.meta.url),'utf8');
+const schema=fs.readFileSync(new URL('../../../scratch_asaas_schema.sql',import.meta.url),'utf8');
+const ui=fs.readFileSync(new URL('../../../frontend_main_asaas.tsx',import.meta.url),'utf8');
+const student=fs.readFileSync(new URL('./aluno.js',import.meta.url),'utf8');
+test('Asaas is fixed to Sandbox and API key stays server-side',()=>{assert.match(server,/api-sandbox\.asaas\.com\/v3/);assert.match(server,/ASAAS_SANDBOX_API_KEY/);assert.doesNotMatch(ui,/ASAAS_SANDBOX_API_KEY/);assert.doesNotMatch(student,/ASAAS_SANDBOX_API_KEY/)});
+test('webhook is authenticated, persisted and deduplicated',()=>{assert.match(server,/asaas-access-token/);assert.match(server,/INSERT INTO asaas_webhook_events/);assert.match(server,/ON CONFLICT\(event_id\) DO NOTHING/);assert.match(server,/DELETE FROM asaas_webhook_events WHERE event_id=\$1/)});
+test('only actual receipt credits wallet and monthly payment',()=>{assert.match(server,/__event\|\|''\)==='PAYMENT_RECEIVED'/);assert.match(server,/remote\.status\|\|''\)==='RECEIVED'/);assert.match(server,/p\.category='membership'/);assert.match(server,/multigym-payment:/)});
+test('Asaas persistence schema is scoped per gym/student and event unique',()=>{assert.match(schema,/PRIMARY KEY\(gym_id,student_id\)/);assert.match(schema,/event_id varchar\(160\) PRIMARY KEY/);assert.match(schema,/UNIQUE\(payment_id\)/)});
+test('student gets Asaas monthly Pix controls and can check status',()=>{assert.match(student,/createStudentAsaasPix/);assert.match(student,/student-api\/monthly-payment/);assert.match(student,/data-asaas-check/);assert.match(ui,/Gerar cobrança Pix Asaas/)});

@@ -35,6 +35,7 @@ async function loadStudentData() {
     if (!response.ok) return;
     const data = await response.json();
     renderRealData(data);
+    await loadStudentMonthlyPayment();
     const name = data.student?.name || 'Aluno';
     const hello = document.querySelector('.hello strong');
     if (hello) hello.textContent = name;
@@ -58,6 +59,25 @@ const exerciseGuide = (name='') => { const n=name.toLowerCase(); if(n.includes('
 
 const exerciseInfo = (name='') => { const n=name.toLowerCase(); if(n.includes('supino')) return {muscles:'Peito · tríceps',equipment:'Barra e banco',tempo:'2–1–2',steps:['Deite-se com os pés firmes e escápulas apoiadas.','Desça a barra até a linha do peito, sem perder o controle.','Empurre para cima sem travar os cotovelos.']}; if(n.includes('remada')) return {muscles:'Costas · bíceps',equipment:'Cabo ou máquina',tempo:'2–1–3',steps:['Mantenha a coluna neutra e o peito aberto.','Puxe o equipamento em direção ao abdômen.','Retorne estendendo os braços sem arredondar as costas.']}; if(n.includes('agach')) return {muscles:'Quadríceps · glúteos',equipment:'Barra, Smith ou halter',tempo:'3–1–2',steps:['Apoie o peso e alinhe os pés aos ombros.','Desça levando o quadril para trás e mantendo os joelhos alinhados.','Suba pressionando o chão, sem perder a postura.']}; if(n.includes('desenvolvimento')) return {muscles:'Ombros · tríceps',equipment:'Halteres ou máquina',tempo:'2–1–2',steps:['Comece com os pesos na altura dos ombros.','Empurre verticalmente sem arquear a lombar.','Desça até a posição inicial de forma controlada.']}; if(n.includes('rosca')) return {muscles:'Bíceps',equipment:'Barra, halter ou polia',tempo:'2–1–3',steps:['Mantenha os cotovelos junto ao corpo.','Flexione os braços sem balançar o tronco.','Desça a carga devagar até quase estender os braços.']}; if(n.includes('tríceps')||n.includes('triceps')) return {muscles:'Tríceps',equipment:'Polia e corda/barra',tempo:'2–1–3',steps:['Fixe os cotovelos ao lado do corpo.','Estenda os braços sem projetar os ombros.','Retorne controlando a subida da carga.']}; if(n.includes('abdominal')) return {muscles:'Abdômen',equipment:'Colchonete ou máquina',tempo:'2–1–2',steps:['Mantenha o pescoço neutro e o abdômen contraído.','Eleve o tronco sem puxar a cabeça.','Retorne devagar sem relaxar completamente.']}; return {muscles:'Conforme prescrição',equipment:'Conforme cadastro',tempo:'Controlada',steps:['Confira a posição inicial da ilustração.','Execute sem impulso e sem dor.','Retorne lentamente à posição inicial.']}; };
 function applyExerciseGuide(name='') { const guide=exerciseGuide(name); const info=exerciseInfo(name); const art=document.querySelector('#exerciseIllustration'); if(art)art.innerHTML=guide[0]; const text=document.querySelector('#exerciseInstructions span'); if(text)text.textContent=guide[1]; const mus=document.querySelector('#exerciseMuscles'); const equip=document.querySelector('#exerciseEquipment'); const tempo=document.querySelector('#exerciseTempo'); const steps=document.querySelector('#exerciseSteps'); if(mus)mus.textContent=info.muscles;if(equip)equip.textContent=info.equipment;if(tempo)tempo.textContent=info.tempo;if(steps)steps.innerHTML=info.steps.map(x=>`<li>${x}</li>`).join(''); }
+
+async function loadStudentMonthlyPayment() {
+  const box=document.querySelector('#studentMonthlyPayment'); if(!box||!token())return;
+  try {
+    const r=await fetch(`${API}/student-api/monthly-payment/status`,{headers:{Authorization:`Bearer ${token()}`}}),data=await r.json();
+    if(!r.ok)throw new Error(data.error||'Não foi possível consultar a cobrança.');
+    const pending=data.pending;
+    if(pending){box.innerHTML=`<div style="width:100%"><strong>Pix da mensalidade · R$ ${Number(pending.amount||0).toFixed(2).replace('.',',')}</strong>${pending.qr_code_base64?`<img alt="QR Code Pix" style="display:block;width:220px;max-width:100%;margin:12px auto" src="data:image/png;base64,${pending.qr_code_base64}">`:''}<small>${pending.status||'Aguardando pagamento'}</small><textarea readonly rows="3" style="width:100%;margin-top:8px">${pending.qr_code||''}</textarea>${pending.ticket_url?`<a href="${pending.ticket_url}" target="_blank" rel="noreferrer">Abrir cobrança Asaas</a>`:''}<button class="primary full" data-asaas-check="${pending.payment_id}" style="margin-top:10px">Já paguei — consultar</button></div>`;return;}
+    if(!data.enabled||!data.enrollment){box.innerHTML=`<div><strong>Pagamento online</strong><small>${data.enabled?'Não há mensalidade ativa para cobrar.':'A academia ainda não habilitou o pagamento online.'}</small></div>`;return;}
+    box.innerHTML=`<div><strong>Mensalidade · ${data.enrollment.plan_name||'Plano ativo'}</strong><small>Vencimento: ${data.enrollment.ends_on?new Date(data.enrollment.ends_on+'T12:00:00').toLocaleDateString('pt-BR'):'—'} · Pix via Asaas</small><button class="primary full" id="createStudentAsaasPix" style="margin-top:10px">Gerar Pix da mensalidade</button></div>`;
+  } catch(e){box.innerHTML=`<div><strong>Pagamento online</strong><small>${String(e.message||'Não foi possível carregar a cobrança.')}</small></div>`;}
+}
+let asaasPollTimer=null;
+document.addEventListener('click',async event=>{
+ const create=event.target.closest('#createStudentAsaasPix');
+ if(create){create.disabled=true;create.textContent='Gerando Pix…';try{const r=await fetch(`${API}/student-api/monthly-payment`,{method:'POST',headers:{Authorization:`Bearer ${token()}`,'Content-Type':'application/json'},body:'{}'}),data=await r.json();if(!r.ok)throw new Error(data.error||'Não foi possível gerar o Pix.');await loadStudentMonthlyPayment();const id=data.pending?.payment_id;if(id){clearInterval(asaasPollTimer);asaasPollTimer=setInterval(()=>checkStudentAsaasPix(id),7000);}}catch(e){create.disabled=false;create.textContent=String(e.message||'Tente novamente');}}
+ const check=event.target.closest('[data-asaas-check]');if(check)await checkStudentAsaasPix(check.dataset.asaasCheck);
+});
+async function checkStudentAsaasPix(id){try{const r=await fetch(`${API}/student-api/monthly-payment/${encodeURIComponent(id)}/status`,{headers:{Authorization:`Bearer ${token()}`}}),data=await r.json();if(!r.ok)throw new Error(data.error||'Não foi possível consultar.');if(data.payment_status==='paid'){clearInterval(asaasPollTimer);await loadStudentData();await loadStudentMonthlyPayment();const box=document.querySelector('#studentMonthlyPayment');if(box)box.insertAdjacentHTML('afterbegin','<p class="paid">Pix confirmado!</p>');}}catch{}}
 
 function renderRealData(data) {
   studentHome = data;
