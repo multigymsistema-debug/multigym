@@ -4,10 +4,12 @@ import fs from 'node:fs';
 const server=fs.readFileSync(new URL('../src/server.ts',import.meta.url),'utf8');
 const migration=fs.readFileSync(new URL('../schema/026_mercadopago_enrollment_orders.sql',import.meta.url),'utf8');
 const ui=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),'utf8');
-test('Orders Pix keeps sandbox credentials server-side and uses pending state',()=>{
- assert.match(server,/MP_ORDERS_ACCESS_TOKEN/); assert.ok(server.includes("mpLiveBillingReady=()=>process.env.MP_ORDERS_ENV==='production'")); assert.match(server,/X-Idempotency-Key/);
- assert.match(server,/status='pending'/); assert.ok(server.includes("payment_method:{id:'pix',type:'bank_transfer'}"));
- assert.match(server,/multigym-enrollment:/);
+test('New online enrollments use Asaas while legacy Mercado Pago Orders cannot be initiated',()=>{
+ assert.ok(server.includes("if(b.payment_provider==='mercadopago')return reply.code(400)"));
+ assert.ok(server.includes("if(b.payment_provider==='asaas')"));
+ assert.ok(server.includes("asaasCreateFlexiblePayment({gymId:g,student,paymentId,amount,description:\`MultiGym matrícula \${enrollmentId}\`})"));
+ assert.match(server,/status='pending'/);
+ assert.ok(server.includes("if(!current)return reply.code(404).send({error:'Cobrança Pix não encontrada.'})"));
 });
 test('Payment reconciliation validates external reference and amount before marking paid',()=>{
  assert.match(server,/remote\.external_reference!==`multigym-enrollment:\$\{id\}`/);
