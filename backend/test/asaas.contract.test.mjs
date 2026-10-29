@@ -5,6 +5,8 @@ const server=fs.readFileSync(new URL('../src/server.ts',import.meta.url),'utf8')
 const schema=fs.readFileSync(new URL('../schema/028_asaas_student_payments.sql',import.meta.url),'utf8');
 const envSchema=fs.readFileSync(new URL('../schema/029_asaas_environment_separation.sql',import.meta.url),'utf8');
 const cashSchema=fs.readFileSync(new URL('../schema/030_asaas_checkout_cash.sql',import.meta.url),'utf8');
+const envPaymentSchema=fs.readFileSync(new URL('../schema/033_asaas_payment_environment_uniqueness.sql',import.meta.url),'utf8');
+const envPaymentSchema=fs.readFileSync(new URL('../schema/033_asaas_payment_environment_uniqueness.sql',import.meta.url),'utf8');
 const ui=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),'utf8');
 const student=fs.readFileSync(new URL('../../frontend/public/aluno.js',import.meta.url),'utf8');
 test('Asaas environments and credentials remain separated server-side',()=>{
@@ -31,8 +33,37 @@ test('hosted Asaas invoice lets the payer choose available payment methods',()=>
   assert.ok(server.includes("app.post('/api/payments/asaas-checkout'"));
   assert.ok(ui.includes('Cobrar Pix/cartão online'));
   assert.ok(ui.includes('Abrir página segura do Asaas'));
-  assert.ok(student.includes('Pagar mensalidade online'));
+  assert.ok(student.includes('Pagar com cartão (abre Asaas)'));
   assert.ok(server.includes("process.cwd(),'schema/030_asaas_checkout_cash.sql'"));
+});
+test('mapping allows independent sandbox and production records for the same local invoice',()=>{
+  assert.ok(envPaymentSchema.includes('DROP CONSTRAINT IF EXISTS asaas_student_payments_payment_id_key'));
+  assert.ok(envPaymentSchema.includes('UNIQUE (payment_id, environment)'));
+  assert.ok(server.includes("ON CONFLICT(payment_id,environment) DO UPDATE SET external_reference=EXCLUDED.external_reference"));
+  assert.ok(server.includes("WHERE payment_id=$1 AND environment=$2"));
+  assert.ok(server.includes('`payments?externalReference=${encodeURIComponent(expectedReference)}`'));
+  assert.ok(server.includes('ON CONFLICT(payment_id,environment) DO UPDATE SET asaas_payment_id=EXCLUDED.asaas_payment_id'));
+  assert.ok(server.includes("process.cwd(),'schema/033_asaas_payment_environment_uniqueness.sql'"));
+});
+test('student UI offers Pix on-page and uses hosted Asaas page for card; app never handles card fields',()=>{
+  assert.ok(student.includes('Pix — pague sem sair desta página'));
+  assert.ok(student.includes('Pagar com cartão (abre Asaas)'));
+  assert.doesNotMatch(server,/creditCardHolderInfo|\bcreditCardToken\b|\bccv\b/);
+  assert.doesNotMatch(student,/\bcardNumber\b|\bccv\b|\bexpiryMonth\b/);
+});
+test('same invoice has environment-specific mapping and lost Sandbox mapping is recovered safely',()=>{
+  assert.ok(envPaymentSchema.includes('UNIQUE (payment_id, environment)'));
+  assert.ok(envPaymentSchema.includes('DROP CONSTRAINT IF EXISTS asaas_student_payments_payment_id_key'));
+  assert.ok(server.includes('ON CONFLICT(payment_id,environment) DO UPDATE SET external_reference=EXCLUDED.external_reference'));
+  assert.ok(server.includes('`payments?externalReference=${encodeURIComponent(expectedReference)}`'));
+  assert.ok(server.includes('UNIQUE (payment_id, environment)')===false);
+  assert.ok(server.includes("process.cwd(),'schema/033_asaas_payment_environment_uniqueness.sql'"));
+});
+test('student Pix stays on the page while card entry remains hosted by Asaas',()=>{
+  assert.ok(student.includes('Pix — pague sem sair desta página'));
+  assert.ok(student.includes('Pagar com cartão (abre Asaas)'));
+  assert.doesNotMatch(server,/creditCardHolderInfo|\bccv\b/);
+  assert.doesNotMatch(student,/\bcardNumber\b|\bccv\b/);
 });
 test('student payments are separated by environment and event ids remain unique',()=>{
   assert.ok(envSchema.includes('environment varchar(20)'));
