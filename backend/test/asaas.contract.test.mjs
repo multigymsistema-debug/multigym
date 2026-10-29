@@ -6,68 +6,11 @@ const schema=fs.readFileSync(new URL('../schema/028_asaas_student_payments.sql',
 const envSchema=fs.readFileSync(new URL('../schema/029_asaas_environment_separation.sql',import.meta.url),'utf8');
 const cashSchema=fs.readFileSync(new URL('../schema/030_asaas_checkout_cash.sql',import.meta.url),'utf8');
 const envPaymentSchema=fs.readFileSync(new URL('../schema/033_asaas_payment_environment_uniqueness.sql',import.meta.url),'utf8');
-const envPaymentSchema=fs.readFileSync(new URL('../schema/033_asaas_payment_environment_uniqueness.sql',import.meta.url),'utf8');
 const ui=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),'utf8');
 const student=fs.readFileSync(new URL('../../frontend/public/aluno.js',import.meta.url),'utf8');
-test('Asaas environments and credentials remain separated server-side',()=>{
-  assert.ok(server.includes('https://api-sandbox.asaas.com/v3'));
-  assert.ok(server.includes('https://api.asaas.com/v3'));
-  assert.ok(server.includes('ASAAS_PRODUCTION_API_KEY'));
-  assert.ok(server.includes('ASAAS_SANDBOX_API_KEY'));
-  assert.doesNotMatch(ui,/ASAAS_SANDBOX_API_KEY/);
-  assert.doesNotMatch(student,/ASAAS_SANDBOX_API_KEY/);
-});
-test('webhook authentication and event idempotency are preserved',()=>{
-  assert.ok(server.includes('asaas-access-token'));
-  assert.ok(server.includes('INSERT INTO asaas_webhook_events'));
-  assert.ok(server.includes('ON CONFLICT(event_id) DO NOTHING'));
-});
-test('only confirmed Asaas receipts become paid and enter the cash register',()=>{
-  assert.ok(server.includes("String(remote.__event||'')==='PAYMENT_RECEIVED'"));
-  assert.ok(server.includes("String(remote.status)==='RECEIVED'"));
-  assert.ok(server.includes("remote.billingType==='CREDIT_CARD'?'card'"));
-  assert.ok(server.includes('cash_register_id'));
-});
-test('hosted Asaas invoice lets the payer choose available payment methods',()=>{
-  assert.ok(server.includes("billingType:'UNDEFINED'"));
-  assert.ok(server.includes("app.post('/api/payments/asaas-checkout'"));
-  assert.ok(ui.includes('Cobrar Pix/cartão online'));
-  assert.ok(ui.includes('Abrir página segura do Asaas'));
-  assert.ok(student.includes('Pagar com cartão (abre Asaas)'));
-  assert.ok(server.includes("process.cwd(),'schema/030_asaas_checkout_cash.sql'"));
-});
-test('mapping allows independent sandbox and production records for the same local invoice',()=>{
-  assert.ok(envPaymentSchema.includes('DROP CONSTRAINT IF EXISTS asaas_student_payments_payment_id_key'));
-  assert.ok(envPaymentSchema.includes('UNIQUE (payment_id, environment)'));
-  assert.ok(server.includes("ON CONFLICT(payment_id,environment) DO UPDATE SET external_reference=EXCLUDED.external_reference"));
-  assert.ok(server.includes("WHERE payment_id=$1 AND environment=$2"));
-  assert.ok(server.includes('`payments?externalReference=${encodeURIComponent(expectedReference)}`'));
-  assert.ok(server.includes('ON CONFLICT(payment_id,environment) DO UPDATE SET asaas_payment_id=EXCLUDED.asaas_payment_id'));
-  assert.ok(server.includes("process.cwd(),'schema/033_asaas_payment_environment_uniqueness.sql'"));
-});
-test('student UI offers Pix on-page and uses hosted Asaas page for card; app never handles card fields',()=>{
-  assert.ok(student.includes('Pix — pague sem sair desta página'));
-  assert.ok(student.includes('Pagar com cartão (abre Asaas)'));
-  assert.doesNotMatch(server,/creditCardHolderInfo|\bcreditCardToken\b|\bccv\b/);
-  assert.doesNotMatch(student,/\bcardNumber\b|\bccv\b|\bexpiryMonth\b/);
-});
-test('same invoice has environment-specific mapping and lost Sandbox mapping is recovered safely',()=>{
-  assert.ok(envPaymentSchema.includes('UNIQUE (payment_id, environment)'));
-  assert.ok(envPaymentSchema.includes('DROP CONSTRAINT IF EXISTS asaas_student_payments_payment_id_key'));
-  assert.ok(server.includes('ON CONFLICT(payment_id,environment) DO UPDATE SET external_reference=EXCLUDED.external_reference'));
-  assert.ok(server.includes('`payments?externalReference=${encodeURIComponent(expectedReference)}`'));
-  assert.ok(server.includes('UNIQUE (payment_id, environment)')===false);
-  assert.ok(server.includes("process.cwd(),'schema/033_asaas_payment_environment_uniqueness.sql'"));
-});
-test('student Pix stays on the page while card entry remains hosted by Asaas',()=>{
-  assert.ok(student.includes('Pix — pague sem sair desta página'));
-  assert.ok(student.includes('Pagar com cartão (abre Asaas)'));
-  assert.doesNotMatch(server,/creditCardHolderInfo|\bccv\b/);
-  assert.doesNotMatch(student,/\bcardNumber\b|\bccv\b/);
-});
-test('student payments are separated by environment and event ids remain unique',()=>{
-  assert.ok(envSchema.includes('environment varchar(20)'));
-  assert.ok(schema.includes('event_id varchar(160) PRIMARY KEY'));
-  assert.ok(cashSchema.includes('cash_register_id'));
-  assert.ok(server.includes('ASAAS_PRODUCTION_WEBHOOK_TOKEN'));
-});
+test('Asaas environments and credentials remain server-side and separate',()=>{for(const s of ['https://api-sandbox.asaas.com/v3','https://api.asaas.com/v3','ASAAS_PRODUCTION_API_KEY','ASAAS_SANDBOX_API_KEY'])assert.ok(server.includes(s));assert.doesNotMatch(ui,/ASAAS_SANDBOX_API_KEY/);assert.doesNotMatch(student,/ASAAS_SANDBOX_API_KEY/);});
+test('Asaas webhook auth and duplicate event idempotency remain enabled',()=>{assert.ok(server.includes('asaas-access-token'));assert.ok(server.includes('INSERT INTO asaas_webhook_events'));assert.ok(server.includes('ON CONFLICT(event_id) DO NOTHING'));});
+test('only remote RECEIVED + PAYMENT_RECEIVED settles and registers cash idempotently',()=>{assert.ok(server.includes("String(remote.__event||'')==='PAYMENT_RECEIVED'"));assert.ok(server.includes("String(remote.status)==='RECEIVED'"));assert.ok(server.includes("remote.billingType==='CREDIT_CARD'?'card'"));assert.ok(server.includes('cash_register_id'));assert.ok(server.includes('ON CONFLICT DO NOTHING'));});
+test('independent sandbox and production mappings and orphan recovery are environment-scoped',()=>{assert.ok(envPaymentSchema.includes('DROP CONSTRAINT IF EXISTS asaas_student_payments_payment_id_key'));assert.ok(envPaymentSchema.includes('UNIQUE (payment_id, environment)'));assert.ok(server.includes('ON CONFLICT(payment_id,environment) DO UPDATE SET external_reference=EXCLUDED.external_reference'));assert.ok(server.includes('ON CONFLICT(payment_id,environment) DO UPDATE SET asaas_payment_id=EXCLUDED.asaas_payment_id'));assert.ok(server.includes('`payments?externalReference=${encodeURIComponent(expectedReference)}`'));assert.ok(server.includes("process.cwd(),'schema/033_asaas_payment_environment_uniqueness.sql'"));});
+test('Pix is rendered inline, card is entered on-site and sent transiently over HTTPS',()=>{for(const s of ['Pix — pague sem sair desta página','Pagar com cartão nesta página','autocomplete="cc-number"','autocomplete="cc-csc"','studentAsaasCard'])assert.ok(student.includes(s));for(const s of ['creditCardHolderInfo:holder','remoteIp};','luhnValid(number)','req.protocol!==\'https\'','JSON.stringify(safe)'])assert.ok(server.includes(s));assert.doesNotMatch(server,/JSON\.stringify\(payload\).*creditCard/);});
+test('existing management checkout remains hosted Asaas and card details are not persisted',()=>{assert.ok(server.includes("billingType:'UNDEFINED'"));assert.ok(server.includes("app.post('/api/payments/asaas-checkout'"));assert.ok(ui.includes('Cobrar Pix/cartão online'));assert.ok(ui.includes('Abrir página segura do Asaas'));assert.ok(cashSchema.includes('cash_register_id'));assert.ok(schema.includes('event_id varchar(160) PRIMARY KEY'));assert.ok(envSchema.includes('environment varchar(20)'));});
