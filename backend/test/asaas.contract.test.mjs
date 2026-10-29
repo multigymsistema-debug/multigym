@@ -12,8 +12,8 @@ test('Asaas environments and credentials remain separated server-side',()=>{
   assert.ok(server.includes('https://api.asaas.com/v3'));
   assert.ok(server.includes('ASAAS_PRODUCTION_API_KEY'));
   assert.ok(server.includes('ASAAS_SANDBOX_API_KEY'));
-  assert.ok(!ui.includes('ASAAS_SANDBOX_API_KEY'));
-  assert.ok(!student.includes('ASAAS_SANDBOX_API_KEY'));
+  assert.doesNotMatch(ui,/ASAAS_SANDBOX_API_KEY/);
+  assert.doesNotMatch(student,/ASAAS_SANDBOX_API_KEY/);
 });
 test('webhook authentication and event idempotency are preserved',()=>{
   assert.ok(server.includes('asaas-access-token'));
