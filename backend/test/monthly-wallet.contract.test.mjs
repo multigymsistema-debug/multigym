@@ -7,7 +7,7 @@ const ui=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),
 const student=fs.readFileSync(new URL('../../frontend/src/nutrigym.tsx',import.meta.url),'utf8');
 const master=fs.readFileSync(new URL('../../frontend/src/MasterPortal.tsx',import.meta.url),'utf8');
 test('Only confirmed matching Mercado Pago monthly orders mark payment paid',()=>{
- assert.match(server,/remote\.status==='processed'&&remote\.status_detail==='accredited'/);
+ assert.match(server,/remote\.status==='processed'&&detail==='accredited'/);
  assert.match(server,/remote\.external_reference!==`multigym-student-monthly:\$\{id\}`/);
  assert.match(server,/WHERE id=\$1 AND gym_id=\$2 AND student_id=\$3 AND status='pending'/);
 });
