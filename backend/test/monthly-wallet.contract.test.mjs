@@ -6,10 +6,11 @@ const migration=fs.readFileSync(new URL('../schema/027_online_membership_wallet.
 const ui=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),'utf8');
 const student=fs.readFileSync(new URL('../../frontend/src/nutrigym.tsx',import.meta.url),'utf8');
 const master=fs.readFileSync(new URL('../../frontend/src/MasterPortal.tsx',import.meta.url),'utf8');
-test('Only confirmed matching Mercado Pago monthly orders mark payment paid',()=>{
- assert.match(server,/remote\.status==='processed'&&detail==='accredited'/);
- assert.match(server,/remote\.external_reference!==`multigym-student-monthly:\$\{id\}`/);
- assert.match(server,/WHERE id=\$1 AND gym_id=\$2 AND student_id=\$3 AND status='pending'/);
+test('Only matching and confirmed Asaas monthly charges enter the ledger',()=>{
+ assert.match(server,/String\(remote\.externalReference\|\|''\)\)!==String\(linked\.external_reference\)/);
+ assert.match(server,/money\(remote\.value\)!==money\(linked\.amount\)/);
+ assert.match(server,/String\(remote\.__event\|\|''\)==='PAYMENT_RECEIVED'&&String\(remote\.status\)==='RECEIVED'/);
+ assert.match(server,/UPDATE payments SET status='paid',paid_at=now\(\)/);
 });
 test('Wallet uses settled online payments only, reserves pending/paid withdrawals and encrypts Pix keys',()=>{
  assert.match(server,/gym_monthly_wallet_withdrawals WHERE gym_id=\$1 AND status IN \('pending','paid'\)/);
