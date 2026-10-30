@@ -181,13 +181,11 @@
 
 .student-header nav{min-width:0;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;justify-content:flex-start}
 .student-header nav button{flex:0 0 auto;white-space:nowrap}
-.student-profile-gym-brand{display:flex;align-items:center;justify-content:center;min-height:86px;margin-bottom:8px;background:#f7f8fa;border-radius:10px;padding:10px}
-.student-profile-gym-brand img{max-width:230px;max-height:70px;width:auto;height:auto;object-fit:contain}
-.student-profile-gym-brand span{color:#79828c;font-size:12px}
+.student-profile-photo{display:flex;align-items:center;justify-content:center;min-height:130px;margin-bottom:8px}.student-profile-photo img{width:112px;height:112px;object-fit:cover;border-radius:50%;border:3px solid #e7ece9}.student-profile-photo span{color:#79828c;font-size:12px}
 .profile-layout{align-items:start}.profile-export-card{align-self:start}
 .student-nutrigym-content{background:#f6f8f7;min-height:calc(100vh - 72px)}
 .student-nutrigym-content .nutri-main{max-width:1120px;padding:22px 28px 42px}
 .student-nutrigym-content .student-heading{margin-bottom:14px}
 .student-nutrigym-content .nutri-welcome{padding:16px 18px;background:#fff;border:1px solid #e7ece9;border-radius:14px;margin-bottom:16px}
 .student-nutrigym-content .nutri-header{display:none}
-@media(max-width:760px){.student-header nav{flex-basis:100%;order:3}.student-nutrigym-content .nutri-main{padding:18px 14px 35px}.student-profile-gym-brand{min-height:72px}}
+@media(max-width:760px){.student-header nav{flex-basis:100%;order:3}.student-nutrigym-content .nutri-main{padding:18px 14px 35px}.student-profile-photo{min-height:110px}}
