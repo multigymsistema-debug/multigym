@@ -13,10 +13,16 @@ test('Master forces password rotation and can block, archive and delete a gym wi
  const unauthorizedOverview=await req('/api/master/overview');assert.equal(unauthorizedOverview.status,401);
  const overview=await req('/api/master/overview',{token});assert.equal(overview.status,200);assert.equal(overview.data.api.ok,true);assert.equal(typeof overview.data.database.ok,'boolean');assert.equal(typeof overview.data.gyms.total,'number');
  const audit=await req('/api/master/audit?limit=10',{token});assert.equal(audit.status,200);assert.ok(Array.isArray(audit.data));
+ assert.equal((await req('/api/master/support/tickets')).status,401);
+ const supportList=await req('/api/master/support/tickets',{token});assert.equal(supportList.status,200);assert.ok(Array.isArray(supportList.data));
  const suffix=Date.now(),created=await req('/api/auth/register',{method:'POST',body:{gymName:`master-test-${suffix}`,name:'Admin Teste',email:`master-test-${suffix}@example.test`,password:'Academy-Test-Password-5531!'}});assert.equal(created.status,200,JSON.stringify(created.data));const gym=created.data.user.gym_id;
+ const ticket=await req('/api/master/support/tickets',{method:'POST',token,body:{gym_id:gym,subject:'Teste de suporte',description:'Teste automatizado; sem dados sensíveis.',priority:'high'}});assert.equal(ticket.status,201,JSON.stringify(ticket.data));assert.equal(ticket.data.status,'open');
+ const ticketUpdate=await req(`/api/master/support/tickets/${ticket.data.id}`,{method:'PATCH',token,body:{status:'in_progress',master_note:'Reprodução documentada.'}});assert.equal(ticketUpdate.status,200);assert.equal(ticketUpdate.data.status,'in_progress');assert.equal(ticketUpdate.data.master_note,'Reprodução documentada.');
+ const invalidTicket=await req(`/api/master/support/tickets/${ticket.data.id}`,{method:'PATCH',token,body:{status:'delete'}});assert.equal(invalidTicket.status,400);
  const blocked=await req(`/api/master/gyms/${gym}`,{method:'PATCH',token,body:{active:false}});assert.equal(blocked.status,200);assert.equal(blocked.data.active,false);assert.equal((await req('/api/me',{token:created.data.token})).status,401);
  const unblocked=await req(`/api/master/gyms/${gym}`,{method:'PATCH',token,body:{active:true}});assert.equal(unblocked.status,200);assert.equal(unblocked.data.active,true);
  const auditAfterBlock=await req('/api/master/audit?limit=20',{token});assert.ok(auditAfterBlock.data.some(x=>x.gym_id===gym&&x.action==='reactivate_gym'));assert.ok(auditAfterBlock.data.some(x=>x.gym_id===gym&&x.action==='block_gym'));
+ assert.ok(auditAfterBlock.data.some(x=>x.gym_id===gym&&x.action==='support_ticket_created'));assert.ok(auditAfterBlock.data.some(x=>x.gym_id===gym&&x.action==='support_ticket_updated'));
  const archived=await req(`/api/master/gyms/${gym}/archive`,{method:'POST',token});assert.equal(archived.status,200);assert.equal(archived.data.active,false);assert.ok(archived.data.archived_at);
  const removed=await req(`/api/master/gyms/${gym}`,{method:'DELETE',token});assert.equal(removed.status,200);assert.equal(removed.data.deleted,true);
  await req('/api/master/logout',{method:'POST',token});assert.equal((await req('/api/master/gyms',{token})).status,401);
