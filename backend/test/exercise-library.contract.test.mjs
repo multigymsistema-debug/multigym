@@ -63,10 +63,14 @@ test('catálogo e sessão do aluno usam as mesmas ilustrações e reproduzem ví
   assert.match(exerciseMedia,/'cadeira abdutora':'\/exercises\/abdutora\.mp4'/);
   assert.ok(exerciseMedia.includes('data:video\\/'));
   assert.match(frontend,/import \{isExerciseVideo,standardExerciseImage\} from '\.\/exerciseMedia'/);
-  assert.match(studentPortal,/exercise\.illustration_url\|\|standardExerciseImage\(exercise\.name\)/);
-  assert.ok(server.includes("'illustration_url',x.illustration_url"),'as rotas do aluno recebem a mídia do exercício cadastrado');
+  assert.match(studentPortal,/exercise\.illustration_url\|\|catalogMedia\|\|standardExerciseImage\(exercise\.name\)/);
+  assert.match(studentPortal,/loadMedia&&exercise\.has_illustration/);
+  assert.ok(server.includes("'illustration_url',CASE WHEN x.illustration_url LIKE 'data:%' THEN NULL ELSE x.illustration_url END"),'mídia embutida fica fora do payload inicial do aluno');
+  assert.ok(server.includes("'has_illustration',(COALESCE(length(x.illustration_url),0)>0 AND x.illustration_url NOT LIKE 'data:%')"),'mídia grande não deve marcar ilustração remota como carregável');
+  assert.ok(server.includes("app.get('/student-api/exercises/:id/media'"),'mídia é obtida em rota privada separada');
   assert.ok(studentPortal.includes('<video src={asset} controls playsInline loop={loop} preload="metadata"'));
-  assert.ok(studentPortal.includes('<ExerciseIllustration exercise={exercise} loop/>'));
+  assert.ok(studentPortal.includes('<ExerciseIllustration exercise={exercise} loop loadMedia/>'));
+  assert.ok(studentPortal.includes('preload="metadata"'));
   assert.ok(exerciseStyles.includes('.exercise-illustration.realistic img{'));
   assert.ok(exerciseStyles.includes('.exercise-illustration.realistic video{display:block;width:100%;height:auto;aspect-ratio:auto;'));
   assert.ok(exerciseStyles.includes('.session-exercise .exercise-illustration{min-height:0}'));
