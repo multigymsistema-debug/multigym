@@ -66,7 +66,7 @@ test('catálogo e sessão do aluno usam as mesmas ilustrações e reproduzem ví
   assert.match(studentPortal,/exercise\.illustration_url\|\|catalogMedia\|\|standardExerciseImage\(exercise\.name\)/);
   assert.match(studentPortal,/loadMedia&&exercise\.has_illustration/);
   assert.ok(server.includes("'illustration_url',CASE WHEN x.illustration_url LIKE 'data:%' THEN NULL ELSE x.illustration_url END"),'mídia embutida fica fora do payload inicial do aluno');
-  assert.ok(server.includes("'has_illustration',(COALESCE(length(x.illustration_url),0)>0 AND x.illustration_url NOT LIKE 'data:%')"),'mídia grande não deve marcar ilustração remota como carregável');
+  assert.ok(server.includes("'has_illustration',COALESCE(length(x.illustration_url),0)>0"),'o indicador informa que a mídia pode ser carregada sob demanda');
   assert.ok(server.includes("app.get('/student-api/exercises/:id/media'"),'mídia é obtida em rota privada separada');
   assert.ok(studentPortal.includes('<video src={asset} controls playsInline loop={loop} preload="metadata"'));
   assert.ok(studentPortal.includes('<ExerciseIllustration exercise={exercise} loop loadMedia/>'));
