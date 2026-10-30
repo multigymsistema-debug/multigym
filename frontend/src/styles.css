@@ -176,3 +176,18 @@
 
 .student-next-due{display:flex;justify-content:space-between;padding:14px;margin:16px 0;background:#f7f9f8;border:1px solid #e7ece9;border-radius:10px}.student-online-payment{margin-top:18px;padding:16px;background:#fbfbfb;border:1px solid #ecefee;border-radius:12px}.student-payment-choice{width:min(440px,100%);max-height:calc(100vh - 36px);overflow:auto}.student-payment-methods{display:grid;grid-template-columns:1fr 1fr;gap:10px}.student-payment-methods button{padding:14px;border:1px solid #dfe6e1;background:white;border-radius:10px}.student-payment-methods button.active{border-color:#c51521;background:#fff2f2}.student-payment-error{color:#b42318;background:#fff1f0;padding:10px;border-radius:8px}
 .student-card-form{display:grid;gap:12px;margin:14px 0}.student-card-form>p{margin:0;color:#59636f;font-size:.9rem}.student-card-form label,.student-pix-code{display:grid;gap:6px;font-weight:600}.student-card-form input,.student-pix-code textarea{box-sizing:border-box;width:100%;min-width:0;padding:11px;border:1px solid #d4dbe1;border-radius:8px;font:inherit}.student-card-form-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.student-payment-choice>button{margin:8px 8px 0 0}@media(max-width:520px){.student-card-form-row{grid-template-columns:1fr 1fr}.student-card-form-row label:last-child{grid-column:1/-1}}
+
+.sidebar .brand-logo-full{background:transparent!important;border-radius:0!important;padding:0!important}
+
+.student-header nav{min-width:0;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;justify-content:flex-start}
+.student-header nav button{flex:0 0 auto;white-space:nowrap}
+.student-profile-gym-brand{display:flex;align-items:center;justify-content:center;min-height:86px;margin-bottom:8px;background:#f7f8fa;border-radius:10px;padding:10px}
+.student-profile-gym-brand img{max-width:230px;max-height:70px;width:auto;height:auto;object-fit:contain}
+.student-profile-gym-brand span{color:#79828c;font-size:12px}
+.profile-layout{align-items:start}.profile-export-card{align-self:start}
+.student-nutrigym-content{background:#f6f8f7;min-height:calc(100vh - 72px)}
+.student-nutrigym-content .nutri-main{max-width:1120px;padding:22px 28px 42px}
+.student-nutrigym-content .student-heading{margin-bottom:14px}
+.student-nutrigym-content .nutri-welcome{padding:16px 18px;background:#fff;border:1px solid #e7ece9;border-radius:14px;margin-bottom:16px}
+.student-nutrigym-content .nutri-header{display:none}
+@media(max-width:760px){.student-header nav{flex-basis:100%;order:3}.student-nutrigym-content .nutri-main{padding:18px 14px 35px}.student-profile-gym-brand{min-height:72px}}
