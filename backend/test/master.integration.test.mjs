@@ -10,9 +10,13 @@ test('Master forces password rotation and can block, archive and delete a gym wi
  assert.equal((await req('/api/master/gyms',{token})).status,403);
  assert.equal((await req('/api/master/change-password',{method:'POST',token,body:{new_password:'Master-Test-Password-Strong-2026!'}})).status,200);
  const list=await req('/api/master/gyms',{token});assert.equal(list.status,200);assert.ok(Array.isArray(list.data));
+ const unauthorizedOverview=await req('/api/master/overview');assert.equal(unauthorizedOverview.status,401);
+ const overview=await req('/api/master/overview',{token});assert.equal(overview.status,200);assert.equal(overview.data.api.ok,true);assert.equal(typeof overview.data.database.ok,'boolean');assert.equal(typeof overview.data.gyms.total,'number');
+ const audit=await req('/api/master/audit?limit=10',{token});assert.equal(audit.status,200);assert.ok(Array.isArray(audit.data));
  const suffix=Date.now(),created=await req('/api/auth/register',{method:'POST',body:{gymName:`master-test-${suffix}`,name:'Admin Teste',email:`master-test-${suffix}@example.test`,password:'Academy-Test-Password-5531!'}});assert.equal(created.status,200,JSON.stringify(created.data));const gym=created.data.user.gym_id;
  const blocked=await req(`/api/master/gyms/${gym}`,{method:'PATCH',token,body:{active:false}});assert.equal(blocked.status,200);assert.equal(blocked.data.active,false);assert.equal((await req('/api/me',{token:created.data.token})).status,401);
  const unblocked=await req(`/api/master/gyms/${gym}`,{method:'PATCH',token,body:{active:true}});assert.equal(unblocked.status,200);assert.equal(unblocked.data.active,true);
+ const auditAfterBlock=await req('/api/master/audit?limit=20',{token});assert.ok(auditAfterBlock.data.some(x=>x.gym_id===gym&&x.action==='reactivate_gym'));assert.ok(auditAfterBlock.data.some(x=>x.gym_id===gym&&x.action==='block_gym'));
  const archived=await req(`/api/master/gyms/${gym}/archive`,{method:'POST',token});assert.equal(archived.status,200);assert.equal(archived.data.active,false);assert.ok(archived.data.archived_at);
  const removed=await req(`/api/master/gyms/${gym}`,{method:'DELETE',token});assert.equal(removed.status,200);assert.equal(removed.data.deleted,true);
  await req('/api/master/logout',{method:'POST',token});assert.equal((await req('/api/master/gyms',{token})).status,401);
