@@ -189,3 +189,5 @@
 .student-nutrigym-content .nutri-welcome{padding:16px 18px;background:#fff;border:1px solid #e7ece9;border-radius:14px;margin-bottom:16px}
 .student-nutrigym-content .nutri-header{display:none}
 @media(max-width:760px){.student-header nav{flex-basis:100%;order:3}.student-nutrigym-content .nutri-main{padding:18px 14px 35px}.student-profile-photo{min-height:110px}}
+
+.student-photo-upload{display:grid;gap:7px;font-size:12px;color:#647069}.student-photo-upload input{border:1px solid #dde5e0;border-radius:8px;padding:9px;background:#fff}.student-photo-upload small{font-size:11px;color:#7c8781;line-height:1.45}.student-photo-error{color:#b42318;font-size:12px}
