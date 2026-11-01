@@ -5,9 +5,10 @@ const text=(value:any)=>String(value??'').toLowerCase().normalize('NFD').replace
 export function detectAssistantIntent(message:string,assistant:'nutrition'|'personal',image=false):AssistantIntent{
   const m=text(message);
   if(image)return 'MEAL_ANALYSIS';
+  // Safety and professional-referral signals must outrank greetings and ordinary intents.
+  if(/dor aguda|dor forte|estou com dor|dor durante|dor no peito|lesao|tontura|desmaio|falta de ar|sintoma|alergia grave|reacao alergica|vomit|sangue|perda de forca/.test(m))return 'SAFETY';
+  if(/nutricion|medico|diagnost|tratamento|remedio|prescri/.test(m))return 'PROFESSIONAL_REFERRAL';
   if(/\b(oi|ola|bom dia|boa tarde|boa noite|hello|hey)\b/.test(m))return 'GREETING';
-  if(/dor aguda|dor forte|lesao|lesão|tontura|desmaio|falta de ar|sintoma|alergia grave|vomit|sangue/.test(m))return 'SAFETY';
-  if(/nutricion|medico|médico|diagnost|tratamento|remedio|remédio|prescri/.test(m))return 'PROFESSIONAL_REFERRAL';
   if(assistant==='nutrition'){
     if(/hidrat|agua|água|ml\b|litro/.test(m))return 'HYDRATION';
     if(/comi|almocei|jantei|lanchei|refeicao|refeição|foto|prato|caloria|macro|proteina|proteína/.test(m))return /comi|almocei|jantei|lanchei|refeicao|refeição/.test(m)?'MEAL_REGISTRATION':'MEAL_ANALYSIS';
