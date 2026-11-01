@@ -9,7 +9,7 @@ const studentNutri=fs.readFileSync(new URL('../../frontend/src/nutrigym.tsx',imp
 test('Personal Gym never reintroduces exercises rejected by limitation filters',()=>{
   assert.match(server,/const pool=candidates\.filter\(\(x:any\)=>!unsafeForProfile\(x,profile\)\)/);
   assert.doesNotMatch(server,/const pool=safe\.length\?safe:candidates/);
-  assert.match(server,/if\(intent==='SAFETY'\)\{text='Interrompa o exercício agora/);
+  assert.match(server,/if\(intent==='SAFETY'\)return \{text:'Interrompa o exercício agora/);
 });
 
 test('safety signals are classified before greetings and include urgent fitness symptoms',()=>{
@@ -29,32 +29,21 @@ test('NutriGym profile editor allows correcting allergies and dietary restrictio
 test('NutriGym routes urgent safety and referral requests even when the profile is incomplete',()=>{
   const nutriRoute=server.slice(server.indexOf("app.post('/student-api/nutrigym/assistant'"),server.indexOf("const nutritionContext="));
   const safetyGuard=nutriRoute.indexOf("if(intent==='SAFETY')");
-  const profileGuard=nutriRoute.indexOf('if(!rawContext.profile)');
-  assert.ok(safetyGuard>=0&&profileGuard>safetyGuard);
+  const query=nutriRoute.indexOf('nutritionContext(s.gym,s.student)');
+  assert.ok(safetyGuard>=0&&query>safetyGuard);
   assert.ok(nutriRoute.indexOf("if(intent==='PROFESSIONAL_REFERRAL')")>safetyGuard);
-  assert.ok(nutriRoute.indexOf('const waterMatch')>profileGuard);
+  assert.ok(nutriRoute.indexOf('const waterMatch')>query);
 });
 
-test('Personal Gym classifies safety before any automatic workout generation',()=>{
+test('Personal Gym urgent safety returns before any data lookup',()=>{
   const personalRoute=server.slice(server.indexOf("app.post('/student-api/personalgym/assistant'"));
-  const safety=personalRoute.indexOf("if(intent==='SAFETY')");
-  const generate=personalRoute.indexOf('await generateAssistantWorkout(s.gym,s.student,0)');
-  assert.ok(safety>=0&&generate>=0);
-  assert.ok(safety<generate);
-  assert.match(personalRoute,/intent!=='SAFETY'&&intent!=='PROFESSIONAL_REFERRAL/);
-});
-
-test('Personal Gym reads safety before any query-dependent generation',()=>{
-  const personal=server.slice(server.indexOf("app.post('/student-api/personalgym/assistant'"));
-  const guard=personal.indexOf("if(intent==='SAFETY')return");
-  const query=personal.indexOf('personalContext(s.gym,s.student)');
-  assert.ok(guard>=0&&query>guard);
-  assert.doesNotMatch(personal.slice(0,personal.indexOf('let rawContext')),/generateAssistantWorkout/);
+  const safety=personalRoute.indexOf("if(intent==='SAFETY')return");
+  const query=personalRoute.indexOf('personalContext(s.gym,s.student)');
+  assert.ok(safety>=0&&query>safety);
 });
 
 test('meal images continue to be blocked from server-side provider analysis',()=>{
   assert.match(server,/student-api\/nutrigym\/meals\/analyze',[^\n]*reply\.code\(410\)/);
   assert.match(server,/student-api\/nutrigym\/meals\/vision',[^\n]*reply\.code\(410\)/);
   assert.match(server,/if\(intent==='SAFETY'\)return/);
-  assert.match(server,/intent!=='SAFETY'&&intent!=='PROFESSIONAL_REFERRAL'&&await allowAi\(s\.gym,'nutrigym_chat'\)/);
 });

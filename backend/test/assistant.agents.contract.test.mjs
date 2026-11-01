@@ -37,10 +37,9 @@ test('tool planner selects read-only domain tools and rejects model-selected IDs
   assert.ok(selectAssistantTools('nutrigym','Qual minha meta de proteína?').includes('read_nutrition_goals'));
   assert.throws(() => executeAssistantTool('personalgym','read_confirmed_meals',{},{}), /TOOL_NOT_ALLOWED/);
   assert.throws(() => executeAssistantTool('personalgym','read_confirmed_workout_performance',{student_id:'other'},{}), /Unrecognized key/);
-  const unavailable=runAssistantTools('nutrigym','Quais são os alimentos e calorias?',{});
-  assert.equal(unavailable[0].status,'unavailable');
-  assert.equal(unavailable[0].recordCount,0);
-  assert.match(unavailable[0].limitation,/não tem um catálogo estruturado/);
+  const unavailable=runAssistantTools('nutrigym','Quais calorias há nos alimentos?',{});
+  assert.ok(unavailable.some(result=>result.tool==='read_food_composition'&&result.status==='unavailable'&&result.recordCount===0));
+  assert.match(unavailable.find(result=>result.tool==='read_food_composition').limitation,/não tem um catálogo estruturado/);
   assert.match(toolsSource,/student_id\$2/);
 });
 
