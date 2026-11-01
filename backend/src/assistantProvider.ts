@@ -43,7 +43,8 @@ export interface AssistantProvider {
 export const groqAssistantProvider: AssistantProvider = Object.freeze({
   id: 'groq',
   capabilities: Object.freeze({ structuredOutput: false, toolCalling: false, vision: false }),
-  async infer({ agent, message, context, responseFormat }) {
+  async infer(request: AssistantInferenceRequest) {
+    const { agent, message, context, responseFormat } = request;
     if (responseFormat && responseFormat.type !== 'text') return null;
     const text = agent === 'nutrigym'
       ? await askGroqNutrition(message, context as any)
