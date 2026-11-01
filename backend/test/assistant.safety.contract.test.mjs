@@ -30,4 +30,5 @@ test('meal images continue to be blocked from server-side provider analysis',()=
   assert.match(server,/student-api\/nutrigym\/meals\/analyze',[^\n]*reply\.code\(410\)/);
   assert.match(server,/student-api\/nutrigym\/meals\/vision',[^\n]*reply\.code\(410\)/);
   assert.match(server,/const safeFallback=intent==='SAFETY'/);
+  assert.match(server,/intent!=='SAFETY'&&intent!=='PROFESSIONAL_REFERRAL'&&await allowAi\(s\.gym,'nutrigym_chat'\)/);
 });
