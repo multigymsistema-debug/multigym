@@ -42,7 +42,9 @@ test('Personal Gym is persisted, authenticated and tenant-scoped',()=>{
   for(const route of ['/student-api/personalgym','/student-api/personalgym/assistant/messages','/student-api/personalgym/assistant']) assert.match(server,new RegExp(`app\\.(get|post)\\('${route.replaceAll('/','\\/')}`));
   assert.match(personal,/CREATE TABLE IF NOT EXISTS personal_gym_chat_messages/);
   assert.match(server,/personal_gym_chat_messages\(gym_id,student_id/);
-  assert.match(server,/askGroqPersonal/);
+  assert.match(server,/askAssistantPersonal/);
+  const provider=fs.readFileSync(new URL('../src/assistantProvider.ts',import.meta.url),'utf8');
+  assert.match(provider,/askGroqPersonal/);
 });
 test('Critical admin writes validate ownership before linking records',()=>{
   assert.match(server,/SELECT id FROM students WHERE id=\$1 AND gym_id=\$2/);
