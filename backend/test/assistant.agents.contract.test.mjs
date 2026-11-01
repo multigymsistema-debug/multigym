@@ -41,7 +41,8 @@ test('tool planner selects read-only domain tools and rejects model-selected IDs
   assert.ok(unavailable.some(result=>result.tool==='read_food_composition'&&result.status==='unavailable'&&result.recordCount===0));
   assert.match(unavailable.find(result=>result.tool==='read_food_composition').limitation,/não tem um catálogo estruturado/);
   assert.match(toolsSource,/already tenant\/student-scoped/);
-  assert.match(toolsSource,/Unrecognized key/);
+  assert.match(toolsSource,/emptyArgs\.parse\(args \?\? \{\}\)/);
+  assert.match(toolsSource,/z\.object\(\{\}\)\.strict\(\)/);
 });
 
 test('provider router dispatches unchanged agent, context and request format', async () => {
