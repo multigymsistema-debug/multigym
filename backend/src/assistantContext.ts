@@ -6,7 +6,7 @@ export function detectAssistantIntent(message:string,assistant:'nutrition'|'pers
   const m=text(message);
   if(image)return 'MEAL_ANALYSIS';
   // Safety and professional-referral signals must outrank greetings and ordinary intents.
-  if(/dor aguda|dor forte|estou com dor|dor durante|dor no peito|lesao|tontura|desmaio|falta de ar|sintoma|alergia grave|reacao alergica|vomit|sangue|perda de forca/.test(m))return 'SAFETY';
+  if(/dor aguda|dor forte|estou com dor|dor durante|dor no peito|lesao|tontura|tonto|tonta|desmaio|desmaiei|falta de ar|sem ar|sintoma|alergia grave|reacao alergica|anafilaxia|vomit|sangue|perda de forca|fraqueza subita/.test(m))return 'SAFETY';
   if(/nutricion|medico|diagnost|tratamento|remedio|prescri/.test(m))return 'PROFESSIONAL_REFERRAL';
   if(/\b(oi|ola|bom dia|boa tarde|boa noite|hello|hey)\b/.test(m))return 'GREETING';
   if(assistant==='nutrition'){
