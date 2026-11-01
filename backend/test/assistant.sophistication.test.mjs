@@ -33,6 +33,7 @@ test('desempenho usado para progressão vem de sessões concluídas e janela rec
 test('assistente recebe regras de negócio e contexto com escopo da intenção',()=>{
   assert.match(groq,/allergies e restrictions como bloqueios rígidos/);
   assert.match(groq,/findRestrictedFoodMentions/);
+  assert.match(server,/SELECT objective,weight_kg,height_cm,age,sex,activity_level,calories_goal,protein_goal_g,carbs_goal_g,fat_goal_g,water_goal_ml,preferences/);
   assert.match(server,/import \{nutritionFallback,personalFallback\} from '\.\/assistantFallback\.js'/);
   assert.match(server,/text=personalFallback\(context\)/);
   assert.match(server,/const fallback=imageDataUrl\?nutritionFallback\(context\)/);
