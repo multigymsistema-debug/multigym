@@ -109,7 +109,7 @@ export function selectAssistantTools(agent: AssistantAgentId, message: string): 
     if (matches(message, /perfil|objetiv|alerg|restric|preferenc|meta|caloria|proteina|carboidrato|gordura/)) selected.add('read_student_nutrition_profile');
     if (matches(message, /meta|objetiv|caloria|proteina|carboidrato|gordura|quanto devo/)) selected.add('read_nutrition_goals');
     if (matches(message, /refeic|aliment|comi|comer|almoco|almocar|jantar|lanche|semana|registr|proteina/)) selected.add('read_confirmed_meals');
-    if (matches(message, /alimento|composicao|nutriente|caloria de|macro/)) selected.add('read_food_composition');
+    if (matches(message, /alimento|composicao|nutriente|caloria de|macro|calorias/)) selected.add('read_food_composition');
     if (matches(message, /peso|emagrec|engord|evolucao|historico/)) selected.add('read_weight_history');
     if (matches(message, /hidrat|agua|ml|litro/)) { selected.add('read_confirmed_hydration'); selected.add('read_hydration_records'); }
   }
