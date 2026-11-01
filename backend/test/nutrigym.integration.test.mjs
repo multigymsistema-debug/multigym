@@ -35,9 +35,9 @@ test('profiles, meals and tenant/student isolation work end to end',async()=>{
   const invalid=await json('/student-api/nutrigym/hydration',{method:'POST',headers:auth(tokenA),body:JSON.stringify({amount_ml:-1})});assert.equal(invalid.status,400);
   // Fictitious accounts in CI exercise the complete assistant route, not the public demo mocks.
   const safetyNutri=await json('/student-api/nutrigym/assistant',{method:'POST',headers:auth(tokenA),body:JSON.stringify({message:'Oi, estou com falta de ar e tontura.'})});
-  assert.equal(safetyNutri.status,200);assert.equal(safetyNutri.data.intent,'SAFETY');assert.match(safetyNutri.data.text,/urgência/i);assert.equal(safetyNutri.data.provider,'fallback');
+  assert.equal(safetyNutri.status,200);assert.equal(safetyNutri.data.context.intent,'SAFETY');assert.match(safetyNutri.data.text,/urgência/i);assert.equal(safetyNutri.data.provider,'fallback');
   const hydrationReply=await json('/student-api/nutrigym/assistant',{method:'POST',headers:auth(tokenA),body:JSON.stringify({message:'Como está minha hidratação hoje?'})});
-  assert.equal(hydrationReply.status,200);assert.equal(hydrationReply.data.intent,'HYDRATION');assert.match(hydrationReply.data.text,/500 ml/);assert.match(hydrationReply.data.text,/2.500 ml/);
+  assert.equal(hydrationReply.status,200);assert.equal(hydrationReply.data.context.intent,'HYDRATION');assert.match(hydrationReply.data.text,/500 ml/);assert.match(hydrationReply.data.text,/2.500 ml/);
   const safetyPersonal=await json('/student-api/personalgym/assistant',{method:'POST',headers:auth(tokenA),body:JSON.stringify({message:'Oi, estou com dor forte no treino.'})});
   assert.equal(safetyPersonal.status,200);assert.equal(safetyPersonal.data.intent,'SAFETY');assert.match(safetyPersonal.data.text,/Interrompa o exercício/);
   const out=await json('/student-api/logout',{method:'POST',headers:auth(tokenA)});assert.equal(out.status,200);const after=await json('/student-api/nutrigym',{headers:auth(tokenA)});assert.equal(after.status,401);
