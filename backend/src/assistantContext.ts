@@ -4,10 +4,10 @@ type Turn={role:'user'|'assistant';content:string};
 const text=(value:any)=>String(value??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 export function detectAssistantIntent(message:string,assistant:'nutrition'|'personal',image=false):AssistantIntent{
   const m=text(message);
-  if(image)return 'MEAL_ANALYSIS';
   // Safety and professional-referral signals must outrank greetings and ordinary intents.
-  if(/dor aguda|dor forte|estou com dor|dor durante|dor no peito|lesao|tontura|desmaio|falta de ar|sintoma|alergia grave|reacao alergica|vomit|sangue|perda de forca/.test(m))return 'SAFETY';
+  if(/dor aguda|dor forte|estou com dor|dor durante|dor no peito|lesao|tontura|tonto|tonta|desmaio|desmaiei|falta de ar|sem ar|sintoma|alergia grave|reacao alergica|anafilaxia|vomit|sangue|perda de forca|fraqueza subita/.test(m))return 'SAFETY';
   if(/nutricion|medico|diagnost|tratamento|remedio|prescri/.test(m))return 'PROFESSIONAL_REFERRAL';
+  if(image)return 'MEAL_ANALYSIS';
   if(/\b(oi|ola|bom dia|boa tarde|boa noite|hello|hey)\b/.test(m))return 'GREETING';
   if(assistant==='nutrition'){
     if(/hidrat|agua|água|ml\b|litro/.test(m))return 'HYDRATION';
@@ -17,10 +17,11 @@ export function detectAssistantIntent(message:string,assistant:'nutrition'|'pers
     if(/resumo|como estou hoje|fechamento do dia|meu dia/.test(m))return 'DAILY_SUMMARY';
     if(/como estou|evolu|progresso|hoje/.test(m))return 'PROGRESS';
   }else{
+    if(/como (fazer|executar)|execucao|tecnica|postura/.test(m))return 'EXERCISE_TECHNIQUE';
     if(/proximo|próximo|amanha|amanhã|depois/.test(m))return 'NEXT_WORKOUT';
-    if(/treino|exercicio|exercício|serie|série|repet|carga/.test(m))return /execu|como fazer|tecnica|técnica|postura/.test(m)?'EXERCISE_TECHNIQUE':'WORKOUT_INFO';
+    if(/evolu|progresso|desempenho|historico|histórico/.test(m))return 'TRAINING_PROGRESS';
     if(/descanso|ritmo|intervalo|aquecimento/.test(m))return 'REST';
-    if(/evolu|progresso|desempenho|historico|histórico|melhor/.test(m))return 'TRAINING_PROGRESS';
+    if(/treino|exercicio|exercício|serie|série|repet|carga/.test(m))return /execu|como fazer|tecnica|técnica|postura/.test(m)?'EXERCISE_TECHNIQUE':'WORKOUT_INFO';
     if(/motiv|desan|constanc|falt/.test(m))return 'MOTIVATION';
     if(/conclu|terminei|finalizei/.test(m))return 'WORKOUT_COMPLETION';
   }

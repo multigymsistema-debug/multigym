@@ -34,6 +34,8 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: npm test
+      - name: Run assistant behavioral tests
+        run: node --test test/assistant.sophistication.test.mjs test/assistant.fallback.test.mjs test/assistant.v2.test.mjs
       - name: Start API for integration tests
         run: npm start > /tmp/multigym-api.log 2>&1 &
         env:
