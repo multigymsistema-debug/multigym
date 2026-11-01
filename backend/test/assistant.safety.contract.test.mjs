@@ -26,6 +26,24 @@ test('NutriGym profile editor allows correcting allergies and dietary restrictio
   assert.match(profileForm,/form\.dislikes/);
 });
 
+test('NutriGym routes urgent safety and referral requests even when the profile is incomplete',()=>{
+  const nutriRoute=server.slice(server.indexOf("app.post('/student-api/nutrigym/assistant'"),server.indexOf("const nutritionContext="));
+  const profileGuard=nutriRoute.indexOf('if(!rawContext.profile)');
+  assert.ok(profileGuard>=0);
+  assert.ok(nutriRoute.indexOf("if(intent==='SAFETY')")>profileGuard);
+  assert.ok(nutriRoute.indexOf("if(intent==='PROFESSIONAL_REFERRAL')")>profileGuard);
+  assert.ok(nutriRoute.indexOf('const waterMatch')>nutriRoute.indexOf("if(intent==='PROFESSIONAL_REFERRAL')"));
+});
+
+test('Personal Gym classifies safety before any automatic workout generation',()=>{
+  const personalRoute=server.slice(server.indexOf("app.post('/student-api/personalgym/assistant'"));
+  const safety=personalRoute.indexOf("if(intent==='SAFETY')");
+  const generate=personalRoute.indexOf('await generateAssistantWorkout(s.gym,s.student,0)');
+  assert.ok(safety>=0&&generate>=0);
+  assert.ok(safety<generate);
+  assert.match(personalRoute,/intent!=='SAFETY'&&intent!=='PROFESSIONAL_REFERRAL/);
+});
+
 test('meal images continue to be blocked from server-side provider analysis',()=>{
   assert.match(server,/student-api\/nutrigym\/meals\/analyze',[^\n]*reply\.code\(410\)/);
   assert.match(server,/student-api\/nutrigym\/meals\/vision',[^\n]*reply\.code\(410\)/);
