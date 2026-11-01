@@ -19,9 +19,9 @@ export function detectAssistantIntent(message:string,assistant:'nutrition'|'pers
   }else{
     if(/como (fazer|executar)|execucao|tecnica|postura/.test(m))return 'EXERCISE_TECHNIQUE';
     if(/proximo|próximo|amanha|amanhã|depois/.test(m))return 'NEXT_WORKOUT';
-    if(/treino|exercicio|exercício|serie|série|repet|carga/.test(m))return /execu|como fazer|tecnica|técnica|postura/.test(m)?'EXERCISE_TECHNIQUE':'WORKOUT_INFO';
+    if(/evolu|progresso|desempenho|historico|histórico/.test(m))return 'TRAINING_PROGRESS';
     if(/descanso|ritmo|intervalo|aquecimento/.test(m))return 'REST';
-    if(/evolu|progresso|desempenho|historico|histórico|melhor/.test(m))return 'TRAINING_PROGRESS';
+    if(/treino|exercicio|exercício|serie|série|repet|carga/.test(m))return /execu|como fazer|tecnica|técnica|postura/.test(m)?'EXERCISE_TECHNIQUE':'WORKOUT_INFO';
     if(/motiv|desan|constanc|falt/.test(m))return 'MOTIVATION';
     if(/conclu|terminei|finalizei/.test(m))return 'WORKOUT_COMPLETION';
   }
