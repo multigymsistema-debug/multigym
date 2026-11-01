@@ -11,6 +11,7 @@ test('detecta sintomas urgentes mesmo misturados a uma saudação ou pedido comu
   assert.equal(detectAssistantIntent('Oi, estou tonto e com falta de ar','personal'),'SAFETY');
   assert.equal(detectAssistantIntent('Bom dia, tive uma reação alérgica','nutrition'),'SAFETY');
   assert.equal(detectAssistantIntent('Desmaiei depois do exercício','personal'),'SAFETY');
+  assert.equal(detectAssistantIntent('Como fazer supino?', 'personal'),'EXERCISE_TECHNIQUE');
 });
 
 test('guarda lexical bloqueia alergênico em frase de recomendação e mantém preferências como preferências',()=>{
@@ -21,6 +22,7 @@ test('guarda lexical bloqueia alergênico em frase de recomendação e mantém p
 test('consultas de segurança e encaminhamento não chamam nem consomem cota de IA',()=>{
   assert.match(server,/intent!=='SAFETY'&&intent!=='PROFESSIONAL_REFERRAL'&&await allowAi\(s\.gym,'nutrigym_chat'\)/);
   assert.match(server,/if\(intent==='SAFETY'\)\{text='Interrompa o exercício agora/);
+  assert.equal(detectAssistantIntent('Oi, falta de ar','nutrition',true),'SAFETY');
 });
 
 test('desempenho usado para progressão vem de sessões concluídas e janela recente',()=>{

@@ -21,5 +21,5 @@ test('fallback de evolução não chama treino prescrito de desempenho',()=>{
   const empty=personalFallback({intent:'TRAINING_PROGRESS',training:{logs:[],history:[]}});
   assert.match(empty,/ainda não há registros/);
   const withLogs=personalFallback({intent:'TRAINING_PROGRESS',training:{logs:[{exercise_name:'Supino',weight:20,reps:10},{exercise_name:'Supino',weight:22,reps:9}]}});
-  assert.match(withLogs,/Supino/);assert.match(withLogs,/compara anotações/);
+  assert.match(withLogs,/Supino/);assert.match(withLogs,/podem conter valores preenchidos automaticamente/);
 });
