@@ -5,9 +5,11 @@ import fs from 'node:fs';
 const agents = fs.readFileSync(new URL('../src/assistantAgents.ts', import.meta.url), 'utf8');
 const providerSource = fs.readFileSync(new URL('../src/assistantProvider.ts', import.meta.url), 'utf8');
 const groqSource = fs.readFileSync(new URL('../src/groq.ts', import.meta.url), 'utf8');
+const toolsSource = fs.readFileSync(new URL('../src/assistantTools.ts', import.meta.url), 'utf8');
 const server = fs.readFileSync(new URL('../src/server.ts', import.meta.url), 'utf8');
 const { ASSISTANT_AGENTS, getAssistantAgentProfile } = await import('../dist/assistantAgents.js');
 const { createAssistantProviderRouter } = await import('../dist/assistantProvider.js');
+const { selectAssistantTools, executeAssistantTool, runAssistantTools } = await import('../dist/assistantTools.js');
 
 test('agent profiles are immutable and domain-specific', () => {
   const personal = getAssistantAgentProfile('personalgym');
@@ -20,7 +22,26 @@ test('agent profiles are immutable and domain-specific', () => {
   assert.notEqual(personal.safetyPolicy, nutrition.safetyPolicy);
   assert.deepEqual(personal.toolAllowlist.filter(tool => nutrition.toolAllowlist.includes(tool)), []);
   assert.ok(personal.toolAllowlist.includes('read_confirmed_workout_performance'));
+  assert.ok(personal.toolAllowlist.includes('read_workout_history'));
+  assert.ok(personal.toolAllowlist.includes('read_active_exercise_catalog'));
+  assert.ok(nutrition.toolAllowlist.includes('read_confirmed_hydration'));
   assert.ok(nutrition.toolAllowlist.includes('read_food_composition'));
+  assert.ok(nutrition.toolAllowlist.includes('read_nutrition_goals'));
+});
+
+test('tool planner selects read-only domain tools and rejects model-selected IDs', () => {
+  assert.deepEqual(selectAssistantTools('personalgym','Como foi meu último treino de peito?').sort(), ['read_active_workout_catalog','read_confirmed_workout_performance','read_workout_history'].sort());
+  assert.ok(selectAssistantTools('nutrigym','Como está minha alimentação esta semana e minha proteína?').includes('read_confirmed_meals'));
+  assert.ok(selectAssistantTools('nutrigym','Quanto de água bebi?').includes('read_confirmed_hydration'));
+  assert.ok(selectAssistantTools('nutrigym','Quanto de água bebi?').includes('read_hydration_records'));
+  assert.ok(selectAssistantTools('nutrigym','Qual minha meta de proteína?').includes('read_nutrition_goals'));
+  assert.throws(() => executeAssistantTool('personalgym','read_confirmed_meals',{},{}), /TOOL_NOT_ALLOWED/);
+  assert.throws(() => executeAssistantTool('personalgym','read_confirmed_workout_performance',{student_id:'other'},{}), /Unrecognized key/);
+  const unavailable=runAssistantTools('nutrigym','Quais são os alimentos e calorias?',{});
+  assert.equal(unavailable[0].status,'unavailable');
+  assert.equal(unavailable[0].recordCount,0);
+  assert.match(unavailable[0].limitation,/não tem um catálogo estruturado/);
+  assert.match(toolsSource,/student_id\$2/);
 });
 
 test('provider router dispatches unchanged agent, context and request format', async () => {
@@ -63,6 +84,8 @@ test('legacy Groq functions remain behind the adapter; routes retain auth and fa
   assert.match(server, /app\.post\('\/student-api\/personalgym\/assistant',\{preHandler:studentAuth\}/);
   assert.match(server, /app\.post\('\/student-api\/nutrigym\/assistant',\{preHandler:studentAuth\}/);
   assert.match(server, /if\(!text\)text=personalFallback\(context\)/);
-  assert.match(server, /const safeFallback=intent==='SAFETY'/);
+  assert.match(server, /runAssistantTools\('personalgym',message/);
+  assert.match(server, /runAssistantTools\('nutrigym',message/);
+  assert.match(server, /if\(intent==='SAFETY'\)return/);
   assert.match(server, /const text=ai\|\|safeFallback/);
 });

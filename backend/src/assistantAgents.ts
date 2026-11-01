@@ -24,9 +24,10 @@ export const ASSISTANT_AGENTS: Readonly<Record<AssistantAgentId, AssistantAgentP
     toolAllowlist: Object.freeze([
       'read_student_training_profile',
       'read_active_workout_catalog',
+      'read_active_exercise_catalog',
+      'read_workout_history',
       'read_confirmed_workout_performance',
       'read_assessments',
-      'propose_workout_change',
     ]),
   }),
   nutrigym: Object.freeze({
@@ -37,10 +38,12 @@ export const ASSISTANT_AGENTS: Readonly<Record<AssistantAgentId, AssistantAgentP
     safetyPolicy: 'nutrigym-safety-v1',
     toolAllowlist: Object.freeze([
       'read_student_nutrition_profile',
-      'read_confirmed_meals',
-      'read_hydration_records',
       'read_food_composition',
-      'propose_meal_record',
+      'read_confirmed_meals',
+      'read_confirmed_hydration',
+      'read_weight_history',
+      'read_hydration_records',
+      'read_nutrition_goals',
     ]),
   }),
 });

@@ -28,11 +28,11 @@ test('NutriGym profile editor allows correcting allergies and dietary restrictio
 
 test('NutriGym routes urgent safety and referral requests even when the profile is incomplete',()=>{
   const nutriRoute=server.slice(server.indexOf("app.post('/student-api/nutrigym/assistant'"),server.indexOf("const nutritionContext="));
+  const safetyGuard=nutriRoute.indexOf("if(intent==='SAFETY')");
   const profileGuard=nutriRoute.indexOf('if(!rawContext.profile)');
-  assert.ok(profileGuard>=0);
-  assert.ok(nutriRoute.indexOf("if(intent==='SAFETY')")>profileGuard);
-  assert.ok(nutriRoute.indexOf("if(intent==='PROFESSIONAL_REFERRAL')")>profileGuard);
-  assert.ok(nutriRoute.indexOf('const waterMatch')>nutriRoute.indexOf("if(intent==='PROFESSIONAL_REFERRAL')"));
+  assert.ok(safetyGuard>=0&&profileGuard>safetyGuard);
+  assert.ok(nutriRoute.indexOf("if(intent==='PROFESSIONAL_REFERRAL')")>safetyGuard);
+  assert.ok(nutriRoute.indexOf('const waterMatch')>profileGuard);
 });
 
 test('Personal Gym classifies safety before any automatic workout generation',()=>{
@@ -44,9 +44,17 @@ test('Personal Gym classifies safety before any automatic workout generation',()
   assert.match(personalRoute,/intent!=='SAFETY'&&intent!=='PROFESSIONAL_REFERRAL/);
 });
 
+test('Personal Gym reads safety before any query-dependent generation',()=>{
+  const personal=server.slice(server.indexOf("app.post('/student-api/personalgym/assistant'"));
+  const guard=personal.indexOf("if(intent==='SAFETY')return");
+  const query=personal.indexOf('personalContext(s.gym,s.student)');
+  assert.ok(guard>=0&&query>guard);
+  assert.doesNotMatch(personal.slice(0,personal.indexOf('let rawContext')),/generateAssistantWorkout/);
+});
+
 test('meal images continue to be blocked from server-side provider analysis',()=>{
   assert.match(server,/student-api\/nutrigym\/meals\/analyze',[^\n]*reply\.code\(410\)/);
   assert.match(server,/student-api\/nutrigym\/meals\/vision',[^\n]*reply\.code\(410\)/);
-  assert.match(server,/const safeFallback=intent==='SAFETY'/);
+  assert.match(server,/if\(intent==='SAFETY'\)return/);
   assert.match(server,/intent!=='SAFETY'&&intent!=='PROFESSIONAL_REFERRAL'&&await allowAi\(s\.gym,'nutrigym_chat'\)/);
 });
