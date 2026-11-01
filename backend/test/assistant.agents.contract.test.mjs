@@ -40,7 +40,8 @@ test('tool planner selects read-only domain tools and rejects model-selected IDs
   const unavailable=runAssistantTools('nutrigym','Quais calorias há nos alimentos?',{});
   assert.ok(unavailable.some(result=>result.tool==='read_food_composition'&&result.status==='unavailable'&&result.recordCount===0));
   assert.match(unavailable.find(result=>result.tool==='read_food_composition').limitation,/não tem um catálogo estruturado/);
-  assert.match(toolsSource,/student_id\$2/);
+  assert.match(toolsSource,/already tenant\/student-scoped/);
+  assert.match(toolsSource,/Unrecognized key/);
 });
 
 test('provider router dispatches unchanged agent, context and request format', async () => {
