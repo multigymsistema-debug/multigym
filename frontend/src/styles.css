@@ -194,3 +194,11 @@
 .student-photo-upload{display:grid;gap:7px;font-size:12px;color:#647069}.student-photo-upload input{border:1px solid #dde5e0;border-radius:8px;padding:9px;background:#fff}.student-photo-upload small{font-size:11px;color:#7c8781;line-height:1.45}.student-photo-error{color:#b42318;font-size:12px}
 
 .student-face-status{display:grid;gap:5px;padding:12px 14px;margin:0 0 14px;border:1px solid #dfe8e2;border-radius:10px;background:#f8faf9}.student-face-status strong{font-size:13px;color:#26342c}.student-face-status span{font-size:12px;color:#647069;line-height:1.45}
+/* Personal Gym: keep coaching prompts below the chat entry and make key actions easy to find. */
+.personal-coach-below-chat{margin:0 0 18px;border:1px solid #c8daf4;background:linear-gradient(135deg,#f5f9ff,#fff);box-shadow:0 8px 22px #194f9e12}
+.personal-coach-below-chat .student-card-title h2{font-size:18px;color:#183e73}
+.personal-start-button{min-height:48px;padding:0 22px!important;background:linear-gradient(135deg,#2168c4,#174c96)!important;color:#fff!important;font-weight:800!important;font-size:15px!important;box-shadow:0 8px 18px #194f9e38;border:1px solid #174c96!important}
+.personal-start-button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.personal-history-analyze{min-height:42px;padding:0 16px!important;border:1px solid #2d6fc4!important;border-radius:11px!important;background:#edf5ff!important;color:#174c91!important;font-weight:750!important;box-shadow:0 3px 10px #194f9e16;cursor:pointer}
+.personal-history-analyze:hover{background:#dfeeff!important}
+@media(max-width:600px){.personal-today-card .student-card-title{flex-wrap:wrap}.personal-today-card .student-card-title>div{width:100%}.personal-start-button{width:100%;min-height:50px;margin-top:10px}.personal-history .student-card-title{align-items:center;flex-wrap:wrap}.personal-history-analyze{min-height:44px}}
