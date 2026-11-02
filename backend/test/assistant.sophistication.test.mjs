@@ -28,8 +28,8 @@ test('consultas de segurança e encaminhamento retornam antes de chamar IA ou co
   assert.equal(detectAssistantIntent('Oi, falta de ar','nutrition',true),'SAFETY');
 });
 
-test('desempenho usado para progressão vem de sessões concluídas e janela recente',()=>{
-  assert.match(server,/wl\.workout_id IN \(SELECT wc\.workout_id FROM workout_completions wc WHERE wc\.gym_id=\$1 AND wc\.student_id=\$2 ORDER BY wc\.completed_at DESC LIMIT 3\)/);
+test('desempenho de Personal Gym só vem de sessões concluídas e escopadas',()=>{
+  assert.match(server,/FROM workout_logs wl JOIN workouts w ON w\.id=wl\.workout_id JOIN exercises e ON e\.id=wl\.exercise_id WHERE wl\.gym_id=\$1 AND wl\.student_id=\$2/);
   assert.match(server,/EXISTS\(SELECT 1 FROM workout_completions wc WHERE wc\.gym_id=wl\.gym_id AND wc\.student_id=wl\.student_id AND wc\.workout_id=wl\.workout_id\)/);
 });
 
@@ -40,6 +40,8 @@ test('assistente recebe regras de negócio e contexto com escopo da intenção',
   assert.match(server,/import \{nutritionFallback,personalFallback\} from '\.\/assistantFallback\.js'/);
   assert.match(server,/text=personalFallback\(context\)/);
   assert.match(server,/const fallback=imageDataUrl\?nutritionFallback\(context\)/);
+  assert.match(server,/runAssistantTools\('personalgym',message/);
+  assert.match(server,/runAssistantTools\('nutrigym',message/);
   const raw={today:'2026-11-01',student:{full_name:'Ana'},profile:{allergies:'amendoim'},meals:[{meal_date:'2026-11-01',meal_type:'almoço',protein_g:20}],goals:[],workouts:[{name:'Treino A'}],logs:[],workoutHistory:[]};
   const n=buildNutriContext(raw,'RECOMMENDATION','O que posso comer?');
   const p=buildPersonalContext(raw,'TRAINING_PROGRESS','Como evoluí?');

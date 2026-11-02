@@ -13,6 +13,7 @@ export function nutritionFallback(context:any):string{
   const toolData=(name:string)=>selectedTools.find((entry:any)=>entry?.tool===name&&entry.status==='ok')?.data;
   const toolFailure=selectedTools.some((entry:any)=>entry?.status!=='ok');
   const actualMeals=toolData('read_confirmed_meals');
+  const hasMealTool=selectedTools.some((entry:any)=>entry?.tool==='read_confirmed_meals');
   const actualGoals=toolData('read_nutrition_goals');
   const actualHydration=toolData('read_confirmed_hydration')??toolData('read_hydration_records');
   const actualWeights=toolData('read_weight_history');
@@ -27,12 +28,12 @@ export function nutritionFallback(context:any):string{
     }
     case 'DAILY_SUMMARY': {
       if(toolFailure)return `${hello}não consegui consultar seus registros de alimentação e hidratação agora; não vou preencher as lacunas com estimativas.`;
-      const meals=Array.isArray(actualMeals)?actualMeals:Array.isArray(nut.meals)?nut.meals:[];
+      const meals=hasMealTool&&Array.isArray(actualMeals)?actualMeals:Array.isArray(nut.meals)?nut.meals:[];
       const today=String(nut.today||new Date().toISOString().slice(0,10));
       const todayMeals=meals.filter((meal:any)=>String(meal.meal_date||'').slice(0,10)===today);
-      const calories=todayMeals.reduce((sum:number,meal:any)=>sum+n(meal.calories),0);
-      const protein=todayMeals.reduce((sum:number,meal:any)=>sum+n(meal.protein_g),0);
-      const lines=[`${hello}consultei ${todayMeals.length} refeição(ões) registradas hoje, somando ${fmt(calories)} kcal e ${fmt(protein,1)} g de proteína anotada.`];
+      const calories=hasMealTool?todayMeals.reduce((sum:number,meal:any)=>sum+n(meal.calories),0):n(totals.calories);
+      const protein=hasMealTool?todayMeals.reduce((sum:number,meal:any)=>sum+n(meal.protein_g),0):n(totals.protein_g);
+      const lines=[`${hello}${hasMealTool?'consultei ':''}no registro de hoje há ${hasMealTool?todayMeals.length:(Array.isArray(nut.meals)?nut.meals.length:0)} refeição(ões), somando ${fmt(calories)} kcal e ${fmt(protein,1)} g de proteína anotada.`];
       if(waterGoal)lines.push(`A água registrada soma ${fmt(waterToday)} ml de ${fmt(waterGoal)} ml da meta do perfil.`);
       lines.push('Os valores dependem do que foi registrado e, quando estimados, podem não representar exatamente o consumo.');
       return lines.join(' ');
@@ -93,6 +94,13 @@ export function personalFallback(context:any):string{
     case 'WORKOUT_INFO':
     case 'NEXT_WORKOUT': {
       if(toolFailure)return `${hello}não consegui consultar os dados do treino agora; não vou adivinhar. Tente novamente em instantes.`;
+      if(/ultimo|último|ultima|última|treino anterior/i.test(norm(String(context?.question||'')))){
+        const last=actualHistory[0];
+        if(!last)return `${hello}consultei o histórico e não encontrei um treino concluído.`;
+        const sessionLogs=actualLogs.filter((row:any)=>String(row.workout_id||'')===String(last.workout_id||''));
+        if(!sessionLogs.length)return `${hello}seu treino concluído mais recente foi ${last.name||'sem nome'}, em ${String(last.completed_at||'').slice(0,10)||'data não disponível'}. Não encontrei séries/cargas confirmadas associadas a essa sessão.`;
+        return `${hello}consultei seu treino concluído mais recente, ${last.name||'sem nome'}, em ${String(last.completed_at||'').slice(0,10)||'data não disponível'}. As séries registradas incluem ${sessionLogs.slice(0,10).map((row:any)=>`${row.exercise_name}: ${fmt(row.weight,1)} kg × ${fmt(row.reps)} repetições`).join('; ')}. Isso descreve somente as anotações disponíveis.`;
+      }
       if(!actualWorkout)return `${hello}não encontrei um treino ativo nos seus registros. Quando a academia publicar uma sessão, posso ajudar a consultar.`;
       const actualExercises=Array.isArray(actualWorkout.exercises)?actualWorkout.exercises:[];
       return `${hello}o treino ativo é ${actualWorkout.name}${actualWorkout.objective?` (${actualWorkout.objective})`:''}. ${actualExercises.length?actualExercises.slice(0,10).map((e:any,i:number)=>`${i+1}. ${e.name}: ${e.sets||'séries não informadas'} séries, ${e.reps||'repetições não informadas'} repetições${e.rest?`, descanso ${e.rest}`:''}.`).join(' '):'A sessão não tem exercícios visíveis neste momento.'} Consultei o treino ativo registrado no MultiGym.`;
@@ -109,7 +117,7 @@ export function personalFallback(context:any):string{
     }
     case 'TRAINING_PROGRESS': {
       if(toolFailure)return `${hello}não consegui consultar seus registros de treino agora; não vou inferir desempenho sem os dados.`;
-      if(!actualLogs.length){const last=actualHistory[0];return last?`${hello}seu treino concluído mais recente foi ${last.name||'sem nome registrado'}, em ${String(last.completed_at||'').slice(0,10)||'data não disponível'}. Não encontrei séries/cargas confirmadas para avaliar o desempenho dessa sessão.`:`${hello}não encontrei treinos concluídos nem séries executadas registradas no histórico disponível.`;}
+      if(!actualLogs.length){const last=actualHistory[0];return last?`${hello}seu treino concluído mais recente foi ${last.name||'sem nome registrado'}, em ${String(last.completed_at||'').slice(0,10)||'data não disponível'}. Não encontrei séries/cargas confirmadas para avaliar o desempenho dessa sessão.`:`${hello}ainda não há registros de séries executadas disponíveis para comparar.`;}
       const byExercise=new Map<string,any[]>();
       for(const log of actualLogs){const key=String(log.exercise_name||'Exercício');const arr=byExercise.get(key)||[];arr.push(log);byExercise.set(key,arr);}
       const comparisons=[...byExercise.entries()].filter(([,arr])=>arr.length>=2).slice(0,3).map(([exercise,arr])=>{const newest=arr[0],oldest=arr.at(-1);return `${exercise}: ${fmt(oldest.weight,1)} kg × ${fmt(oldest.reps)} repetições no registro mais antigo mostrado; ${fmt(newest.weight,1)} kg × ${fmt(newest.reps)} no mais recente.`;});
