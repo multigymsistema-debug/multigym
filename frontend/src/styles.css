@@ -726,3 +726,56 @@
 .student-app .student-assistant-chat .nutri-chat-head>div.chat-agent-identity>span:last-child,.student-app .student-assistant-chat .personal-chat-head>div.chat-agent-identity>span:last-child{display:grid!important;flex:1 1 auto!important;gap:4px!important;min-width:0!important;width:auto!important;margin:0!important;padding:0!important}
 .student-app .student-assistant-chat .nutri-chat-head>div.chat-agent-identity>span:last-child b,.student-app .student-assistant-chat .personal-chat-head>div.chat-agent-identity>span:last-child b{display:block!important;color:#fff!important;line-height:1.2!important}
 .student-app .student-assistant-chat .nutri-chat-head>div.chat-agent-identity>span:last-child small,.student-app .student-assistant-chat .personal-chat-head>div.chat-agent-identity>span:last-child small{display:flex!important;align-items:center!important;white-space:normal!important;color:#ffe7e9!important}
+
+/* Specialist tab heroes — portrait-led, immediately actionable, same structure for both AIs. */
+.student-app .student-assistant-hero{position:relative;display:grid;grid-template-columns:minmax(240px,38%) minmax(0,1fr);min-height:330px;margin:0 0 10px;overflow:hidden;border:1px solid #9f102b;border-radius:23px;background:linear-gradient(112deg,#de173f 0%,#b20e2c 39%,#760b21 100%);box-shadow:0 18px 42px rgba(128,12,37,.18);color:white;isolation:isolate}
+.student-app .student-assistant-hero:before{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(ellipse at 14% 33%,#ff527245,transparent 38%),linear-gradient(135deg,transparent 58%,#4c06175c 58%,#4c06175c 68%,transparent 68%)}
+.student-app .student-assistant-hero:after{content:"";position:absolute;z-index:-1;right:-24px;top:0;width:110px;height:100%;transform:skewX(-18deg);background:#ffffff0a}
+.student-app .student-assistant-hero-art{position:relative;align-self:stretch;min-height:330px;overflow:hidden;background:linear-gradient(130deg,#f12c55 0%,#cf123b 70%,#960c2c 100%)}
+.student-app .student-assistant-hero-art:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,#a10d2b 100%),linear-gradient(0deg,#72091f66,transparent 36%);pointer-events:none}
+.student-app .student-assistant-hero-art img{position:absolute;left:50%;bottom:-4%;height:108%;width:auto;max-width:none;transform:translateX(-50%);object-fit:contain;object-position:center bottom;filter:drop-shadow(0 10px 18px #4c071b60)}
+.student-app .student-assistant-hero.nutri .student-assistant-hero-art{background:linear-gradient(135deg,#f23858,#bc1035 72%,#830c28)}
+.student-app .student-assistant-hero-copy{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:12px;min-width:0;padding:32px clamp(22px,4vw,54px) 30px 28px}
+.student-app .student-assistant-hero-label{display:flex;align-items:center;gap:8px;padding:6px 11px;border:1px solid #ffffff45;border-radius:999px;background:#ffffff12;color:#ffe9ed;font-size:11px;font-weight:700;letter-spacing:.01em}
+.student-app .student-assistant-live-dot{width:9px;height:9px;border-radius:50%;background:#4be27c;box-shadow:0 0 0 4px #4be27c2b}
+.student-app .student-assistant-hero-copy h1{margin:0;color:white;font-size:clamp(28px,4vw,42px);font-weight:850;line-height:1.05;letter-spacing:-.045em}
+.student-app .student-assistant-hero-copy>p{max-width:480px;margin:0;color:#ffe7eb;font-size:clamp(13px,1.4vw,16px);line-height:1.55}
+.student-app .student-assistant-context{color:#ffced7;font-size:11px;font-weight:650}
+.student-app .student-assistant-hero-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;margin-top:3px;padding:0 22px;border:1px solid #ffffff68;border-radius:999px;background:linear-gradient(100deg,#ef1742,#cd0e34);box-shadow:0 8px 18px #45091c45;color:white;font-size:14px;font-weight:800;cursor:pointer;transition:transform .16s,filter .16s}
+.student-app .student-assistant-hero-button:hover{transform:translateY(-2px);filter:brightness(1.07)}
+.student-app .student-assistant-hero-button svg:last-child{margin-left:6px}
+.student-app .student-assistant-hero-suggestions{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+.student-app .student-assistant-hero-suggestions button{display:inline-flex;align-items:center;gap:5px;min-height:32px;padding:0 10px;border:1px solid #ffffff44;border-radius:999px;background:#4d071b30;color:#ffe8ec;font-size:10px;font-weight:650;cursor:pointer}
+.student-app .student-assistant-hero-suggestions button:hover{background:#ffffff22}
+.student-app .student-assistant-disclaimer{margin:0 0 18px;color:#758195;font-size:10px;line-height:1.45}
+.student-app .student-nutri-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.student-app .student-nutri-actions>span{min-width:0}
+.student-app .student-nutri-actions button{flex:none}
+.student-app .student-nutrigym-content .nutri-stats{margin-top:12px}
+.student-app .student-nutrigym-content .nutri-context{margin-top:0}
+@media(max-width:760px){
+ .student-app .student-assistant-hero{grid-template-columns:34% minmax(0,1fr);min-height:252px;margin-bottom:8px;border-radius:18px}
+ .student-app .student-assistant-hero-art{min-height:252px}
+ .student-app .student-assistant-hero-art img{height:103%;bottom:-2%}
+ .student-app .student-assistant-hero-copy{gap:9px;padding:20px 15px 18px}
+ .student-app .student-assistant-hero-label{gap:6px;padding:5px 8px;font-size:9px}
+ .student-app .student-assistant-live-dot{width:7px;height:7px}
+ .student-app .student-assistant-hero-copy h1{font-size:clamp(21px,5.5vw,30px)}
+ .student-app .student-assistant-hero-copy>p{font-size:11px;line-height:1.4}
+ .student-app .student-assistant-context{font-size:9px}
+ .student-app .student-assistant-hero-button{min-height:40px;gap:7px;padding:0 13px;font-size:11px}
+ .student-app .student-assistant-hero-button svg{width:15px;height:15px}
+ .student-app .student-assistant-hero-suggestions{gap:5px}
+ .student-app .student-assistant-hero-suggestions button{min-height:28px;padding:0 8px;font-size:8px}
+ .student-app .student-assistant-disclaimer{margin-bottom:12px;font-size:9px}
+ .student-app .student-nutri-actions{align-items:flex-start;font-size:10px}
+ .student-app .student-nutri-actions button{min-height:34px;padding:0 10px;font-size:10px}
+}
+@media(max-width:420px){
+ .student-app .student-assistant-hero{grid-template-columns:30% minmax(0,1fr);min-height:236px}
+ .student-app .student-assistant-hero-art{min-height:236px}
+ .student-app .student-assistant-hero-copy{gap:7px;padding:15px 11px}
+ .student-app .student-assistant-hero-copy h1{font-size:21px}
+ .student-app .student-assistant-hero-copy>p{font-size:10px}
+ .student-app .student-assistant-hero-suggestions button{font-size:7px;padding:0 7px}
+}
