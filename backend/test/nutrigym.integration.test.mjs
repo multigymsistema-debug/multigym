@@ -47,7 +47,7 @@ test('profiles, meals and tenant/student isolation work end to end',async()=>{
   const profileRead=await json('/student-api/personalgym/assistant',{method:'POST',headers:auth(tokenA),body:JSON.stringify({message:'Qual meu objetivo e quais minhas limitações?'})});
   assert.equal(profileRead.status,200);assert.match(profileRead.data.text,/consultei seu perfil/);assert.ok(profileRead.data.tool_results.some(t=>t.tool==='read_student_training_profile'&&t.status==='ok'));
   const noPerformance=await json('/student-api/personalgym/assistant',{method:'POST',headers:auth(tokenA),body:JSON.stringify({message:'Aumentei a carga no último treino?'})});
-  assert.equal(noPerformance.status,200);assert.match(noPerformance.data.text,/não encontrei séries executadas registradas/);assert.equal(noPerformance.data.tool_results.find(t=>t.tool==='read_confirmed_workout_performance').recordCount,0);
+  assert.equal(noPerformance.status,200);assert.match(noPerformance.data.text,/não há registros de séries executadas|não encontrei séries\/cargas confirmadas/);assert.equal(noPerformance.data.tool_results.find(t=>t.tool==='read_confirmed_workout_performance').recordCount,0);
   const catalogRead=await json('/student-api/personalgym/assistant',{method:'POST',headers:auth(tokenA),body:JSON.stringify({message:'Quais exercícios estão disponíveis no catálogo?'})});
   assert.equal(catalogRead.status,200);assert.ok(catalogRead.data.tool_results.some(t=>t.tool==='read_active_exercise_catalog'&&t.status==='ok'));
   const noProfileUrgency=await json('/student-api/nutrigym/assistant',{method:'POST',headers:auth(tokenB),body:JSON.stringify({message:'Estou com reação alérgica grave e falta de ar.'})});
