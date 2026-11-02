@@ -26,6 +26,14 @@ export function rankMemories<T extends {memory_key?:string;memory_value?:string;
  return rows.map((row,index)=>{const body=normalize(`${row.memory_key||''} ${row.category||''} ${row.memory_value||''}`);const tokens=new Set(body.match(/[a-z0-9]{3,}/g)||[]);let score=[...query].filter(x=>tokens.has(x)).length; if(/horario|manha|tarde|noite|disponibilidade/.test(normalize(message))&&/^(training_time|training_availability|training_preference)$/.test(String(row.memory_key)))score+=2;if(/comer|aliment|refeic|lanche|alimento|nutri|consum/.test(normalize(message))&&row.category==='preference')score+=2;if(/objetivo|meta/.test(normalize(message))&&row.category==='goal')score+=2;return{row,index,score:score+(Number(row.relevance)||0)/1000};}).filter(x=>x.score>=1).sort((a,b)=>b.score-a.score||a.index-b.index).slice(0,Math.max(0,Math.min(limit,8))).map(x=>x.row);
 }
 
+
+/** Profile fields are authoritative for overlapping facts; old chat memories must not override them. */
+export function excludeProfileBackedMemories<T extends {memory_key?:string}>(rows:T[],agent:AgentId,context:any):T[]{
+ const p=context?.profile||{};const student=context?.student||{};
+ const profileValues=agent==='nutrigym'?{food_preference:p.preferences,food_dislike:p.dislikes,nutrition_goal:p.objective}:{training_preference:student.preferences,training_goal:student.primary_goal,training_time:p.training_time,training_availability:p.training_time};
+ return rows.filter(row=>!String(profileValues[row.memory_key||'']||'').trim());
+}
+
 /** Transactional memory write. Advisory lock serializes writes for a tenant/student/agent/key; history and current value commit together. */
 export async function saveMemory(executor:any,scope:{gym:string;student:string},agent:AgentId,candidate:Candidate){
  const client=await executor.connect();const lockKey=`${scope.gym}:${scope.student}:${agent}:${candidate.key}`;

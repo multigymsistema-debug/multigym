@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {extractCandidate,rankMemories,saveMemory,searchKnowledge} from '../dist/assistantMemory.js';
+import {extractCandidate,excludeProfileBackedMemories,rankMemories,saveMemory,searchKnowledge} from '../dist/assistantMemory.js';
 import {nutritionFallback,personalFallback} from '../dist/assistantFallback.js';
 import {detectAssistantIntent} from '../dist/assistantContext.js';
 
@@ -12,6 +12,16 @@ test('memory extraction keeps direct, relevant, non-clinical and non-question st
  assert.equal(extractCandidate('Tenho alergia a amendoim.','nutrigym'),null);
 });
 
+test('profile-backed facts override historical conversation memories',()=>{
+ const rows=[{memory_key:'food_preference',memory_value:'massa'},{memory_key:'nutrition_goal',memory_value:'perder peso'},{memory_key:'training_time',memory_value:'manhã'}];
+ assert.deepEqual(excludeProfileBackedMemories(rows,'nutrigym',{profile:{preferences:'arroz e feijão',objective:'manutenção'}}),[rows[2]]);
+ assert.deepEqual(excludeProfileBackedMemories(rows,'personalgym',{student:{},profile:{training_time:'19:00'}}),[rows[0],rows[1]]);
+});
+
+test('memory safety excludes clinical claims from extraction',()=>{
+ for(const text of ['Tenho alergia a amendoim.','Tenho intolerância à lactose.','Tenho lesão no joelho.','Tenho dor lombar.','Tenho doença celíaca.','Uso medicamento para pressão.'])assert.equal(extractCandidate(text,'nutrigym'),null);
+});
+
 test('memory relevance ranks matching statement without unrelated recall',()=>{
  const rows=[{memory_key:'training_time',memory_value:'manhã',category:'availability',relevance:75},{memory_key:'food_preference',memory_value:'feijão',category:'preference',relevance:75}];
  assert.equal(rankMemories(rows,'Qual horário prefiro para treinar?')[0].memory_key,'training_time');
@@ -21,7 +31,7 @@ test('memory relevance ranks matching statement without unrelated recall',()=>{
 
 test('memory writes serialize per tenant/student/agent/key and retain old values atomically',async()=>{
  const calls=[];let active=null;let next=0;
- const client={query:async(sql,params=[])=>{calls.push(sql);if(sql==='BEGIN'||sql==='COMMIT'||sql==='ROLLBACK')return{rows:[]};if(sql.includes('SELECT pg_advisory_xact_lock'))return{rows:[]};if(sql.includes('SELECT id,memory_value,source FROM assistant_memories'))return{rows:active?[active]:[]};if(sql.includes('UPDATE assistant_memories SET active=false'))return{rows:[]};if(sql.includes('INSERT INTO assistant_memories')){active={id:`id-${++next}`,memory_value:params[4],source:'explicit_student'};return{rows:[active]};}return{rows:[]};},release(){}};
+ const client={query:async(sql,params=[])=>{calls.push(sql);if(sql==='BEGIN'||sql==='COMMIT'||sql==='ROLLBACK')return{rows:[]};if(sql.includes('SELECT pg_advisory_xact_lock'))return{rows:[]};if(sql.includes('SELECT id,memory_value,source FROM assistant_memories'))return{rows:active?[active]:[]};if(sql.includes('UPDATE assistant_memories SET active=false'))return{rows:[]};if(sql.includes('INSERT INTO assistant_memories')){active={id:`id-${++next}`,memory_value:params[4],source:'explicit_student'};return{rows:[active]};}if(sql.includes('INSERT INTO assistant_memory_history'))return{rows:[]};return{rows:[]};},release(){}};
  const pool={connect:async()=>client};
  const base={key:'food_preference',category:'preference',confidence:.95,source:'explicit_student',sourceDetail:'direct statement'};
  await saveMemory(pool,{gym:'gymA',student:'studentA'},'nutrigym',{...base,value:'feijão'});

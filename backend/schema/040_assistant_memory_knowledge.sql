@@ -58,12 +58,12 @@ VALUES('personalgym','resistance_training','review_summary','Resistance training
 'PMC:10818109','2024-01-01','draft','en')
 ON CONFLICT(agent,source_name,source_record_id,title) DO UPDATE SET content=EXCLUDED.content,source_url=EXCLUDED.source_url,license_name=EXCLUDED.license_name,source_detail=EXCLUDED.source_detail,review_status='draft',updated_at=now();
 
--- A short population-guideline benchmark from the U.S. Physical Activity Guidelines; only a paraphrase is stored.
+-- CDC public-domain adult activity guidance. CDC requires attribution, no substantive alteration,
+-- availability at no charge, and a prominent non-endorsement disclaimer in commercial use.
 INSERT INTO assistant_knowledge(agent,category,record_type,title,content,source_name,source_url,author_institution,license_name,source_detail,source_record_id,published_at,review_status,language)
-VALUES('personalgym','physical_activity','guideline_summary','Adult activity benchmark: moderate or vigorous aerobic activity',
-'For substantial health benefits, the U.S. guideline describes at least 150 minutes of moderate-intensity aerobic activity weekly, or 75 minutes of vigorous-intensity activity, or an equivalent combination; it also recommends muscle-strengthening activity. This is a general adult benchmark and not an individualized training plan.',
-'U.S. Department of Health and Human Services, Physical Activity Guidelines for Americans, 2nd edition','https://health.gov/sites/default/files/2019-09/Physical_Activity_Guidelines_2nd_edition.pdf','U.S. Department of Health and Human Services','U.S. federal government publication; paraphrase only; source is government-hosted.','Imported scope: concise independently worded summary of adult guideline benchmark, verified against the official federal PDF; no tables or substantial text copied.',
-'HHS-PAG-2E-2018','2018-12-01','reviewed','en')
+VALUES('personalgym','physical_activity','guideline_summary','Adult weekly aerobic and strengthening activity benchmark',
+'CDC states adults need at least 150 minutes of moderate-intensity aerobic activity per week (or 75 minutes vigorous or equivalent) and muscle-strengthening activity on at least 2 days each week. General population guidance, not an individualized training plan.',
+'CDC, Adult Activity: An Overview','https://www.cdc.gov/physical-activity-basics/guidelines/adults.html','U.S. Centers for Disease Control and Prevention','CDC public-domain material; attribution to CDC, link directly to source, state source available free, no substantive changes, and prominently disclaim government endorsement for commercial use.','Independent, content-preserving summary; CDC reuse terms verified. MultiGym must display required attribution, free-source notice, direct source link, and non-endorsement disclaimer before this record is served.','CDC-ADULT-ACTIVITY','2024-05-15','reviewed','en')
 ON CONFLICT(agent,source_name,source_record_id,title) DO UPDATE SET content=EXCLUDED.content,source_url=EXCLUDED.source_url,license_name=EXCLUDED.license_name,source_detail=EXCLUDED.source_detail,review_status='reviewed',updated_at=now();
 
 -- WHO health fact sheets require explicit license/permission review for commercial reuse. Do not seed from WHO until confirmed.
