@@ -604,3 +604,109 @@
  .student-app .student-progress-metric strong{font-size:11px}.student-app .student-module-copy b{font-size:9px}
  .student-app .student-module-copy small{font-size:7px}
 }
+
+/* Assistant chats — reference-led, branded, welcoming, and consistent on both modules. */
+.student-app .student-assistant-chat{width:min(780px,100%);height:min(84dvh,850px);max-height:calc(100dvh - 36px);border:1px solid #e5dadd;border-radius:22px;box-shadow:0 26px 86px rgba(18,10,12,.28)}
+.student-app .student-assistant-chat .nutri-chat-head,.student-app .student-assistant-chat .personal-chat-head{min-height:78px;padding:12px 18px;background:linear-gradient(105deg,#971126 0%,#c8102e 68%,#e02745 100%);border:0;color:#fff}
+.student-app .student-assistant-chat .nutri-chat-head:after,.student-app .student-assistant-chat .personal-chat-head:after{content:"";position:absolute;right:0;top:0;width:115px;height:100%;background:linear-gradient(130deg,transparent 45%,#ffffff18 45%,#ffffff18 58%,transparent 58%);pointer-events:none}
+.student-app .student-assistant-chat .chat-agent-identity{display:flex;align-items:center;gap:12px;min-width:0;position:relative;z-index:1}
+.student-app .student-assistant-chat .chat-agent-portrait{width:52px;height:52px;display:block;flex:none;position:relative;overflow:hidden;border:2px solid rgba(255,255,255,.7);border-radius:50%;background:linear-gradient(145deg,#fff,#f5e8e8);box-shadow:0 3px 12px #490b1938}
+.student-app .student-assistant-chat .chat-agent-portrait img{position:absolute;width:125%;height:auto;max-width:none;left:50%;top:-2px;transform:translateX(-50%);object-fit:contain}
+.student-app .student-assistant-chat .chat-agent-identity>span:last-child{display:grid;gap:4px}
+.student-app .student-assistant-chat .chat-agent-identity b{font-size:16px;color:white;letter-spacing:-.02em}
+.student-app .student-assistant-chat .chat-agent-identity small{display:flex;align-items:center;gap:6px;color:#ffe7e9;font-size:10px}
+.student-app .student-assistant-chat .chat-agent-identity small i{width:7px;height:7px;display:block;border-radius:50%;background:#54db86;box-shadow:0 0 0 3px #54db8628}
+.student-app .student-assistant-chat .chat-head-actions{position:relative;z-index:1}
+.student-app .student-assistant-chat .chat-head-actions button{min-height:38px;border:1px solid #ffffff50;border-radius:10px;background:#590b1b30;color:#fff;font-weight:650}
+.student-app .student-assistant-chat .chat-head-actions button:hover{background:#ffffff20}
+.student-app .student-assistant-chat .chat-head-actions .chat-clear-button{font-size:10px}
+.student-app .student-assistant-chat .nutri-chat-messages,.student-app .student-assistant-chat .personal-chat-messages{background-color:#fbf8f8;background-image:radial-gradient(#e8dfe1 .7px,transparent .7px);background-size:20px 20px;padding:22px 24px}
+.student-app .student-assistant-chat.is-new .nutri-chat-messages,.student-app .student-assistant-chat.is-new .personal-chat-messages{justify-content:center}
+.student-app .student-assistant-chat .nutri-bubble-row.chat-welcome-row,.student-app .student-assistant-chat .personal-bubble-row.chat-welcome-row{width:100%;justify-content:center;align-items:center;flex-direction:column;gap:10px;margin:auto 0 0}
+.student-app .student-assistant-chat .chat-welcome-row .chat-message-avatar{width:112px;height:112px;border:3px solid white;border-radius:50%;background:linear-gradient(145deg,#fff,#f7e6e9);box-shadow:0 5px 22px #a20e2720}
+.student-app .student-assistant-chat .chat-welcome-row .chat-message-avatar img{object-fit:cover;object-position:center 10%;transform:scale(1.45);transform-origin:50% 18%}
+.student-app .student-assistant-chat .chat-welcome-row .nutri-bubble,.student-app .student-assistant-chat .chat-welcome-row .personal-bubble{position:relative;max-width:min(90%,560px);padding:16px 20px;border:1px solid #f0dfe2;border-radius:18px;background:#fff;text-align:center;box-shadow:0 7px 22px #4a1b2310;font-size:14px;line-height:1.65}
+.student-app .student-assistant-chat .chat-welcome-row .nutri-bubble:before,.student-app .student-assistant-chat .chat-welcome-row .personal-bubble:before{content:"";position:absolute;top:-7px;left:calc(50% - 7px);width:12px;height:12px;transform:rotate(45deg);background:#fff;border-top:1px solid #f0dfe2;border-left:1px solid #f0dfe2}
+.student-app .student-assistant-chat .chat-welcome-row .chat-message-speaker{margin-bottom:7px;font-size:12px;color:#c8102e}
+.student-app .student-assistant-chat .chat-welcome-row .chat-message-time{display:none}
+.student-app .student-assistant-chat .chat-welcome-row .chat-message-avatar-user{display:none}
+.student-app .student-assistant-chat .nutri-bubble-row.user .nutri-bubble,.student-app .student-assistant-chat .personal-bubble-row.user .personal-bubble{background:linear-gradient(110deg,#c8102e,#aa1028);border-color:#b90e2b;color:white}
+.student-app .student-assistant-chat .nutri-bubble-row.user .chat-message-speaker,.student-app .student-assistant-chat .personal-bubble-row.user .chat-message-speaker{color:#ffe0e5}
+.student-app .student-assistant-chat .nutri-chat-suggestions,.student-app .student-assistant-chat .personal-chat-suggestions{padding:11px 16px;border-top:1px solid #f0e7e9;gap:8px}
+.student-app .student-assistant-chat .nutri-chat-suggestions button,.student-app .student-assistant-chat .personal-chat-suggestions button{min-height:37px;padding:0 13px;border-color:#eed8dc;background:#fff;color:#8f1b2d;font-size:10px;font-weight:650;transition:background .15s,border-color .15s,transform .15s}
+.student-app .student-assistant-chat .nutri-chat-suggestions button:hover,.student-app .student-assistant-chat .personal-chat-suggestions button:hover{background:#fff1f3;border-color:#d997a2;transform:translateY(-1px)}
+.student-app .student-assistant-chat .nutri-chat-suggestions .voice-suggestion,.student-app .student-assistant-chat .personal-chat-suggestions .voice-suggestion{background:#fff1f2;border-color:#edc5cb;color:#9f1529}
+.student-app .student-assistant-chat .nutri-chat-compose,.student-app .student-assistant-chat .personal-chat-compose{padding:12px 16px 9px;gap:9px}
+.student-app .student-assistant-chat .nutri-chat-compose input,.student-app .student-assistant-chat .personal-chat-compose input{height:48px;border-radius:15px;background:#faf8f8}
+.student-app .student-assistant-chat .nutri-send,.student-app .student-assistant-chat .personal-chat-compose .nutri-send{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#d91839,#aa1028);box-shadow:0 5px 12px #bb163327}
+.student-app .student-assistant-chat .voice-mic{width:42px;height:42px;flex:none;border:1px solid #eed8dc;border-radius:13px;background:#fff4f5;color:#a91a2e}
+.student-app .student-assistant-chat .nutri-chat-note,.student-app .student-assistant-chat .personal-chat-note{padding:0 16px 11px;text-align:left}
+.student-app .student-assistant-chat .chat-message-time{display:block;margin-top:6px;color:#98a1ae;font-size:9px;text-align:right}
+.student-app .student-assistant-chat .nutri-bubble-row.assistant .nutri-bubble,.student-app .student-assistant-chat .personal-bubble-row.assistant .personal-bubble{position:relative}
+.student-app .student-assistant-chat .nutri-bubble-row.assistant .nutri-bubble:before,.student-app .student-assistant-chat .personal-bubble-row.assistant .personal-bubble:before{content:"";position:absolute;left:-6px;bottom:12px;width:10px;height:10px;transform:rotate(-45deg);border-left:1px solid #e7ebf0;border-bottom:1px solid #e7ebf0;background:white}
+.student-app .student-assistant-chat .nutri-chat-head .chat-agent-portrait{box-shadow:0 3px 12px #490b1938}
+@media(max-width:600px){
+ .student-app .student-assistant-chat{width:100%;height:100dvh;max-height:100dvh;border:0;border-radius:0}
+ .student-app .student-assistant-chat .nutri-chat-head,.student-app .student-assistant-chat .personal-chat-head{min-height:70px;padding:10px 13px}
+ .student-app .student-assistant-chat .chat-agent-portrait{width:46px;height:46px}
+ .student-app .student-assistant-chat .chat-agent-identity b{font-size:14px}
+ .student-app .student-assistant-chat .chat-agent-identity small{font-size:9px}
+ .student-app .student-assistant-chat .chat-head-actions{gap:5px}
+ .student-app .student-assistant-chat .chat-head-actions button{min-width:34px;min-height:34px;padding:0 8px}
+ .student-app .student-assistant-chat .chat-head-actions .chat-clear-button{font-size:9px!important}
+ .student-app .student-assistant-chat .nutri-chat-messages,.student-app .student-assistant-chat .personal-chat-messages{padding:15px 12px}
+ .student-app .student-assistant-chat .chat-welcome-row .chat-message-avatar{width:92px;height:92px}
+ .student-app .student-assistant-chat .chat-welcome-row .nutri-bubble,.student-app .student-assistant-chat .chat-welcome-row .personal-bubble{max-width:94%;padding:14px 15px;font-size:13px}
+ .student-app .student-assistant-chat .nutri-chat-suggestions,.student-app .student-assistant-chat .personal-chat-suggestions{padding:9px 11px;gap:6px}
+ .student-app .student-assistant-chat .nutri-chat-suggestions button,.student-app .student-assistant-chat .personal-chat-suggestions button{min-height:34px;padding:0 10px;font-size:9px}
+ .student-app .student-assistant-chat .nutri-chat-compose,.student-app .student-assistant-chat .personal-chat-compose{padding:9px 11px 6px;gap:7px}
+ .student-app .student-assistant-chat .nutri-chat-compose input,.student-app .student-assistant-chat .personal-chat-compose input{height:45px;padding:0 12px;font-size:12px}
+ .student-app .student-assistant-chat .voice-mic{width:39px;height:39px}
+ .student-app .student-assistant-chat .nutri-send,.student-app .student-assistant-chat .personal-chat-compose .nutri-send{width:42px;height:42px}
+ .student-app .student-assistant-chat .nutri-chat-note,.student-app .student-assistant-chat .personal-chat-note{padding:0 12px 8px;font-size:8px}
+}
+@media(max-height:620px) and (min-width:601px){.student-app .student-assistant-chat.is-new .nutri-chat-messages,.student-app .student-assistant-chat.is-new .personal-chat-messages{justify-content:flex-start}.student-app .student-assistant-chat .chat-welcome-row .chat-message-avatar{width:76px;height:76px}}
+/* Home assistant invitations: two clear, image-led choices as in the user's reference. */
+.student-app .student-assistant-promo{position:relative;display:grid;grid-template-columns:34% minmax(0,1fr);align-items:stretch;min-height:184px;padding:0;gap:0;overflow:hidden;border:1px solid #b9203b;border-radius:18px;background:linear-gradient(112deg,#8b1026 0%,#ae102d 56%,#490c1c 100%);text-align:left;box-shadow:0 8px 22px rgba(134,14,40,.15);color:white}
+.student-app .student-assistant-promo:after{content:"";position:absolute;right:0;top:0;width:25%;height:100%;background:linear-gradient(130deg,transparent 47%,#ffffff12 47%,#ffffff12 58%,transparent 58%);pointer-events:none}
+.student-app .student-assistant-promo-image{position:relative;align-self:stretch;overflow:hidden;min-height:184px;background:linear-gradient(90deg,#df1744,#b60f30)}
+.student-app .student-assistant-promo-image:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 62%,#9e0e2b 100%);z-index:1}
+.student-app .student-assistant-promo-image img{position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);height:108%;width:auto;max-width:none;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 4px 8px #42071650)}
+.student-app .student-assistant-promo.nutrigym .student-assistant-promo-image{background:linear-gradient(140deg,#ef3154,#b20f32)}
+.student-app .student-assistant-promo-content{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:7px;padding:15px 18px}
+.student-app .student-assistant-promo-content>b{font-size:19px;line-height:1.15;color:#fff;letter-spacing:-.02em}
+.student-app .student-assistant-promo-content>small{max-width:260px;color:#ffe5e8;font-size:11px;line-height:1.4}
+.student-app .student-assistant-online{display:flex;align-items:center;gap:6px;color:#ffe2e6;font-size:9px;font-weight:650}
+.student-app .student-assistant-online i{width:7px;height:7px;border-radius:50%;background:#55e28c;box-shadow:0 0 0 3px #55e28c30}
+.student-app .student-assistant-promo-cta{display:flex;align-items:center;gap:8px;min-height:36px;margin-top:3px;padding:0 13px;border:1px solid #ffffff60;border-radius:999px;background:linear-gradient(100deg,#ed1741,#d20f34);box-shadow:0 5px 12px #36061335;color:white;font-size:11px;font-weight:750}
+.student-app .student-assistant-promo-cta svg:last-child{margin-left:7px}
+.student-app .student-assistant-promo:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(134,14,40,.22)}
+.student-app .student-assistant-promo .student-assistant-promo-cta{transition:filter .15s}.student-app .student-assistant-promo:hover .student-assistant-promo-cta{filter:brightness(1.1)}
+/* New chat welcome fills the open conversation instead of leaving a tiny bubble at the top. */
+.student-app .student-assistant-chat .nutri-chat-messages,.student-app .student-assistant-chat .personal-chat-messages{display:flex;flex-direction:column}
+.student-app .student-assistant-chat.is-new .nutri-chat-messages,.student-app .student-assistant-chat.is-new .personal-chat-messages{justify-content:center}
+.student-app .student-assistant-chat.is-new .chat-welcome-row{flex:0 0 auto}
+.student-app .student-assistant-chat.has-history .nutri-chat-messages,.student-app .student-assistant-chat.has-history .personal-chat-messages{justify-content:flex-start}
+.student-app .student-assistant-chat.has-history .chat-welcome-row{align-items:flex-start;flex-direction:row;justify-content:flex-start;margin:0 0 13px}
+.student-app .student-assistant-chat.has-history .chat-welcome-row .chat-message-avatar{width:31px;height:31px;border-width:0}
+.student-app .student-assistant-chat.has-history .chat-welcome-row .nutri-bubble,.student-app .student-assistant-chat.has-history .chat-welcome-row .personal-bubble{max-width:min(82%,520px);padding:12px 14px;text-align:left;border-radius:16px 16px 16px 5px;font-size:13px}
+.student-app .student-assistant-chat.has-history .chat-welcome-row .chat-message-time{display:block}
+.student-app .student-assistant-chat.has-history .chat-welcome-row .nutri-bubble:before,.student-app .student-assistant-chat.has-history .chat-welcome-row .personal-bubble:before{left:-6px;top:auto;bottom:12px;transform:rotate(-45deg)}
+@media(max-width:600px){
+ .student-app .student-assistant-promo{min-height:144px;grid-template-columns:31% minmax(0,1fr);border-radius:15px}
+ .student-app .student-assistant-promo-image{min-height:144px}
+ .student-app .student-assistant-promo-image img{height:106%}
+ .student-app .student-assistant-promo-content{gap:5px;padding:10px 11px}
+ .student-app .student-assistant-promo-content>b{font-size:16px}
+ .student-app .student-assistant-promo-content>small{font-size:9px;line-height:1.3}
+ .student-app .student-assistant-promo-cta{min-height:32px;margin-top:1px;padding:0 10px;font-size:9px;gap:5px}
+ .student-app .student-assistant-promo-cta svg:last-child{margin-left:3px}
+ .student-app .student-assistant-online{font-size:8px}
+}
+@media(max-width:380px){
+ .student-app .student-assistant-promo{grid-template-columns:28% minmax(0,1fr);min-height:136px}
+ .student-app .student-assistant-promo-image{min-height:136px}
+ .student-app .student-assistant-promo-content{padding:9px;gap:4px}
+ .student-app .student-assistant-promo-content>b{font-size:14px}
+ .student-app .student-assistant-promo-content>small{font-size:8px}
+}
