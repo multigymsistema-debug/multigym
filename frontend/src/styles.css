@@ -970,3 +970,11 @@
  .student-app .student-nutrigym-content .nutri-hydration-content{grid-template-columns:1fr}
  .student-app .student-nutrigym-content .nutri-glass-wrap{display:none}
 }
+
+/* Last consistency pass from live screenshots: workout actions must use the platform's primary red. */
+.student-app .personal-page .personal-start-button,.student-app .personal-page .personal-today-card .student-primary{background:linear-gradient(110deg,#d31536,#ad1029);border:1px solid #b20e2b;color:#fff;box-shadow:0 6px 15px rgba(190,16,48,.16)}
+.student-app .personal-page .personal-start-button:hover,.student-app .personal-page .personal-today-card .student-primary:hover{filter:brightness(1.06)}
+.student-app .personal-page .personal-history-analyze{border-color:#ead3d8!important;background:#fff7f8!important;color:#a8182c!important;box-shadow:none!important}
+.student-app .personal-page .personal-exercise-row>.exercise-illustration{width:78px;min-width:78px;height:76px;background:#f5f6f7}
+.student-app .personal-page .personal-exercise-row>.exercise-illustration img{object-fit:contain;background:#f5f6f7}
+@media(max-width:760px){.student-app .personal-page .personal-exercise-row>.exercise-illustration{width:72px;min-width:72px;height:70px}}
