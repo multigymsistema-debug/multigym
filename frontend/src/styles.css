@@ -710,3 +710,12 @@
  .student-app .student-assistant-promo-content>b{font-size:14px}
  .student-app .student-assistant-promo-content>small{font-size:8px}
 }
+/* Override legacy chat header rules so the shared branded identity remains horizontal. */
+.student-app .student-assistant-chat .nutri-chat-head>.chat-agent-identity,.student-app .student-assistant-chat .personal-chat-head>.chat-agent-identity{display:flex;flex:1;align-items:center;gap:12px;min-width:0;margin:0;padding:0;background:transparent;position:relative}
+.student-app .student-assistant-chat .nutri-chat-head>.chat-agent-identity:before,.student-app .student-assistant-chat .personal-chat-head>.chat-agent-identity:before{content:none}
+.student-app .student-assistant-chat .chat-agent-identity>span:first-child{display:block;flex:none;margin:0}
+.student-app .student-assistant-chat .chat-agent-identity>span:last-child{display:grid;flex:1;min-width:0;gap:4px;margin:0}
+.student-app .student-assistant-chat .chat-head-actions{display:flex;flex:none;align-items:center;gap:7px;margin:0}
+.student-app .student-assistant-chat .chat-head-actions button:last-child{font-size:22px;line-height:1}
+.student-app .student-assistant-chat .nutri-send:disabled,.student-app .student-assistant-chat .personal-chat-compose .nutri-send:disabled{opacity:.78;background:linear-gradient(135deg,#d97a8a,#ba5668);box-shadow:none;cursor:not-allowed}
+.student-app .student-assistant-chat .voice-mic{display:grid;place-items:center;font-size:17px}
