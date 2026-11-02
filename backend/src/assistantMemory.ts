@@ -41,7 +41,7 @@ export async function saveMemory(executor:any,scope:{gym:string;student:string},
 
 export async function searchKnowledge(executor:any,agent:AgentId,question:string,limit=4){
  const terms=[...new Set(normalize(clean(question,500)).match(/[a-z0-9]{3,}/g)||[])].slice(0,12);if(!terms.length)return[];
- const aliases:Record<string,string[]>={arroz:['rice'],rice:['arroz'],cozido:['cooked'],cooked:['cozido'],calorias:['kcal','calorie','calories'],calorie:['kcal','calorias'],calories:['kcal','calorias'],proteina:['protein'],protein:['proteina'],treino:['training','resistance'],training:['treino','resistance'],forca:['strength'],strength:['forca'],atividade:['activity'],physical:['atividade','activity'],adults:['adulto','adultos'],adulto:['adults'],adultos:['adults']};
+ const aliases:Record<string,string[]>={arroz:['rice'],rice:['arroz'],cozido:['cooked'],cooked:['cozido'],calorias:['kcal','calorie','calories'],calorie:['kcal','calorias'],calories:['kcal','calorias'],proteina:['protein'],protein:['proteina'],treino:['training','resistance'],treinamento:['training','resistance','strengthening'],resistido:['resistance','strengthening'],forca:['strength','strengthening'],training:['treino','resistance'],strength:['forca'],atividade:['activity'],physical:['atividade','activity'],adults:['adulto','adultos'],adulto:['adults'],adultos:['adults']};
  const expanded=[...new Set([...terms,...terms.flatMap(term=>aliases[term]||[])])];
  // English aliases deliberately target the English-language licensed records currently seeded; other queries remain exact-lexeme searches.
  const tsquery=expanded.map(x=>x.replace(/[^a-z0-9_]/g,'')).filter(Boolean).join(' | ');if(!tsquery)return[];

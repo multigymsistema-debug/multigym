@@ -56,7 +56,7 @@ VALUES('personalgym','resistance_training','review_summary','Resistance training
 'An umbrella review of 44 systematic reviews reports that resistance training consistently improved muscle mass and strength compared with non-exercising controls in healthy adults. The evidence on how specific prescription variables affect outcomes varied; available evidence did not establish one universally optimal schedule. This is population-level evidence, not an individual prescription.',
 'McLeod et al., Journal of Sport and Health Science, umbrella review','https://pmc.ncbi.nlm.nih.gov/articles/PMC10818109/','McMaster University; Journal of Sport and Health Science','CC BY-NC-ND 4.0; license restricts commercial reuse; included as pending licensing review, not as a cleared commercial source.','Content is paraphrased from article abstract results; source/license metadata verified at PMC page. Requires legal review before use in a commercial service.',
 'PMC:10818109','2024-01-01','draft','en')
-ON CONFLICT(agent,source_name,source_record_id,title) DO UPDATE SET content=EXCLUDED.content,source_url=EXCLUDED.source_url,license_name=EXCLUDED.license_name,source_detail=EXCLUDED.source_detail,review_status='reviewed',updated_at=now();
+ON CONFLICT(agent,source_name,source_record_id,title) DO UPDATE SET content=EXCLUDED.content,source_url=EXCLUDED.source_url,license_name=EXCLUDED.license_name,source_detail=EXCLUDED.source_detail,review_status='draft',updated_at=now();
 
 -- A short population-guideline benchmark from the U.S. Physical Activity Guidelines; only a paraphrase is stored.
 INSERT INTO assistant_knowledge(agent,category,record_type,title,content,source_name,source_url,author_institution,license_name,source_detail,source_record_id,published_at,review_status,language)
@@ -67,4 +67,4 @@ VALUES('personalgym','physical_activity','guideline_summary','Adult activity ben
 ON CONFLICT(agent,source_name,source_record_id,title) DO UPDATE SET content=EXCLUDED.content,source_url=EXCLUDED.source_url,license_name=EXCLUDED.license_name,source_detail=EXCLUDED.source_detail,review_status='reviewed',updated_at=now();
 
 -- WHO health fact sheets require explicit license/permission review for commercial reuse. Do not seed from WHO until confirmed.
-DELETE FROM assistant_knowledge WHERE source_name ILIKE 'World Health Organization%' AND review_status='reviewed';
+-- WHO is not imported. Previously reviewed rows, if any, must never be modified by this migration.
