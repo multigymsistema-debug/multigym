@@ -1073,3 +1073,148 @@
  .student-app .student-assistant-hero-copy h1{font-size:18px}
  .student-app .student-assistant-hero-copy>p{font-size:8px}
 }
+
+/* Lower visual noise: single strong action, calm surfaces, consistent hierarchy. */
+.student-app .student-welcome-hero:after{width:16%;opacity:.42;background:linear-gradient(130deg,transparent 45%,rgba(200,16,46,.58) 45%,rgba(200,16,46,.58) 54%,transparent 54%)}
+.student-app .student-welcome-mark{display:none}
+.student-app .student-welcome-hero{min-height:196px}
+.student-app .student-welcome-copy h1{max-width:490px}
+.student-app .student-module-grid{gap:8px}
+.student-app .student-module-card{min-height:62px;padding:9px 11px;border-radius:12px;box-shadow:none}
+.student-app .student-module-icon{width:31px;height:31px;border-radius:9px}
+.student-app .student-module-copy b{font-size:10px}
+.student-app .student-module-copy small{font-size:8px}
+.student-app .student-dashboard-grid>.student-card{min-height:0;padding:16px}
+.student-app .student-dashboard-grid>.student-dashboard-appointment{align-self:start}
+.student-app .student-dashboard-training>.student-primary{min-height:40px;margin-top:10px}
+.student-app .student-next-workout-title{min-height:52px;padding:9px 11px}
+.student-app .student-appointment-feature{min-height:0;padding:11px 12px;font-size:11px}
+.student-app .student-recent-workouts{grid-template-columns:repeat(3,minmax(0,1fr))}
+.student-app .student-recent-workouts>div{padding:9px 10px}
+.student-app .student-announcements{margin-top:10px;padding:16px;border-top:1px solid #e5e8ed}
+.student-app .student-announcements>.student-card-title{border-bottom:0;padding-bottom:5px}
+.student-app .student-assistant-compact-icon{display:none}
+.student-app .student-assistant-hero{grid-template-columns:minmax(0,1fr);min-height:0;max-width:960px;margin-inline:auto}
+.student-app .student-assistant-hero-art{display:none}
+.student-app .student-assistant-hero-copy{gap:8px;padding:20px 24px}
+.student-app .student-assistant-hero-copy h1{font-size:28px}
+.student-app .student-assistant-hero-copy>p{max-width:620px}
+.student-app .student-assistant-hero-suggestions{display:none}
+.student-app .student-assistant-hero-context{font-size:10px}
+.student-app .student-assistant-hero-button{margin-top:2px}
+.student-app .student-assistant-hero-label{color:#e28b9b}
+.student-app .student-assistant-disclaimer{max-width:960px;margin:0 auto 12px}
+.student-app .personal-page .personal-today-card,.student-app .personal-page .personal-history{padding:16px;border-radius:14px}
+.student-app .personal-page .personal-history-list{grid-template-columns:repeat(3,minmax(0,1fr))}
+.student-app .student-nutrigym-content .student-assistant-hero{margin-bottom:10px}
+.student-app .student-nutrigym-content .student-nutri-section-heading{margin:11px 2px 8px}
+.student-app .student-nutrigym-content .nutri-stack{grid-template-columns:minmax(0,1fr) minmax(265px,.8fr);gap:9px}
+.student-app .student-nutrigym-content .nutri-hydration-feature{grid-row:span 2}
+.student-app .student-nutrigym-content .nutri-stat:nth-child(3){display:none}
+.student-app .student-nutrigym-content .nutri-stat{min-height:77px;padding:11px}
+.student-app .student-nutrigym-content .nutri-hydration-history{display:none}
+.student-app .student-nutrigym-content .nutri-card{padding:16px}
+.student-app .student-nutrigym-content .nutri-columns{margin-top:9px}
+.student-app .student-profile-form,.student-app .profile-export-card{box-shadow:none}
+@media(max-width:760px){
+ .student-app .student-welcome-hero{min-height:174px;padding:20px 15px 50px}
+ .student-app .student-welcome-copy h1{font-size:24px;max-width:260px}
+ .student-app .student-welcome-copy p{max-width:240px}
+ .student-app .student-welcome-facts{display:none}
+ .student-app .student-module-grid{gap:7px}
+ .student-app .student-module-card{min-height:56px;padding:7px 8px}
+ .student-app .student-module-icon{width:27px;height:27px}
+ .student-app .student-assistant-compact-icon{display:none}
+ .student-app .student-module-copy b{font-size:9px}
+ .student-app .student-module-copy small{font-size:7px}
+ .student-app .student-dashboard-grid>.student-dashboard-history{grid-column:auto}
+ .student-app .student-recent-workouts{grid-template-columns:1fr 1fr}
+ .student-app .student-assistant-hero{min-height:0;max-width:none;border-radius:12px}
+ .student-app .student-assistant-hero-copy{gap:6px;padding:14px}
+ .student-app .student-assistant-hero-copy h1{font-size:20px}
+ .student-app .student-assistant-hero-copy>p{font-size:10px}
+ .student-app .student-assistant-hero-button{min-height:36px}
+ .student-app .student-nutrigym-content .nutri-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .student-app .student-nutrigym-content .nutri-stack{grid-template-columns:1fr}
+ .student-app .student-nutrigym-content .nutri-hydration-feature{grid-row:auto}
+ .student-app .student-nutrigym-content .nutri-columns{grid-template-columns:1fr}
+ .student-app .personal-page .personal-history-list{grid-template-columns:1fr 1fr}
+}
+@media(max-width:390px){
+ .student-app .student-module-card{gap:4px;padding:6px}
+ .student-app .student-module-copy b{font-size:8px}
+ .student-app .student-module-copy small{font-size:7px}
+ .student-app .student-welcome-hero{min-height:165px}
+}
+
+/* Final decluttering: softer red accents, fewer decorative layers and less repeated microcopy. */
+.student-app .student-header:after{opacity:.38}
+.student-app .student-welcome-hero{min-height:170px;border:0;border-radius:14px;box-shadow:none;background-position:center 48%}
+.student-app .student-welcome-hero:after{display:none}
+.student-app .student-welcome-copy h1{font-size:clamp(24px,3vw,32px);letter-spacing:-.025em}
+.student-app .student-welcome-copy .student-eyebrow{color:#f08b9c}
+.student-app .student-module-grid{margin-bottom:9px}
+.student-app .student-module-card{background:#fff;border-color:#e8eaed;box-shadow:none}
+.student-app .student-module-card:hover{transform:none;box-shadow:none}
+.student-app .student-progress-panel{box-shadow:none;border:1px solid #e8eaed;background:#fff}
+.student-app .student-progress-metric>div>small:last-child{display:none}
+.student-app .student-dashboard-grid>.student-card{border-color:#e8eaed;background:#fff}
+.student-app .student-dashboard-grid .student-card-title>button:not(.student-primary){background:#fff;border-color:#eceef1;box-shadow:none}
+.student-app .student-next-workout-title,.student-app .student-appointment-feature{border-color:#eef0f2;background:#fafbfc}
+.student-app .student-recent-workouts>div{border-color:#eef0f2}
+.student-app .student-history-check{box-shadow:none}
+.student-app .student-assistant-hero{grid-template-columns:minmax(0,1fr);min-height:0;max-width:none;margin:0 0 8px;border:0;border-left:3px solid #c8102e;border-radius:0 11px 11px 0;background:#202226;box-shadow:none}
+.student-app .student-assistant-hero:before,.student-app .student-assistant-hero:after{display:none}
+.student-app .student-assistant-hero-art{display:none}
+.student-app .student-assistant-hero-copy{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 14px;padding:13px 16px}
+.student-app .student-assistant-hero-label{grid-column:1/-1;padding:0;color:#df929e;font-size:8px}
+.student-app .student-assistant-hero-copy h1{grid-column:1/-1;font-size:22px;line-height:1.15}
+.student-app .student-assistant-hero-copy>p{grid-column:1;grid-row:3;color:#d4d5d8;font-size:10px;line-height:1.35}
+.student-app .student-assistant-context{grid-column:1;grid-row:4;color:#c1c3c7;font-size:9px}
+.student-app .student-assistant-hero-button{grid-column:2;grid-row:3/span 2;min-height:35px;margin:0;padding:0 12px;border-radius:8px;background:#c8102e;box-shadow:none;font-size:10px;white-space:nowrap}
+.student-app .student-assistant-hero-button:hover{transform:none}
+.student-app .student-assistant-hero-suggestions{display:none!important}
+.student-app .student-assistant-disclaimer{margin:0 0 8px;color:#858b94;font-size:9px}
+.student-app .student-page-banner{background:#202226!important;border-radius:11px;box-shadow:none}
+.student-app .student-page-banner:after{display:none}
+.student-app .student-page-banner-icon{color:#e04a62}
+.student-app .student-page-banner .student-eyebrow{color:#d98593}
+.student-app .student-page-banner p{color:#d1d3d7}
+.student-app .personal-page .personal-today-card,.student-app .personal-page .personal-history{border:1px solid #e8eaed;border-radius:13px;box-shadow:none}
+.student-app .personal-page .personal-today-card{border-top:2px solid #c8102e}
+.student-app .personal-page .personal-exercise-summary{background:#fafbfc;border-color:#eceef1}
+.student-app .personal-page .personal-history-list>div{border-color:#eef0f2;background:#fff}
+.student-app .student-nutrigym-content .student-assistant-hero{margin-bottom:9px}
+.student-app .student-nutrigym-content .student-nutri-section-heading{margin:10px 2px 7px}
+.student-app .student-nutrigym-content .student-nutri-section-heading>div>span{color:#9c2033}
+.student-app .student-nutrigym-content .nutri-stat:before{display:none}
+.student-app .student-nutrigym-content .nutri-stat{border-color:#e8eaed;background:#fff;box-shadow:none}
+.student-app .student-nutrigym-content .nutri-stack{gap:9px}
+.student-app .student-nutrigym-content .nutri-hydration-feature{border:1px solid #e0eaf0;border-top:2px solid #3296c3;background:#fff;box-shadow:none}
+.student-app .student-nutrigym-content .nutri-shopping-inline,.student-app .student-nutrigym-content .nutri-card{border-color:#e8eaed;box-shadow:none}
+.student-app .student-nutrigym-content .nutri-water-actions button{background:#f1f8fb;color:#367f9f}
+.student-app .student-nutrigym-content .nutri-columns{margin-top:9px}
+.student-app .student-profile-form,.student-app .profile-export-card{border-color:#e8eaed;border-top:2px solid #c8102e;box-shadow:none}
+.student-app .student-bottom-nav button.active{box-shadow:none}
+@media(max-width:760px){
+ .student-app .student-welcome-hero{min-height:158px;padding:17px 14px 45px;margin-bottom:12px;border-radius:12px}
+ .student-app .student-welcome-copy h1{font-size:23px}
+ .student-app .student-section-heading{margin-bottom:8px}
+ .student-app .student-progress-panel{box-shadow:none}
+ .student-app .student-dashboard-grid>.student-card{box-shadow:none}
+ .student-app .student-assistant-hero{min-height:0;margin-bottom:7px;border-radius:0 9px 9px 0}
+ .student-app .student-assistant-hero-copy{grid-template-columns:minmax(0,1fr) auto;gap:3px 8px;padding:10px 12px}
+ .student-app .student-assistant-hero-copy h1{font-size:18px}
+ .student-app .student-assistant-hero-copy>p{font-size:8px}
+ .student-app .student-assistant-context{font-size:8px}
+ .student-app .student-assistant-hero-button{min-height:32px;padding:0 9px;font-size:9px}
+ .student-app .student-assistant-disclaimer{font-size:8px}
+ .student-app .student-page-banner{min-height:70px}
+ .student-app .student-nutrigym-content .nutri-stat{min-height:70px}
+ .student-app .student-nutrigym-content .nutri-card{padding:14px}
+ .student-app .student-nutrigym-content .nutri-hydration-feature{border-top:2px solid #3296c3}
+}
+@media(max-width:360px){
+ .student-app .student-assistant-hero-copy{grid-template-columns:1fr}
+ .student-app .student-assistant-hero-button{grid-column:1;grid-row:auto;justify-self:start;margin-top:4px}
+}
