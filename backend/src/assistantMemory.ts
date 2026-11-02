@@ -30,7 +30,7 @@ export function rankMemories<T extends {memory_key?:string;memory_value?:string;
 /** Profile fields are authoritative for overlapping facts; old chat memories must not override them. */
 export function excludeProfileBackedMemories<T extends {memory_key?:string}>(rows:T[],agent:AgentId,context:any):T[]{
  const p=context?.profile||{};const student=context?.student||{};
- const profileValues=agent==='nutrigym'?{food_preference:p.preferences,food_dislike:p.dislikes,nutrition_goal:p.objective}:{training_preference:student.preferences,training_goal:student.primary_goal,training_time:p.training_time,training_availability:p.training_time};
+ const profileValues:Record<string,any>=agent==='nutrigym'?{food_preference:p.preferences,food_dislike:p.dislikes,nutrition_goal:p.objective}:{training_preference:student.preferences,training_goal:student.primary_goal,training_time:p.training_time,training_availability:p.training_time};
  return rows.filter(row=>!String(profileValues[row.memory_key||'']||'').trim());
 }
 

@@ -16,6 +16,7 @@ test('profile-backed facts override historical conversation memories',()=>{
  const rows=[{memory_key:'food_preference',memory_value:'massa'},{memory_key:'nutrition_goal',memory_value:'perder peso'},{memory_key:'training_time',memory_value:'manhã'}];
  assert.deepEqual(excludeProfileBackedMemories(rows,'nutrigym',{profile:{preferences:'arroz e feijão',objective:'manutenção'}}),[rows[2]]);
  assert.deepEqual(excludeProfileBackedMemories(rows,'personalgym',{student:{},profile:{training_time:'19:00'}}),[rows[0],rows[1]]);
+ assert.deepEqual(excludeProfileBackedMemories([rows[2]],'nutrigym',{profile:{}}),[rows[2]]);
 });
 
 test('memory safety excludes clinical claims from extraction',()=>{
