@@ -136,6 +136,8 @@ export function personalFallback(context:any):string{
     case 'SAFETY': return 'Interrompa o exercício agora. Se houver dor no peito, falta de ar, desmaio, tontura intensa ou perda súbita de força, procure atendimento de urgência. Não retome um movimento que provoque dor antes de conversar com um profissional.';
     case 'QUESTION': {
       if(toolFailure)return `${hello}não consegui consultar com segurança seus registros agora; não vou completar a resposta com suposições.`;
+      const relevant=Array.isArray(context?.memory_notes)?context.memory_notes.find((m:any)=>m.memory_key==='training_time'||m.memory_key==='training_availability'):null;
+      if(relevant&&/horario|prefer|disponibilidade/i.test(norm(context?.question)))return `${hello}tenho anotado que sua preferência ou disponibilidade é ${relevant.memory_value}. Se isso mudou, me avise.`;
       const knowledge=Array.isArray(context?.knowledge)?context.knowledge:[];
       if(/exercicio|treinamento|forca|musculo|atividade fisica/i.test(norm(String(context?.question||'')))){const item=knowledge[0];if(item)return `${hello}${item.title}: ${item.content} Fonte: ${item.source_name} — ${item.source_url}. É evidência geral para adultos e não substitui prescrição individual.`;return `${hello}não encontrei conhecimento revisado suficientemente pertinente na base atual para responder essa pergunta de treinamento com fonte verificável. Posso consultar seu treino e catálogo oficiais, mas não vou inventar evidência.`;}
       const catalog=toolData('read_active_exercise_catalog');
