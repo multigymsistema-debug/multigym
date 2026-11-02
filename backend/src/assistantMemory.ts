@@ -17,7 +17,7 @@ export function extractCandidate(message:string, agent:AgentId):Candidate|null {
     [/^(?:eu\s+)?prefiro\s+(.+)$/i,'food_preference','preference'],
     [/^(?:lembre(?:-se)?|guarde|anote)\s+que\s+meu objetivo(?: nutricional)?\s+(?:é|e)\s+(.+)$/i,'nutrition_goal','goal'],
   ];
-  for(const [pattern,key,category] of patterns){const match=m.match(pattern);if(!match?.[1])continue;const value=clean(match[1].replace(/[.!]+$/,''));if(value.length<2||/\b(alerg|intoler|lesao|lesão|dor|diagnost|doenca|doença|medic|tratamento|cirurg|cirurgia)\b/i.test(normalize(value)))return null;return {key,category,value,confidence:0.95,source:'explicit_student',sourceDetail:'Declaração direta do aluno em conversa autenticada.'};}
+  for(const [pattern,key,category] of patterns){const match=m.match(pattern);if(!match?.[1])continue;const value=clean(match[1].replace(/[.!]+$/,''));if(value.length<2||/\b(?:alerg\w*|intoler\w*|lesao|dor|diagnost\w*|doenca\w*|medic\w*|tratamento\w*|cirurg\w*)\b/i.test(normalize(value)))return null;return {key,category,value,confidence:0.95,source:'explicit_student',sourceDetail:'Declaração direta do aluno em conversa autenticada.'};}
   return null;
 }
 
