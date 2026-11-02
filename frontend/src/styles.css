@@ -454,3 +454,153 @@
  .student-app .student-grid:has(.student-next-due)>section:first-child{padding:18px}.student-app .student-grid:has(.student-next-due)>section:first-child .student-subscription-price{font-size:26px}
  .student-app .student-notifications{width:32px;height:32px;padding:0}
 }
+
+/* Final visual refinement against the user's reference: reduce competing boxes, increase glanceable hierarchy. */
+.student-app .student-logo img{width:145px;max-height:42px;object-fit:contain}
+.student-app .student-page-banner{background-image:linear-gradient(100deg,rgba(18,20,24,.98) 0%,rgba(27,29,34,.94) 68%,rgba(37,22,27,.86) 100%),url('/vendas/assets/academia-campanha.webp');background-size:cover;background-position:right 40%;border:0;border-radius:17px;box-shadow:0 8px 20px rgba(16,18,22,.13)}
+.student-app .student-page-banner:after{width:115px;opacity:.75}
+.student-app .student-page-banner-icon{background:transparent;border:0;border-radius:10px;color:#ef233c}
+.student-app .student-page-banner.personal{background-image:linear-gradient(100deg,rgba(18,20,24,.98) 0%,rgba(27,29,34,.94) 68%,rgba(37,22,27,.86) 100%),url('/vendas/assets/treino-execucao.webp')}
+.student-app .student-page-banner.nutrigym{background-image:linear-gradient(100deg,rgba(18,20,24,.98) 0%,rgba(27,29,34,.92) 70%,rgba(37,22,27,.78) 100%),url('/vendas/assets/nutri-alimentos.webp')}
+.student-app .student-page-banner.billing,.student-app .student-page-banner.profile{background-image:linear-gradient(100deg,#17191d 0%,#24262c 75%,#35151d 100%)}
+.student-app .student-welcome-hero{min-height:216px;margin-bottom:21px;border-radius:18px;box-shadow:0 12px 27px rgba(13,15,18,.16)}
+.student-app .student-welcome-copy h1{font-size:clamp(25px,3.4vw,36px)}
+.student-app .student-welcome-facts{left:auto;right:24px;bottom:15px;padding:10px 14px}
+.student-app .student-module-grid{gap:10px;margin-bottom:14px}
+.student-app .student-module-card{min-height:72px;padding:11px 13px;border-radius:14px;box-shadow:0 3px 9px rgba(23,35,52,.035)}
+.student-app .student-module-icon{width:36px;height:36px;border-radius:11px}
+.student-app .student-progress-panel{grid-template-columns:minmax(150px,1fr) repeat(3,minmax(125px,.9fr));gap:12px;padding:15px 17px;border-top:0}
+.student-app .student-progress-intro{grid-column:auto}
+.student-app .student-progress-intro h2{font-size:16px}
+.student-app .student-progress-intro p{font-size:10px}
+.student-app .student-progress-metric{gap:8px}
+.student-app .student-progress-icon{width:31px;height:31px;border-radius:10px}
+.student-app .student-progress-metric strong{font-size:18px}
+.student-app .student-progress-track{height:5px}
+.student-app .student-dashboard-grid{gap:13px}
+.student-app .student-card{border-radius:15px;box-shadow:0 4px 12px rgba(25,38,55,.04)}
+.student-app .student-workout-list .student-exercise-list>div{border-radius:12px}
+.student-app .student-workout-tabs{border-radius:12px}
+.student-app .student-workout-tabs button.active{background:linear-gradient(105deg,#d20e30,#ab1029);box-shadow:0 4px 10px #c8102e28}
+.student-app .student-assistant-chat{border-radius:18px}
+.student-app .student-assistant-chat .nutri-bubble-row.assistant .nutri-bubble,.student-app .student-assistant-chat .personal-bubble-row.assistant .personal-bubble{background:#fff}
+.student-app .student-assistant-chat .nutri-bubble-row.user .nutri-bubble{background:#fcebed}
+.student-app .student-assistant-chat .personal-bubble-row.user .personal-bubble{background:#edf4fc}
+.student-app .student-dashboard-training>.student-primary{background:linear-gradient(105deg,#d20e30,#a90d27)}
+.student-app .student-subscription-price{font-variant-numeric:tabular-nums}
+.student-app .student-payments small{font-weight:650}
+@media(max-width:760px){
+ .student-app .student-logo img{width:132px;max-height:36px}
+ .student-app .student-header{height:58px}
+ .student-app .student-welcome-hero{min-height:202px;padding:22px 17px 61px;margin-bottom:17px;border-radius:16px}
+ .student-app .student-welcome-copy h1{font-size:26px;max-width:245px}
+ .student-app .student-welcome-copy p{margin-bottom:13px;font-size:11px}
+ .student-app .student-welcome-copy .student-primary{min-height:40px;padding:0 13px;font-size:11px}
+ .student-app .student-welcome-facts{left:13px;right:13px;bottom:9px;justify-content:flex-start;width:max-content;max-width:calc(100% - 26px);padding:7px 11px;border-radius:10px}
+ .student-app .student-welcome-facts strong{font-size:12px}.student-app .student-welcome-facts span{font-size:8px}
+ .student-app .student-section-heading{margin-bottom:10px}
+ .student-app .student-module-grid{gap:8px;margin-bottom:11px}
+ .student-app .student-module-card{min-height:64px;padding:8px;border-radius:12px;gap:7px}
+ .student-app .student-module-icon{width:30px;height:30px;border-radius:9px}
+ .student-app .student-module-icon svg{width:16px;height:16px}
+ .student-app .student-module-copy{gap:2px}.student-app .student-module-copy b{font-size:10px}.student-app .student-module-copy small{font-size:8px;line-height:1.25}
+ .student-app .student-module-card>svg{width:13px;height:13px}
+ .student-app .student-progress-panel{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:11px;padding:11px;border:1px solid #e3e8ef;border-radius:13px}
+ .student-app .student-progress-intro{grid-column:1/-1;display:flex;align-items:baseline;gap:8px}
+ .student-app .student-progress-intro .student-eyebrow{font-size:8px}.student-app .student-progress-intro h2{font-size:13px;margin:0}.student-app .student-progress-intro p{display:none}
+ .student-app .student-progress-metric{display:grid;grid-template-columns:22px 1fr;align-items:center;gap:4px 6px;padding:0;border:0;background:transparent}
+ .student-app .student-progress-icon{grid-row:1/3;width:22px;height:22px;font-size:12px;border-radius:7px}
+ .student-app .student-progress-icon svg{width:13px;height:13px}
+ .student-app .student-progress-metric>div{display:contents}
+ .student-app .student-progress-metric small{font-size:8px;line-height:1.1;white-space:normal}
+ .student-app .student-progress-metric strong{font-size:12px;line-height:1.15;white-space:nowrap}
+ .student-app .student-progress-metric strong em{font-size:8px}
+ .student-app .student-progress-metric>div>small:last-child{display:none}
+ .student-app .student-progress-track{grid-column:1/-1;height:4px}
+ .student-app .student-dashboard-grid{gap:10px}
+ .student-app .student-dashboard-grid .student-card{padding:14px}
+ .student-app .student-page-banner{min-height:86px;margin-bottom:13px;padding:14px 15px;border-radius:14px;background-position:64% center}
+ .student-app .student-page-banner:after{width:76px}
+ .student-app .student-page-banner-icon{width:35px;height:35px;padding:0}
+ .student-app .student-page-banner-icon svg{width:22px;height:22px}
+ .student-app .student-page-banner .student-eyebrow{font-size:7px}
+ .student-app .student-page-banner h1{font-size:19px;margin:3px 0}
+ .student-app .student-page-banner p{font-size:9px;line-height:1.3}
+ .student-app .student-workout-tabs{margin-bottom:11px;padding:3px}
+ .student-app .student-workout-tabs button{min-height:36px;font-size:11px}
+ .student-app .student-grid:has(.student-next-due)>section:first-child{background:linear-gradient(115deg,#17191d,#24262c 80%,#40131d)}
+}
+@media(max-width:380px){
+ .student-app .student-progress-panel{gap:5px;padding:9px}
+ .student-app .student-progress-metric{grid-template-columns:19px 1fr;gap:3px}
+ .student-app .student-progress-icon{width:19px;height:19px}
+ .student-app .student-progress-metric small{font-size:7px}
+ .student-app .student-progress-metric strong{font-size:11px}
+ .student-app .student-module-copy b{font-size:9px}
+ .student-app .student-module-copy small{font-size:7px}
+}
+/* Refine compact mobile glance card: four real metrics grouped without overflow. */
+@media(max-width:760px){
+ .student-app .student-progress-panel{grid-template-columns:repeat(3,minmax(0,1fr));}
+ .student-app .student-progress-intro{grid-column:1/-1;}
+ .student-app .student-progress-metric{min-width:0;}
+ .student-app .student-progress-metric>div{min-width:0;}
+ .student-app .student-progress-metric strong{overflow:hidden;text-overflow:ellipsis;}
+}
+/* Final aesthetic calibration: compact hierarchy inspired by supplied six-screen reference. */
+.student-app .student-logo img{width:145px;max-height:42px;object-fit:contain}
+.student-app .student-page-banner{background-image:linear-gradient(100deg,rgba(18,20,24,.98) 0%,rgba(27,29,34,.94) 68%,rgba(37,22,27,.86) 100%),url('/vendas/assets/academia-campanha.webp');background-size:cover;background-position:right 40%;border:0;border-radius:17px;box-shadow:0 8px 20px rgba(16,18,22,.13)}
+.student-app .student-page-banner:after{width:115px;opacity:.75}
+.student-app .student-page-banner-icon{background:transparent;border:0;border-radius:10px;color:#ef233c}
+.student-app .student-page-banner.personal{background-image:linear-gradient(100deg,rgba(18,20,24,.98) 0%,rgba(27,29,34,.94) 68%,rgba(37,22,27,.86) 100%),url('/vendas/assets/treino-execucao.webp')}
+.student-app .student-page-banner.nutrigym{background-image:linear-gradient(100deg,rgba(18,20,24,.98) 0%,rgba(27,29,34,.92) 70%,rgba(37,22,27,.78) 100%),url('/vendas/assets/nutri-alimentos.webp')}
+.student-app .student-page-banner.billing,.student-app .student-page-banner.profile{background-image:linear-gradient(100deg,#17191d 0%,#24262c 75%,#35151d 100%)}
+.student-app .student-welcome-hero{min-height:216px;margin-bottom:21px;border-radius:18px;box-shadow:0 12px 27px rgba(13,15,18,.16)}
+.student-app .student-welcome-copy h1{font-size:clamp(25px,3.4vw,36px)}
+.student-app .student-welcome-facts{right:24px;bottom:15px;padding:10px 14px}
+.student-app .student-module-grid{gap:10px;margin-bottom:14px}
+.student-app .student-module-card{min-height:72px;padding:11px 13px;border-radius:14px;box-shadow:0 3px 9px rgba(23,35,52,.035)}
+.student-app .student-module-icon{width:36px;height:36px;border-radius:11px}
+.student-app .student-progress-panel{grid-template-columns:minmax(150px,1fr) repeat(3,minmax(125px,.9fr));gap:12px;padding:15px 17px;border-top:0}
+.student-app .student-progress-intro{grid-column:auto}.student-app .student-progress-intro h2{font-size:16px}.student-app .student-progress-intro p{font-size:10px}
+.student-app .student-progress-metric{gap:8px}.student-app .student-progress-icon{width:31px;height:31px;border-radius:10px}.student-app .student-progress-metric strong{font-size:18px}.student-app .student-progress-track{height:5px}
+.student-app .student-dashboard-grid{gap:13px}.student-app .student-card{border-radius:15px;box-shadow:0 4px 12px rgba(25,38,55,.04)}
+.student-app .student-workout-tabs button.active{background:linear-gradient(105deg,#d20e30,#ab1029);box-shadow:0 4px 10px #c8102e28}
+.student-app .student-dashboard-training>.student-primary{background:linear-gradient(105deg,#d20e30,#a90d27)}
+.student-app .student-bottom-nav{background:rgba(23,25,29,.98);border-top-color:#383b42;box-shadow:0 -8px 22px rgba(0,0,0,.17)}
+.student-app .student-bottom-nav button{color:#b9bdc5}.student-app .student-bottom-nav button.active{background:#c8102e;color:#fff;box-shadow:0 4px 12px #c8102e42}
+@media(max-width:760px){
+ .student-app .student-logo img{width:132px;max-height:36px}.student-app .student-header{height:58px}
+ .student-app .student-welcome-hero{min-height:202px;padding:22px 17px 61px;margin-bottom:17px;border-radius:16px}
+ .student-app .student-welcome-copy h1{font-size:26px;max-width:245px}.student-app .student-welcome-copy p{margin-bottom:13px;font-size:11px}
+ .student-app .student-welcome-copy .student-primary{min-height:40px;padding:0 13px;font-size:11px}
+ .student-app .student-welcome-facts{left:13px;right:auto;bottom:9px;justify-content:flex-start;width:max-content;max-width:calc(100% - 26px);padding:7px 11px;border-radius:10px}
+ .student-app .student-welcome-facts strong{font-size:12px}.student-app .student-welcome-facts span{font-size:8px}
+ .student-app .student-section-heading{margin-bottom:10px}.student-app .student-module-grid{gap:8px;margin-bottom:11px}
+ .student-app .student-module-card{min-height:64px;padding:8px;border-radius:12px;gap:7px}.student-app .student-module-icon{width:30px;height:30px;border-radius:9px}
+ .student-app .student-module-icon svg{width:16px;height:16px}.student-app .student-module-copy{gap:2px}
+ .student-app .student-module-copy b{font-size:10px}.student-app .student-module-copy small{font-size:8px;line-height:1.25}
+ .student-app .student-module-card>svg{width:13px;height:13px}
+ .student-app .student-progress-panel{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:11px;padding:11px;border:1px solid #e3e8ef;border-radius:13px}
+ .student-app .student-progress-intro{grid-column:1/-1;display:flex;align-items:baseline;gap:8px}
+ .student-app .student-progress-intro .student-eyebrow{font-size:8px}.student-app .student-progress-intro h2{font-size:13px;margin:0}.student-app .student-progress-intro p{display:none}
+ .student-app .student-progress-metric{min-width:0;display:grid;grid-template-columns:22px minmax(0,1fr);align-items:center;gap:4px 6px;padding:0;border:0;background:transparent}
+ .student-app .student-progress-icon{grid-row:1/3;width:22px;height:22px;font-size:12px;border-radius:7px}
+ .student-app .student-progress-icon svg{width:13px;height:13px}.student-app .student-progress-metric>div{display:contents}
+ .student-app .student-progress-metric small{font-size:8px;line-height:1.1;white-space:normal}
+ .student-app .student-progress-metric strong{font-size:12px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .student-app .student-progress-metric strong em{font-size:8px}.student-app .student-progress-metric>div>small:last-child{display:none}
+ .student-app .student-progress-track{grid-column:1/-1;height:4px}
+ .student-app .student-dashboard-grid{gap:10px}.student-app .student-dashboard-grid .student-card{padding:14px}
+ .student-app .student-page-banner{min-height:86px;margin-bottom:13px;padding:14px 15px;border-radius:14px;background-position:64% center}
+ .student-app .student-page-banner:after{width:76px}.student-app .student-page-banner-icon{width:35px;height:35px;padding:0}
+ .student-app .student-page-banner-icon svg{width:22px;height:22px}.student-app .student-page-banner .student-eyebrow{font-size:7px}
+ .student-app .student-page-banner h1{font-size:19px;margin:3px 0}.student-app .student-page-banner p{font-size:9px;line-height:1.3}
+ .student-app .student-workout-tabs{margin-bottom:11px;padding:3px}.student-app .student-workout-tabs button{min-height:36px;font-size:11px}
+}
+@media(max-width:380px){
+ .student-app .student-progress-panel{gap:5px;padding:9px}.student-app .student-progress-metric{grid-template-columns:19px minmax(0,1fr);gap:3px}
+ .student-app .student-progress-icon{width:19px;height:19px}.student-app .student-progress-metric small{font-size:7px}
+ .student-app .student-progress-metric strong{font-size:11px}.student-app .student-module-copy b{font-size:9px}
+ .student-app .student-module-copy small{font-size:7px}
+}
