@@ -89,8 +89,8 @@ test('legacy Groq functions remain behind the adapter; routes retain auth and fa
   assert.match(server, /runAssistantTools\('nutrigym',message/);
   assert.match(server, /if\(intent==='SAFETY'\)return/);
   assert.match(server, /const text=ai\|\|safeFallback/);
-  assert.match(server,/retrieveRelevantMemory\(s\.gym,s\.student,'nutrigym',message\)/);
-  assert.match(server,/retrieveRelevantMemory\(s\.gym,s\.student,'personalgym',message\)/);
+  assert.match(server,/retrieveRelevantMemory\(s\.gym,s\.student,'nutrigym',message,rawContext\)/);
+  assert.match(server,/retrieveRelevantMemory\(s\.gym,s\.student,'personalgym',message,rawContext\)/);
   assert.match(server,/retrieveKnowledge\('nutrigym',message\)/);
   assert.match(server,/retrieveKnowledge\('personalgym',message\)/);
 });
