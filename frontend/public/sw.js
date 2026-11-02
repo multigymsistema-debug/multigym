@@ -1,4 +1,4 @@
-const CACHE = 'multigym-static-v6';
+const CACHE = 'multigym-static-v7';
 const ROOT = new URL('./', self.registration.scope);
 const STATIC_ASSETS = [
   new URL('logo-symbol.png', ROOT).href,
