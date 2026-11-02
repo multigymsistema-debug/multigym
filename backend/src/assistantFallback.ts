@@ -54,8 +54,10 @@ export function nutritionFallback(context:any):string{
       return `${hello}${objective?`seu objetivo registrado é ${String(objective)}.`:'ainda não há um objetivo registrado no perfil.'}${calorieGoal?` Sua meta cadastrada é ${calorieGoal} por dia.`:''}${proteinGoal?` A meta de proteína registrada é ${proteinGoal}.`:''}${namedGoals?` Outras metas registradas: ${namedGoals}.`:''} Posso ajudar a acompanhar esses dados e organizar perguntas para seu nutricionista; eles não substituem uma avaliação profissional.`;
     }
     case 'RECOMMENDATION': {
+      const remembered=Array.isArray(context?.memory_notes)?context.memory_notes.find((row:any)=>row.category==='preference'&&row.memory_key==='food_preference'):null;
       const restrictions=[p.allergies,p.restrictions].filter(Boolean).join('; ');
       if(restrictions)return `${hello}seu perfil registra alergias/restrições (${String(restrictions).slice(0,180)}). Sem uma checagem confiável de ingredientes, não vou sugerir um alimento específico. Posso ajudar a conferir opções que você já sabe serem seguras ou organizar seu plano profissional.`;
+      if(remembered)return `${hello}vou considerar sua preferência alimentar registrada — ${String(remembered.memory_value)} — ao personalizar ideias. Diga o que tem disponível e confira os ingredientes, especialmente se houver alergia ou restrição.`;
       if(p.dislikes)return `${hello}posso personalizar uma opção considerando seus alimentos favoritos, rotina e orçamento, mas não consigo confirmar ingredientes ou porções sem mais detalhes. Diga quais alimentos você tem disponíveis e a quantidade aproximada.`;
       return `${hello}para sugerir algo realmente adequado, preciso saber quais alimentos você tem disponíveis e se há alergias ou restrições que ainda não estejam no perfil. Posso então ajudar a organizar uma opção prática, sem substituir orientação nutricional.`;
     }
@@ -64,6 +66,10 @@ export function nutritionFallback(context:any):string{
     case 'PROFESSIONAL_REFERRAL': return 'Posso organizar seus registros e dúvidas, mas diagnóstico, tratamento, medicamentos ou prescrição precisam ser avaliados por um profissional de saúde.';
     case 'QUESTION': {
       if(toolFailure)return `${hello}não consegui consultar todos os registros necessários agora; não vou apresentar uma análise incompleta como se fosse completa.`;
+      const knowledge=Array.isArray(context?.knowledge)?context.knowledge:[];
+      if(/arroz|alimento|nutriente|caloria|proteina|proteína|carboidrato/i.test(String(context?.question||''))){const item=knowledge.find((row:any)=>row.record_type==='food_composition');if(item)return `${hello}${item.title}: ${item.content} Fonte: ${item.source||item.source_name} (${item.source_url||''}). Se o alimento/preparo não corresponder exatamente ao registro, não use esses valores como equivalentes.`;}
+      if(/comer|aliment|nutri|refeic|dieta/i.test(String(context?.question||''))&&knowledge.length)return `${hello}${knowledge.slice(0,2).map((row:any)=>`${row.title}: ${row.content} Fonte: ${row.source||row.source_name} (${row.source_url||''}).`).join(' ')} Isso é conhecimento geral revisado, não um plano individual.`;
+      if(/comer|aliment|nutri|refeic|dieta|arroz|alimento|nutriente|caloria|proteina|proteína/i.test(String(context?.question||''))&&!knowledge.length)return `${hello}não encontrei conhecimento revisado suficientemente pertinente na base disponível para responder com segurança. Posso consultar seus registros oficiais, mas não vou inventar referências ou valores.`;
       if(/alimento|composicao|nutriente|caloria de|macro/i.test(String(context?.question||''))){const unavailable=selectedTools.find((entry:any)=>entry.tool==='read_food_composition');return unavailable?.limitation||`${hello}não há tabela nutricional estruturada disponível para este alimento; não vou inventar valores.`;}
       if(/aliment|refeic|semana|proteina|proteína|comi|consumo/i.test(String(context?.question||''))) {
         const rows=Array.isArray(actualMeals)?actualMeals:[];
@@ -94,6 +100,8 @@ export function personalFallback(context:any):string{
     case 'WORKOUT_INFO':
     case 'NEXT_WORKOUT': {
       if(toolFailure)return `${hello}não consegui consultar os dados do treino agora; não vou adivinhar. Tente novamente em instantes.`;
+      const remembered=Array.isArray(context?.memory_notes)?context.memory_notes.find((row:any)=>row.category==='availability'||row.category==='preference'):null;
+      if(remembered&&/horario|manhã|manha|tarde|noite|prefiro|disponibilidade/i.test(norm(String(context?.question||''))))return `${hello}tenho anotado que sua preferência/disponibilidade é ${remembered.memory_value}. Se isso mudou, me avise; vou conferir o treino ativo registrado separadamente.`;
       if(/ultimo|último|ultima|última|treino anterior/i.test(norm(String(context?.question||'')))){
         const last=actualHistory[0];
         if(!last)return `${hello}consultei o histórico e não encontrei um treino concluído.`;
@@ -128,6 +136,8 @@ export function personalFallback(context:any):string{
     case 'SAFETY': return 'Interrompa o exercício agora. Se houver dor no peito, falta de ar, desmaio, tontura intensa ou perda súbita de força, procure atendimento de urgência. Não retome um movimento que provoque dor antes de conversar com um profissional.';
     case 'QUESTION': {
       if(toolFailure)return `${hello}não consegui consultar com segurança seus registros agora; não vou completar a resposta com suposições.`;
+      const knowledge=Array.isArray(context?.knowledge)?context.knowledge:[];
+      if(/exercicio|treinamento|forca|musculo|atividade fisica/i.test(norm(String(context?.question||'')))){const item=knowledge[0];if(item)return `${hello}${item.title}: ${item.content} Fonte: ${item.source_name} — ${item.source_url}. É evidência geral para adultos e não substitui prescrição individual.`;return `${hello}não encontrei conhecimento revisado suficientemente pertinente na base atual para responder essa pergunta de treinamento com fonte verificável. Posso consultar seu treino e catálogo oficiais, mas não vou inventar evidência.`;}
       const catalog=toolData('read_active_exercise_catalog');
       if(catalog&&/exercicio|exercicios|catalogo|disponiveis/i.test(String(context?.question||'')))return catalog.length?`${hello}consultei o catálogo ativo da sua academia e encontrei: ${catalog.slice(0,12).map((e:any)=>e.name).join(', ')}.`:`${hello}consultei o catálogo ativo da sua academia e não encontrei exercícios disponíveis.`;
       if(profileData)return `${hello}consultei seu perfil registrado. Seu objetivo é ${profileData.student?.primary_goal||profileData.profile?.objective||'não informado'}; nível ${profileData.student?.training_level||'não informado'}; limitações cadastradas: ${profileData.student?.limitations||'nenhuma informada'}. Use esses dados como registro, não como avaliação clínica.`;
