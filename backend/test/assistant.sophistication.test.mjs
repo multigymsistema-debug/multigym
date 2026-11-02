@@ -19,9 +19,12 @@ test('guarda lexical bloqueia alergênico em frase de recomendação e mantém p
   assert.deepEqual(findRestrictedFoodMentions('Uma opção é arroz e feijão.',{allergies:'amendoim',restrictions:'sem lactose'}),[]);
 });
 
-test('consultas de segurança e encaminhamento não chamam nem consomem cota de IA',()=>{
-  assert.match(server,/intent!=='SAFETY'&&intent!=='PROFESSIONAL_REFERRAL'&&await allowAi\(s\.gym,'nutrigym_chat'\)/);
-  assert.match(server,/if\(intent==='SAFETY'\)\{text='Interrompa o exercício agora/);
+test('consultas de segurança e encaminhamento retornam antes de chamar IA ou consultar perfil',()=>{
+  const nutri=server.slice(server.indexOf("app.post('/student-api/nutrigym/assistant'"),server.indexOf('const nutritionContext='));
+  const safety=nutri.indexOf("if(intent==='SAFETY')return");
+  const referral=nutri.indexOf("if(intent==='PROFESSIONAL_REFERRAL')return");
+  const profileQuery=nutri.indexOf('nutritionContext(s.gym,s.student)');
+  assert.ok(safety>=0&&referral>safety&&profileQuery>referral);
   assert.equal(detectAssistantIntent('Oi, falta de ar','nutrition',true),'SAFETY');
 });
 
@@ -33,7 +36,7 @@ test('desempenho usado para progressão vem de sessões concluídas e janela rec
 test('assistente recebe regras de negócio e contexto com escopo da intenção',()=>{
   assert.match(groq,/allergies e restrictions como bloqueios rígidos/);
   assert.match(groq,/findRestrictedFoodMentions/);
-  assert.match(server,/SELECT objective,weight_kg,height_cm,age,sex,activity_level,calories_goal,protein_goal_g,carbs_goal_g,fat_goal_g,water_goal_ml,preferences/);
+  assert.match(server,/SELECT id,objective,weight_kg,height_cm,age,sex,activity_level,calories_goal,protein_goal_g,carbs_goal_g,fat_goal_g,water_goal_ml,preferences/);
   assert.match(server,/import \{nutritionFallback,personalFallback\} from '\.\/assistantFallback\.js'/);
   assert.match(server,/text=personalFallback\(context\)/);
   assert.match(server,/const fallback=imageDataUrl\?nutritionFallback\(context\)/);
