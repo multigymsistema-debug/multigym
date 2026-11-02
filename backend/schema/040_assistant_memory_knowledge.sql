@@ -8,7 +8,11 @@ ALTER TABLE assistant_memories ADD COLUMN IF NOT EXISTS valid_from timestamptz N
 ALTER TABLE assistant_memories ADD COLUMN IF NOT EXISTS valid_until timestamptz;
 ALTER TABLE assistant_memories ADD COLUMN IF NOT EXISTS supersedes_id uuid REFERENCES assistant_memories(id) ON DELETE SET NULL;
 ALTER TABLE assistant_memories ADD COLUMN IF NOT EXISTS relevance smallint NOT NULL DEFAULT 75 CHECK(relevance BETWEEN 0 AND 100);
-ALTER TABLE assistant_memories DROP CONSTRAINT IF EXISTS assistant_memories_gym_id_student_id_assistant_memory_key_key;
+DO $$ BEGIN
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='assistant_memories'::regclass AND conname='assistant_memories_gym_id_student_id_assistant_memory_key_key') THEN
+  ALTER TABLE assistant_memories ADD CONSTRAINT assistant_memories_gym_id_student_id_assistant_memory_key_key UNIQUE(gym_id,student_id,assistant,memory_key);
+ END IF;
+END $$; -- Keep the pre-V1 uniqueness target so old code remains safe during rollback.
 CREATE UNIQUE INDEX IF NOT EXISTS assistant_memories_active_key_uq ON assistant_memories(gym_id,student_id,assistant,memory_key) WHERE active=true;
 CREATE INDEX IF NOT EXISTS assistant_memories_recall_idx ON assistant_memories(gym_id,student_id,assistant,active,updated_at DESC) WHERE fact_status='confirmed';
 

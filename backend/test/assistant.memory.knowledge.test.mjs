@@ -32,7 +32,7 @@ test('memory relevance ranks matching statement without unrelated recall',()=>{
 
 test('memory writes serialize per tenant/student/agent/key and retain old values atomically',async()=>{
  const calls=[];let active=null;let next=0;
- const client={query:async(sql,params=[])=>{calls.push(sql);if(sql==='BEGIN'||sql==='COMMIT'||sql==='ROLLBACK')return{rows:[]};if(sql.includes('SELECT pg_advisory_xact_lock'))return{rows:[]};if(sql.includes('SELECT id,memory_value,source FROM assistant_memories'))return{rows:active?[active]:[]};if(sql.includes('UPDATE assistant_memories SET active=false'))return{rows:[]};if(sql.includes('INSERT INTO assistant_memories')){active={id:`id-${++next}`,memory_value:params[4],source:'explicit_student'};return{rows:[active]};}if(sql.includes('INSERT INTO assistant_memory_history'))return{rows:[]};return{rows:[]};},release(){}};
+ const client={query:async(sql,params=[])=>{calls.push(sql);if(sql==='BEGIN'||sql==='COMMIT'||sql==='ROLLBACK')return{rows:[]};if(sql.includes('SELECT pg_advisory_xact_lock'))return{rows:[]};if(sql.includes('SELECT id,memory_value,source,active FROM assistant_memories'))return{rows:active?[active]:[]};if(sql.includes('UPDATE assistant_memories SET memory_value=')){active={...active,memory_value:params[1],active:true};return{rows:[]};}if(sql.includes('INSERT INTO assistant_memories')){active={id:`id-${++next}`,memory_value:params[4],source:'explicit_student',active:true};return{rows:[active]};}if(sql.includes('INSERT INTO assistant_memory_history'))return{rows:[]};return{rows:[]};},release(){}};
  const pool={connect:async()=>client};
  const base={key:'food_preference',category:'preference',confidence:.95,source:'explicit_student',sourceDetail:'direct statement'};
  await saveMemory(pool,{gym:'gymA',student:'studentA'},'nutrigym',{...base,value:'feijão'});
@@ -40,7 +40,7 @@ test('memory writes serialize per tenant/student/agent/key and retain old values
  // The test contract asserts advisory-lock transaction and audited updates; API integration covers separate student/tenant scopes.
  assert.ok(calls.filter(x=>x.includes('pg_advisory_xact_lock')).length>=2);
  assert.ok(calls.includes('BEGIN')&&calls.includes('COMMIT'));
- assert.ok(calls.some(x=>x.includes('assistant_memory_history')));assert.ok(calls.some(x=>x.includes('UPDATE assistant_memories SET active=false')));assert.equal(active.memory_value,'lentilha');
+ assert.ok(calls.some(x=>x.includes('assistant_memory_history')));assert.ok(calls.some(x=>x.includes('UPDATE assistant_memories SET memory_value=')));assert.equal(active.memory_value,'lentilha');
 });
 
 test('retrieved evidence and relevant memory are used by the corresponding assistant fallback; no evidence is explicit',()=>{

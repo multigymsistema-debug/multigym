@@ -522,12 +522,13 @@ const memoryRoutes=(agent:'nutrigym'|'personalgym')=>{
    const old=(await client.query(`SELECT id,memory_key,memory_value,category,source FROM assistant_memories WHERE id=$1 AND gym_id=$2 AND student_id=$3 AND assistant=$4 AND active=true FOR UPDATE`,[id,s.gym,s.student,agent])).rows[0];
    if(!old){await client.query('ROLLBACK');return reply.code(404).send({error:'Memória não encontrada.'});}
    if(old.source==='profile'){await client.query('ROLLBACK');return reply.code(409).send({error:'Atualize o campo correspondente do perfil.'});}
-   if(!old){await client.query('ROLLBACK');return reply.code(404).send({error:'Memória não encontrada.'});}
-   await client.query(`UPDATE assistant_memories SET active=false,valid_until=now(),updated_at=now() WHERE id=$1`,[id]);
-   const chatTable=agent==='nutrigym'?'nutrigym_chat_messages':'personal_gym_chat_messages';await client.query(`DELETE FROM ${chatTable} WHERE gym_id=$1 AND student_id=$2 AND position(lower($3) in lower(content))>0`,[s.gym,s.student,old.memory_value]);await client.query(`DELETE FROM assistant_conversation_state WHERE gym_id=$1 AND student_id=$2 AND assistant=$3`,[s.gym,s.student,agent]);if(agent==='nutrigym')await client.query(`UPDATE nutrigym_memories SET active=false,updated_at=now() WHERE gym_id=$1 AND student_id=$2 AND active=true AND position(lower(memory_value) in lower($3))>0`,[s.gym,s.student,old.memory_value]);
-   const row=(await client.query(`INSERT INTO assistant_memories(gym_id,student_id,assistant,memory_key,memory_value,category,source,source_detail,confidence,fact_status,valid_from,supersedes_id) VALUES($1,$2,$3,$4,$5,$6,'student_correction','Correção explícita do aluno.',1,'confirmed',now(),$7) RETURNING id`,[s.gym,s.student,agent,old.memory_key,value,old.category,id])).rows[0];
-   await client.query(`INSERT INTO assistant_memory_history(gym_id,student_id,assistant,memory_key,memory_id,old_value,new_value,source_detail,change_type) VALUES($1,$2,$3,$4,$5,$6,$7,'Correção explícita do aluno.','corrected')`,[s.gym,s.student,agent,old.memory_key,row.id,old.memory_value,value]);
-   await client.query('COMMIT');return {ok:true,id:row.id};
+   const chatTable=agent==='nutrigym'?'nutrigym_chat_messages':'personal_gym_chat_messages';
+   await client.query(`INSERT INTO assistant_memory_history(gym_id,student_id,assistant,memory_key,memory_id,old_value,new_value,source_detail,change_type) VALUES($1,$2,$3,$4,$5,$6,$7,'Correção explícita do aluno.','corrected')`,[s.gym,s.student,agent,old.memory_key,id,old.memory_value,value]);
+   await client.query(`UPDATE assistant_memories SET memory_value=$2,category=$3,source='student_correction',source_detail='Correção explícita do aluno.',confidence=1,fact_status='confirmed',valid_from=now(),valid_until=NULL,active=true,updated_at=now() WHERE id=$1`,[id,value,old.category]);
+   await client.query(`DELETE FROM ${chatTable} WHERE gym_id=$1 AND student_id=$2 AND position(lower($3) in lower(content))>0`,[s.gym,s.student,old.memory_value]);
+   await client.query(`DELETE FROM assistant_conversation_state WHERE gym_id=$1 AND student_id=$2 AND assistant=$3`,[s.gym,s.student,agent]);
+   if(agent==='nutrigym')await client.query(`UPDATE nutrigym_memories SET active=false,updated_at=now() WHERE gym_id=$1 AND student_id=$2 AND active=true AND position(lower(memory_value) in lower($3))>0`,[s.gym,s.student,old.memory_value]);
+   await client.query('COMMIT');return {ok:true,id};
   }catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
  });
  app.delete(`${route}/:id`,{preHandler:studentAuth},async(req:any,reply)=>{
@@ -540,6 +541,7 @@ const memoryRoutes=(agent:'nutrigym'|'personalgym')=>{
    if(!row){await client.query('ROLLBACK');return reply.code(404).send({error:'Memória não encontrada.'});}
    await client.query(`DELETE FROM assistant_memory_history WHERE gym_id=$1 AND student_id=$2 AND assistant=$3 AND memory_key=$4`,[s.gym,s.student,agent,row.memory_key]);
    await client.query(`DELETE FROM assistant_memories WHERE gym_id=$1 AND student_id=$2 AND assistant=$3 AND memory_key=$4`,[s.gym,s.student,agent,row.memory_key]);
+   await client.query(`DELETE FROM assistant_memory_history WHERE gym_id=$1 AND student_id=$2 AND assistant=$3 AND memory_key=$4`,[s.gym,s.student,agent,row.memory_key]);
    const chatTable=agent==='nutrigym'?'nutrigym_chat_messages':'personal_gym_chat_messages';await client.query(`DELETE FROM ${chatTable} WHERE gym_id=$1 AND student_id=$2 AND position(lower($3) in lower(content))>0`,[s.gym,s.student,probe.memory_value]);await client.query(`DELETE FROM assistant_conversation_state WHERE gym_id=$1 AND student_id=$2 AND assistant=$3`,[s.gym,s.student,agent]);if(agent==='nutrigym')await client.query(`UPDATE nutrigym_memories SET active=false,updated_at=now() WHERE gym_id=$1 AND student_id=$2 AND active=true AND position(lower(memory_value) in lower($3))>0`,[s.gym,s.student,probe.memory_value]);
    await client.query('COMMIT');return {ok:true,deleted:true};
   }catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
