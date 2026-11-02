@@ -405,3 +405,52 @@
 }
 @media(max-width:400px){.student-app .student-header{padding:0 10px}.student-app .student-logo img{width:110px}.student-app .student-bottom-nav{padding-right:2px;padding-left:2px}.student-app .student-bottom-nav button{font-size:8px}.student-app .student-bottom-nav button svg{width:16px;height:16px}.student-app .student-welcome-mark{right:10px;top:29px}.student-app .student-welcome-copy h1{max-width:245px;font-size:25px}.student-app .student-welcome-copy p{max-width:230px}.student-app .student-progress-panel{grid-template-columns:1fr}.student-app .student-progress-intro{grid-column:auto}.student-app .student-nutrigym-content .nutri-hydration-content{grid-template-columns:1fr}.student-app .student-nutrigym-content .nutri-glass-wrap{display:none}}
 @media(prefers-reduced-motion:reduce){.student-app *, .student-app *:before,.student-app *:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* Referência visual MultiGym: cabeçalho grafite com cortes vermelhos e conteúdo claro. */
+.student-app .student-header{background:linear-gradient(110deg,#17191d 0%,#1d2026 78%,#41141e 100%);border-bottom:1px solid #343840;box-shadow:0 5px 18px rgba(0,0,0,.16);color:#fff}
+.student-app .student-header:after{content:"";position:absolute;z-index:-1;right:0;top:0;width:115px;height:100%;background:linear-gradient(130deg,transparent 46%,rgba(200,16,46,.92) 46%,rgba(200,16,46,.92) 57%,transparent 57%);pointer-events:none}
+.student-app .student-logo img{filter:drop-shadow(0 1px 4px rgba(0,0,0,.24))}.student-app .student-logo small{border-color:#494c52;color:#c7cbd2}
+.student-app .student-header-user{color:#f3f4f6}.student-app .student-header-avatar{background:#392128;color:#ff6178;border:1px solid #64313d}
+.student-app .student-signout,.student-app .student-notifications{border-color:#4a4e55;background:#24272d;color:#f4f5f7}.student-app .student-signout:hover,.student-app .student-notifications:hover{background:#343840}
+.student-app .student-desktop-nav button{color:#c4c8cf}.student-app .student-desktop-nav button:hover{background:#30343a;color:#fff}.student-app .student-desktop-nav button.active{background:linear-gradient(120deg,#c8102e,#9e0c25);color:#fff;box-shadow:0 6px 14px #c8102e40}
+.student-app .student-notifications{width:36px;height:36px;display:grid;place-items:center;border:1px solid #4a4e55;border-radius:10px;cursor:pointer}
+.student-app .student-page-banner{position:relative;display:flex;align-items:center;gap:16px;min-height:116px;margin:0 0 22px;padding:22px 26px;overflow:hidden;border:1px solid #343840;border-radius:20px;background:linear-gradient(110deg,#17191d 0%,#202329 76%,#34131b 100%);color:#fff;box-shadow:0 10px 24px rgba(12,16,22,.13)}
+.student-app .student-page-banner:after{content:"";position:absolute;right:-6px;top:0;width:145px;height:100%;background:linear-gradient(130deg,transparent 42%,#c8102e 42%,#c8102e 54%,transparent 54%);opacity:.92;pointer-events:none}
+.student-app .student-page-banner-icon{width:52px;height:52px;display:grid;place-items:center;flex:none;border:1px solid #6d2935;border-radius:16px;background:#321820;color:#fa3854}
+.student-app .student-page-banner>div{position:relative;z-index:1}.student-app .student-page-banner .student-eyebrow{color:#ff788b;font-size:9px}.student-app .student-page-banner h1{margin:4px 0;color:#fff;font-size:25px;letter-spacing:-.035em}.student-app .student-page-banner p{margin:0;color:#c7cbd2;font-size:12px}
+.student-app .student-fitness-hero{background-image:linear-gradient(90deg,rgba(17,19,22,.97) 0%,rgba(17,19,22,.93) 40%,rgba(17,19,22,.58) 72%,rgba(17,19,22,.18) 100%),url('/vendas/assets/academia-campanha.webp');background-size:cover;background-position:center 39%}
+.student-app .student-welcome-hero:after{right:0;width:24%;opacity:.9}.student-app .student-welcome-mark{display:none}
+.student-app .student-welcome-facts{right:28px;bottom:15px;border:1px solid rgba(255,255,255,.18);border-radius:14px}
+.student-app .student-section-heading h2{color:#17191d}
+.student-app .student-module-card{border-color:#e4e8ee}.student-app .student-module-icon.workouts{background:#fff0f2;color:#c8102e}.student-app .student-module-icon.subscription{background:#f0f2f5;color:#242832}
+.student-app .student-progress-panel{border-top:3px solid #c8102e}
+.student-app .student-workout-tabs{display:flex;gap:8px;margin:-3px 0 16px;padding:5px;border:1px solid #e2e7ed;border-radius:13px;background:#fff;width:max-content;max-width:100%}
+.student-app .student-workout-tabs button{min-height:40px;display:flex;align-items:center;gap:8px;padding:0 17px;border:0;border-radius:9px;background:transparent;color:#647184;font-size:12px;font-weight:700;cursor:pointer}
+.student-app .student-workout-tabs button.active{background:#c8102e;color:#fff;box-shadow:0 4px 10px #c8102e2a}
+.student-app .student-workout-tabs button span{min-width:19px;height:19px;display:grid;place-items:center;border-radius:10px;background:#ffffff30;font-size:10px}
+.student-app .student-workout-history{display:grid;gap:2px}.student-app .student-workout-history article{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #edf0f4}.student-app .student-workout-history article:last-child{border-bottom:0}.student-app .student-workout-history article>div{display:grid;gap:4px;flex:1;min-width:0}.student-app .student-workout-history article b{font-size:13px}.student-app .student-workout-history article small{color:#64748b;font-size:10px}.student-app .student-history-status{color:#198754;font-size:10px;font-weight:750}
+.student-app .student-online-payment{border-color:#e4e8ef;background:#f8fafc}.student-app .student-subscription-price{font-size:29px;font-weight:800;letter-spacing:-.04em}.student-app .student-grid:has(.student-next-due)>section:first-child{position:relative;overflow:hidden;border-color:#363941;background:linear-gradient(122deg,#17191d 0%,#202329 72%,#37141c 100%);color:#fff;box-shadow:0 15px 32px rgba(23,25,29,.2)}
+.student-app .student-grid:has(.student-next-due)>section:first-child:after{content:"";position:absolute;right:-20px;top:0;width:110px;height:100%;background:linear-gradient(130deg,transparent 43%,#c8102e 43%,#c8102e 55%,transparent 55%);opacity:.55;pointer-events:none}
+.student-app .student-grid:has(.student-next-due)>section:first-child h2,.student-app .student-grid:has(.student-next-due)>section:first-child strong,.student-app .student-grid:has(.student-next-due)>section:first-child p,.student-app .student-grid:has(.student-next-due)>section:first-child .student-subscription-price,.student-app .student-grid:has(.student-next-due)>section:first-child .student-subscription-price small{position:relative;z-index:1;color:#fff}
+.student-app .student-grid:has(.student-next-due)>section:first-child .student-next-due{position:relative;z-index:1;border-color:#454951;background:#292c32;color:#fff}
+.student-app .student-grid:has(.student-next-due)>section:first-child .student-online-payment{position:relative;z-index:1;border-color:#474a51;background:#fff;color:#17191d}
+.student-app .student-grid:has(.student-next-due)>section:first-child .student-online-payment h3,.student-app .student-grid:has(.student-next-due)>section:first-child .student-online-payment p{color:#3d4856}
+.student-app .student-profile-form,.student-app .profile-export-card{border-top:3px solid #c8102e}
+.student-app .profile-export-card h2{margin-top:0}
+.student-app .student-nutrigym-content .nutri-welcome{border-top:3px solid #c8102e}
+.student-app .student-assistant-chat .nutri-chat-head,.student-app .student-assistant-chat .personal-chat-head{background:linear-gradient(110deg,#17191d,#282a30 80%,#41141e);border:0}
+.student-app .student-assistant-chat .nutri-chat-head b,.student-app .student-assistant-chat .personal-chat-head b{color:#fff}.student-app .student-assistant-chat .nutri-chat-head small,.student-app .student-assistant-chat .personal-chat-head small{color:#cbd0d8}
+.student-app .student-assistant-chat .nutri-chat-head>div:first-child:before,.student-app .student-assistant-chat .personal-chat-head>div:first-child:before{content:"";position:absolute;left:0;top:0;width:4px;height:100%;background:#c8102e}
+.student-app .student-assistant-chat .personal-chat-head>div:first-child:before{background:#2874b8}
+.student-app .student-assistant-chat .chat-head-actions button{background:#282b31;border-color:#484b52;color:#fff}
+.student-app .student-bottom-nav{background:rgba(23,25,29,.98);border-top-color:#383b42;box-shadow:0 -8px 22px rgba(0,0,0,.17)}
+.student-app .student-bottom-nav button{color:#b9bdc5}.student-app .student-bottom-nav button.active{background:#c8102e;color:#fff;box-shadow:0 4px 12px #c8102e42}
+@media(max-width:760px){
+ .student-app .student-header{background:linear-gradient(110deg,#17191d,#24262c 80%,#41141e)}.student-app .student-header:after{width:65px}.student-app .student-header-user{position:relative;z-index:1}
+ .student-app .student-page-banner{min-height:100px;margin-bottom:17px;padding:18px;border-radius:17px}.student-app .student-page-banner-icon{width:44px;height:44px;border-radius:13px}.student-app .student-page-banner h1{font-size:21px}.student-app .student-page-banner p{font-size:11px;max-width:260px}
+ .student-app .student-fitness-hero{min-height:205px;background-position:62% center;padding:22px 18px 61px}.student-app .student-fitness-hero:after{width:27%}.student-app .student-welcome-facts{right:11px;bottom:10px;gap:12px}.student-app .student-progress-panel{border-top-width:3px}
+ .student-app .student-workout-tabs{width:100%;display:grid;grid-template-columns:1fr 1fr}.student-app .student-workout-tabs button{justify-content:center;padding:0 8px}
+ .student-app .student-grid:has(.student-next-due)>section:first-child{padding:18px}.student-app .student-grid:has(.student-next-due)>section:first-child .student-subscription-price{font-size:26px}
+ .student-app .student-notifications{width:32px;height:32px;padding:0}
+}
