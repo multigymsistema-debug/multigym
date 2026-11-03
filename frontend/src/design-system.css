@@ -1,0 +1,139 @@
+/* MultiGym design tokens and cross-portal visual foundations. Presentation only. */
+:root{
+  --mg-brand:#c8102e;
+  --mg-brand-hover:#a90e27;
+  --mg-brand-soft:#fff0f2;
+  --mg-brand-border:#f0c4ca;
+  --mg-ink:#18181b;
+  --mg-ink-soft:#38383d;
+  --mg-muted:#73737b;
+  --mg-line:#e5e5e9;
+  --mg-surface:#fff;
+  --mg-canvas:#f6f6f8;
+  --mg-surface-subtle:#f2f2f4;
+  --mg-success:#16834a;
+  --mg-success-soft:#eaf8ef;
+  --mg-warning:#9a6400;
+  --mg-warning-soft:#fff4dc;
+  --mg-danger:#b20d20;
+  --mg-danger-soft:#fff0f2;
+  --mg-radius-sm:8px;
+  --mg-radius-md:12px;
+  --mg-radius-lg:16px;
+  --mg-shadow-sm:0 2px 8px rgba(20,20,24,.05);
+  --mg-shadow-md:0 8px 24px rgba(20,20,24,.08);
+  --mg-space-1:4px;--mg-space-2:8px;--mg-space-3:12px;--mg-space-4:16px;--mg-space-5:20px;--mg-space-6:24px;--mg-space-8:32px;
+}
+:where(button,input,select,textarea){font-family:inherit}
+:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:3px solid color-mix(in srgb,var(--mg-brand) 42%,transparent);outline-offset:2px}
+:where(input,select,textarea){accent-color:var(--mg-brand)}
+/* Management shell */
+.app-shell{background:var(--mg-canvas);color:var(--mg-ink)}
+.sidebar{background:linear-gradient(180deg,#17191d 0%,#242126 62%,#3b1018 100%)}
+.sidebar nav button.active{background:var(--mg-brand);box-shadow:0 5px 14px rgba(200,16,46,.24)}
+.topbar{background:rgba(255,255,255,.97);border-color:var(--mg-line);box-shadow:0 2px 12px rgba(20,20,24,.035)}
+.content{max-width:1600px}
+.card{border-color:var(--mg-line);border-radius:var(--mg-radius-md);box-shadow:var(--mg-shadow-sm)}
+.card-title h3,.page-head h2{color:var(--mg-ink)}
+.page-head{margin-bottom:var(--mg-space-5)}
+.page-head h2{font-size:24px;letter-spacing:-.035em}
+.page-head p{line-height:1.5;color:var(--mg-muted)}
+.btn{min-height:42px;border-radius:var(--mg-radius-sm);background:var(--mg-brand);box-shadow:0 2px 8px rgba(200,16,46,.14);transition:background .15s ease,border-color .15s ease,transform .15s ease}
+.btn:hover:not(:disabled){background:var(--mg-brand-hover);filter:none;transform:translateY(-1px)}
+.btn.secondary{background:#fff;border-color:var(--mg-line);color:var(--mg-ink-soft);box-shadow:none}
+.btn.secondary:hover:not(:disabled){background:var(--mg-surface-subtle);border-color:#c9c9cf;color:var(--mg-ink)}
+.btn.soft,.settings-nav button.active{background:var(--mg-brand-soft);color:var(--mg-brand)}
+input,select,textarea{border-color:#d7d7dd;border-radius:var(--mg-radius-sm);color:var(--mg-ink);background:#fff}
+input:focus,select:focus,textarea:focus{border-color:var(--mg-brand);box-shadow:0 0 0 3px rgba(200,16,46,.12)}
+.field>span{font-size:12px;color:#45454b}
+.table-card th{background:#f7f7f8;color:#68686f;font-size:11px}
+.table-card td{font-size:12px;border-color:#eeeef1}
+.table-card tr:hover td{background:#fcf7f8}
+.badge{border-radius:999px}
+.badge.good{background:var(--mg-success-soft);color:var(--mg-success)}
+.badge.warn{background:var(--mg-warning-soft);color:var(--mg-warning)}
+.error-box{background:var(--mg-danger-soft);color:var(--mg-danger)}
+.toast{box-shadow:var(--mg-shadow-md)}
+/* Point-of-sale: readable product selection, persistent cart and clear checkout priority. */
+.sales-grid{grid-template-columns:minmax(0,1fr) minmax(320px,390px);gap:18px;align-items:start}
+.product-picker,.sale-cart{padding:20px}
+.sale-cart{position:sticky;top:92px}
+.picker-grid{gap:9px}
+.picker-grid button{min-height:58px;padding:11px;border-color:var(--mg-line);border-radius:var(--mg-radius-sm);transition:border-color .15s,background .15s}
+.picker-grid button:hover:not(:disabled){border-color:var(--mg-brand-border);background:#fffafb}
+.picker-grid strong,.cart-items strong{font-size:12px;line-height:1.3;color:var(--mg-ink)}
+.picker-grid small,.cart-items small{font-size:11px;line-height:1.35;color:var(--mg-muted)}
+.sale-cart .field{margin-bottom:12px}
+.sale-cart .field>span{font-size:12px}
+.cart-items>div{min-height:48px;align-items:center;border-color:#ededf0}
+.cart-items button{width:36px;height:36px;display:grid;place-items:center;border-radius:8px;color:var(--mg-brand)}
+.cart-items button:hover{background:var(--mg-brand-soft)}
+.sale-total{margin-top:12px;padding:16px 0;border-top:1px solid #dedee3}
+.sale-total span{font-size:13px;color:var(--mg-muted)}
+.sale-total strong{font-size:28px;font-variant-numeric:tabular-nums;letter-spacing:-.04em;color:var(--mg-ink)}
+.sale-cart>.btn{min-height:48px;font-size:14px;font-weight:800}
+.sale-history{font-size:11px;padding:10px 0;border-color:#ededf0}
+@media(max-width:1000px){.sales-grid{grid-template-columns:minmax(0,1fr) minmax(290px,.8fr)}}
+@media(max-width:760px){.sales-grid{grid-template-columns:minmax(0,1fr)}.sale-cart{position:static;order:-1}.product-picker,.sale-cart{padding:16px}.picker-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.picker-grid button{min-height:62px}.sale-total strong{font-size:25px}}
+@media(max-width:390px){.picker-grid{grid-template-columns:1fr}.page-head h2{font-size:21px}.content{padding-right:12px;padding-left:12px}}
+/* Student Portal stays its own experience, but shares MultiGym reds, neutrals and typography. */
+.student-app .student-section-heading h2,.student-app .student-card h2,.student-app .student-reference-shortcuts b{color:var(--mg-ink)}
+.student-app .student-reference-shortcut-icon,.student-app .student-module-icon{color:var(--mg-brand)}
+.student-app .student-reference-shortcut-icon.personal,.student-app .student-reference-shortcut-icon.nutrigym{background:var(--mg-brand-soft);color:var(--mg-brand)}
+.student-app .personal-chat-head,.student-app .nutri-chat-head{background:linear-gradient(110deg,#17191d,#29252a 78%,#46131d);color:#fff}
+.student-app .personal-bubble-row.user .personal-bubble{background:#fff0f2;border-color:#f0c4ca;color:#38383d}
+.student-app .personal-chat-suggestions button,.student-app .personal-chat .voice-suggestion{border-color:var(--mg-brand-border)!important;background:var(--mg-brand-soft)!important;color:var(--mg-brand)!important}
+.student-app .personal-chat .voice-mic,.student-app .personal-bubble .speak-message{border-color:var(--mg-brand-border);background:var(--mg-brand-soft);color:var(--mg-brand)}
+.student-app .personal-chat-cta,.student-app .personal-coach-below-chat{border-color:var(--mg-brand-border);background:#fffafb;box-shadow:var(--mg-shadow-sm)}
+.student-app .personal-chat-cta .student-primary,.student-app .personal-start-button,.student-app .personal-history-analyze{border-color:var(--mg-brand)!important;background:var(--mg-brand)!important;color:#fff!important;box-shadow:none!important}
+.student-app .personal-start-button:hover,.student-app .personal-history-analyze:hover{background:var(--mg-brand-hover)!important}
+.student-app .personal-chat-head>div:first-child:before{background:var(--mg-brand)!important}
+.student-app .nutri-water-actions button{background:#f1f1f3;color:#4e4e55}
+.student-app .nutri-blue,.student-app .nutri-eyebrow,.student-app .nutri-glass-label{color:var(--mg-brand)}
+.student-app .nutri-hydration-feature{border-color:#e5e5e9;background:#fff}
+/* Master: remove legacy blue surfaces; keep destructive, success and warning semantics distinct. */
+.master-sidebar{background:linear-gradient(180deg,#17191d 0%,#242126 64%,#3b1018 100%)}
+.master-sidebar nav button.active{color:var(--mg-brand);box-shadow:var(--mg-shadow-sm)}
+.master-overview{background:linear-gradient(130deg,#17191d,#27252a 76%,#43121b);box-shadow:var(--mg-shadow-md)}
+.master-kpis article,.master-mini-panel{background:#24262c;border-color:#3a3b42}
+.master-overview-heading p,.master-kpis article span,.master-kpis article small,.master-mini-title>span{color:#d0d0d5}
+.master-eyebrow,.master-mini-title h2 svg{color:#ef5065}
+.master-ticket-priority.p-normal,.master-ticket-status.s-in_progress{background:#f0f0f2;color:#55555d}
+.master-ticket-priority.p-high,.master-ticket-status.s-open{background:var(--mg-warning-soft);color:var(--mg-warning)}
+.master-ticket-priority.p-urgent{background:var(--mg-danger-soft);color:var(--mg-danger)}
+.master-ticket-status.s-resolved,.master-ticket-status.s-closed,.master-health-pill{background:var(--mg-success-soft);color:var(--mg-success);border-color:#d2eadb}
+.master-action:hover,.master-top-refresh:hover{border-color:var(--mg-brand);color:var(--mg-brand)}
+.master-plan-form button,.master-card>button{background:var(--mg-brand)}
+.master-health-row i,.master-health-pill i{background:var(--mg-success)}
+.master-health-pill.warn{background:var(--mg-warning-soft);border-color:#ecd9ae;color:var(--mg-warning)}
+/* Support: statuses use neutral/red/green rather than an unrelated blue brand. */
+.gym-ticket-badge.in_progress,.master-ticket-status.s-in_progress{background:#f0f0f2;color:#55555d}
+.gym-ticket-message.from-gym{background:var(--mg-brand-soft)}
+.gym-support-notice{background:var(--mg-success-soft);color:var(--mg-success)}
+.gym-ticket-unread,.gym-ticket-count{background:var(--mg-brand-soft);color:var(--mg-brand)}
+/* Billing and receipt surfaces use the same neutral and brand tokens. */
+.subscription-block{background:var(--mg-canvas);color:var(--mg-ink)}
+.subscription-plan button,.receipt-prompt-primary{background:var(--mg-brand)}
+.receipt-prompt-overlay{background:rgba(20,20,24,.56)}
+.receipt-prompt{border-color:var(--mg-line);border-radius:var(--mg-radius-lg);box-shadow:0 24px 70px rgba(20,20,24,.2);color:var(--mg-ink)}
+/* Small-screen POS keeps the purchase flow product-first, then checkout. */
+@media(max-width:760px){.sale-cart{order:initial!important}}
+/* Keep the public pre-enrollment experience inside the red/white/graphite identity. */
+.pre-public{background:linear-gradient(135deg,#f6f6f8,#ededf0);color:var(--mg-ink)}
+.pre-public-card{border-color:var(--mg-line);border-radius:var(--mg-radius-lg);box-shadow:var(--mg-shadow-md)}
+.pre-logo{background:var(--mg-brand)}
+.pre-eyebrow{color:var(--mg-brand)}
+.pre-form input,.pre-form select,.pre-form textarea{border-color:#d7d7dd;color:var(--mg-ink)}
+.pre-submit{background:var(--mg-brand)}
+.pre-link-card{background:#f7f7f8;border-color:var(--mg-line)}
+.pre-link-card small,.pre-link-card strong{color:var(--mg-ink-soft)}
+.pre-status.contacted{color:var(--mg-ink-soft);background:#f2f2f4}
+.pre-public .pre-success-icon{background:var(--mg-success-soft);color:var(--mg-success)}
+
+/* Preserve the Home-only fixed header; all other student views use their normal sticky header. */
+.student-app:not(.student-home-mode) .student-header{position:sticky!important;inset:auto!important;top:0!important;height:60px!important;min-height:60px!important;z-index:20!important;border-radius:0!important;background:#17191d!important;border-bottom:1px solid #343840!important;box-shadow:none!important;backdrop-filter:none!important}
+@media(min-width:761px){.student-app:not(.student-home-mode) .student-header{height:76px!important;min-height:76px!important}}
+
+:where(.settings-form input,.settings-form select,.settings-form textarea,.modal input,.modal select,.modal textarea){min-height:42px}
+:where(.settings-form textarea,.modal textarea){min-height:96px}
+@media(max-width:650px){.head-actions{flex-wrap:wrap}.head-actions .btn{min-width:min(100%,150px);min-height:44px}.form-grid{gap:12px}.modal{padding:17px;border-radius:12px}.modal-actions{flex-wrap:wrap}.modal-actions .btn{min-height:44px;flex:1 1 130px}}

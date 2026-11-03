@@ -10,6 +10,7 @@ import {SupportPortal} from './SupportPortal';
 import './styles.css';
 import './receipt-prompt.css';
 import './billing.css';
+import './design-system.css';
 
 type User={id:string;gym_id:string;name:string;email:string;role:string;gym_name:string;is_gym_owner?:boolean;totp_enabled?:boolean};
 
