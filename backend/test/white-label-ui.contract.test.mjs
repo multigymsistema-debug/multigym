@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+const main=fs.readFileSync(new URL('../../src/main.tsx',import.meta.url),'utf8');const student=fs.readFileSync(new URL('../../src/nutrigym.tsx',import.meta.url),'utf8');
+test('all MultiGym billing surfaces keep provider brand out of visible UI while retaining API integration',()=>{assert.doesNotMatch(main,/Asaas/);assert.ok(main.includes("post('/payments/asaas-checkout'"));assert.ok(main.includes("post('/saas/checkout'"));assert.ok(main.includes('Assinar plano mensal (cartão)'));assert.ok(main.includes('Continuar para pagamento seguro'));assert.ok(main.includes('Abrir página segura de pagamento'));});
+test('student payment sandbox notice explains demo without provider branding',()=>{assert.doesNotMatch(student,/Asaas/);assert.ok(student.includes('ambiente de demonstração'));});
