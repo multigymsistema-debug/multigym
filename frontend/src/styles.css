@@ -1104,3 +1104,16 @@
  .student-app .student-reference-motivation{min-height:55px}
  .student-app .student-reference-motivation>svg:nth-last-of-type(2){margin-left:auto}
 }
+
+/* Home mobile: top bar fixed alone; all page content continues scrolling below it. */
+.student-app .student-header{position:fixed!important;inset:0 0 auto!important;width:100%!important;height:60px!important;min-height:60px!important;z-index:100!important;border-radius:0!important;background:#17191d!important;border-bottom:1px solid #343840!important;box-shadow:none!important;backdrop-filter:none!important}
+.student-app .student-header:after{display:none!important}
+.student-app .student-reference-home{padding-top:60px!important}
+.student-app .student-reference-home .student-reference-hero{margin:0!important;background-image:url('/student-portal-hero.webp')!important;background-color:#111!important;background-size:cover!important;background-position:center!important;border-radius:0!important}
+.student-app .student-reference-home .student-reference-hero:after{display:none!important}
+.student-app .student-reference-home .student-reference-hero .student-welcome-copy{ text-shadow:0 1px 4px #0008 }
+.student-app .student-bottom-nav{background:#17191d!important;border-top:1px solid #343840!important;box-shadow:none!important;backdrop-filter:none!important}
+.student-app .student-reference-secondary,.student-app .student-reference-workout{display:none!important}
+.student-app .student-reference-motivation{display:none!important}
+@media(min-width:761px){.student-app .student-reference-home{padding-top:76px!important}.student-app .student-header{height:76px!important;min-height:76px!important}}
+@media(max-width:760px){.student-app .student-reference-home{padding-top:60px!important}.student-app .student-reference-home .student-reference-hero{min-height:300px!important;background-position:center!important}}
