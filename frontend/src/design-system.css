@@ -137,3 +137,29 @@ input:focus,select:focus,textarea:focus{border-color:var(--mg-brand);box-shadow:
 :where(.settings-form input,.settings-form select,.settings-form textarea,.modal input,.modal select,.modal textarea){min-height:42px}
 :where(.settings-form textarea,.modal textarea){min-height:96px}
 @media(max-width:650px){.head-actions{flex-wrap:wrap}.head-actions .btn{min-width:min(100%,150px);min-height:44px}.form-grid{gap:12px}.modal{padding:17px;border-radius:12px}.modal-actions{flex-wrap:wrap}.modal-actions .btn{min-height:44px;flex:1 1 130px}}
+
+/* Operations sidebar identity: black + MultiGym red with official white lockup. */
+.app-shell .sidebar{background:linear-gradient(180deg,#17191d 0%,#242126 64%,#420d17 100%)}
+.app-shell .sidebar nav button.active{background:#c8102e;color:#fff;box-shadow:0 8px 18px #26000435}
+.app-shell .sidebar .side-plan button{background:#c8102e}
+.app-shell .sidebar .sidebar-logo-white{width:184px;height:auto;object-fit:contain;object-position:left center;filter:none;background:transparent!important;border-radius:0!important;padding:0!important}
+.app-shell .sidebar .side-brand{padding-bottom:18px}
+.mg-human-overlay{position:fixed;inset:0;z-index:500;display:grid;place-items:center;padding:18px;background:rgba(9,9,12,.76);backdrop-filter:blur(4px)}
+.mg-human-card{width:min(480px,100%);padding:23px;border:1px solid #e5e5e9;border-top:4px solid #c8102e;border-radius:16px;background:#fff;color:#18181b;box-shadow:0 24px 70px #0006}
+.mg-human-head{display:flex;align-items:center;justify-content:space-between;color:#a50e26;font-size:10px;font-weight:850;letter-spacing:.1em}
+.mg-human-head button{width:34px;height:34px;border-radius:8px;background:#f3f3f5;font-size:22px;color:#39393f}
+.mg-human-card h2{margin:8px 0 5px;font-size:22px;line-height:1.2}
+.mg-human-card>p{margin:0 0 15px;color:#57575e;font-size:14px;line-height:1.45}
+.mg-human-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.mg-human-grid button{aspect-ratio:1;display:grid;place-items:center;border:1px solid #dedee4;border-radius:11px;background:#fafafb;color:#202026;font-size:32px;transition:border-color .15s,background .15s,box-shadow .15s}
+.mg-human-grid button:hover,.mg-human-grid button.selected{border-color:#c8102e;background:#fff0f2;box-shadow:inset 0 0 0 2px #c8102e;color:#a50e26}
+.mg-human-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:16px}
+.mg-human-secondary{min-height:42px;padding:0 14px;border:1px solid #dedee3;border-radius:9px;background:#fff;color:#35353b;font-weight:700}
+.mg-human-card>small{display:block;margin-top:14px;color:#73737b;font-size:10px;line-height:1.45}
+@media(max-width:480px){.mg-human-card{padding:17px}.mg-human-grid{gap:7px}.mg-human-grid button{font-size:28px}.mg-human-actions{flex-direction:column-reverse}.mg-human-actions>*{width:100%}.app-shell .sidebar .sidebar-logo-white{width:174px}}
+
+.sidebar .side-brand .sidebar-logo-white{display:block;width:184px;height:auto;max-height:54px;object-fit:contain;object-position:left center;background:transparent;border-radius:0;padding:0}
+@media(max-width:760px){.sidebar .side-brand .sidebar-logo-white{width:174px}}
+
+.mg-human-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.mg-human-grid button{position:relative}
