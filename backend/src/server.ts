@@ -102,7 +102,7 @@ const allowAi=async(gym:string,feature:string)=>Boolean(await one(`INSERT INTO a
 
 await app.register(cors,{origin:(origin,cb)=>cb(null,!origin||FRONTEND_ORIGINS.has(origin)||(/^https?:\/\/localhost(?::\d+)?$/.test(origin)&&process.env.NODE_ENV!=='production')), credentials:false});
 await app.register(helmet,{contentSecurityPolicy:false});
-await app.register(rateLimit,{max:120,timeWindow:'1 minute'});
+await app.register(rateLimit,{max:Math.max(120,Number(process.env.GLOBAL_RATE_LIMIT_MAX||120)),timeWindow:'1 minute'});
 await pool.query(`CREATE TABLE IF NOT EXISTS auth_visual_challenges(id_hash text PRIMARY KEY,answer text NOT NULL,correct_option_ids jsonb NOT NULL,expires_at timestamptz NOT NULL,verified_at timestamptz,attempts integer NOT NULL DEFAULT 0,failed_at timestamptz); ALTER TABLE auth_visual_challenges ADD COLUMN IF NOT EXISTS attempts integer NOT NULL DEFAULT 0; ALTER TABLE auth_visual_challenges ADD COLUMN IF NOT EXISTS failed_at timestamptz; CREATE TABLE IF NOT EXISTS auth_human_challenge_tokens(token_hash text PRIMARY KEY,challenge_id_hash text NOT NULL,expires_at timestamptz NOT NULL,used_at timestamptz);`);
 
 app.get('/health',async()=>({ok:true,service:'multigym-api',version:'2.0.0'}));
