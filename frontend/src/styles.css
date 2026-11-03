@@ -1078,3 +1078,4 @@
 }
 
 @media(max-width:760px){.student-app .student-bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.student-app .student-reference-workouts .student-page-banner{background-image:linear-gradient(0deg,rgba(12,13,16,.95),rgba(12,13,16,.42)),url('/student-portal-hero.webp')!important;background-size:cover!important;background-position:65% 43%!important}
