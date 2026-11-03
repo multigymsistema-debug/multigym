@@ -1153,3 +1153,11 @@
 /* Keep exercise-library row actions compact so long exercise names retain readable width. */
 .exercise-admin-row .link-btn{width:auto;margin:0;flex:0 0 auto}
 @media(max-width:520px){.exercise-admin-row .link-btn{margin-left:58px}}
+
+/* Compact exercise media placeholder: preserve its label and avoid clipping it in student workout rows. */
+.student-app .student-reference-exercise-thumb .exercise-media-empty{display:grid;grid-template-columns:20px minmax(0,1fr);align-items:center;gap:4px;min-height:0;height:100%;padding:4px;text-align:left;font-size:7px;line-height:1.2;overflow:hidden}
+.student-app .student-reference-exercise-thumb .exercise-media-empty>span{font-size:15px;line-height:1}
+.student-app .student-reference-exercise-thumb .exercise-media-empty>div{min-width:0}
+.student-app .student-reference-exercise-thumb .exercise-media-empty b{display:block;font-size:7px;white-space:normal}
+.student-app .student-reference-exercise-thumb .exercise-media-empty small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:6px;line-height:1.15;margin-top:2px}
+.student-app .student-reference-exercise-thumb .exercise-media-accessible{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
