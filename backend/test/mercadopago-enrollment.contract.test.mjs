@@ -4,10 +4,10 @@ import fs from 'node:fs';
 const server=fs.readFileSync(new URL('../src/server.ts',import.meta.url),'utf8');
 const migration=fs.readFileSync(new URL('../schema/026_mercadopago_enrollment_orders.sql',import.meta.url),'utf8');
 const ui=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),'utf8');
-test('New online enrollments use Asaas while legacy Mercado Pago Orders cannot be initiated',()=>{
+test('New online enrollments use MultiGym checkout while legacy Mercado Pago Orders cannot be initiated',()=>{
  assert.ok(server.includes("if(b.payment_provider==='mercadopago')return reply.code(400)"));
  assert.ok(server.includes("if(b.payment_provider==='asaas')"));
- assert.ok(server.includes("asaasCreateFlexiblePayment({gymId:g,student,paymentId,amount,description:\`MultiGym matrícula \${enrollmentId}\`})"));
+ assert.ok(server.includes("const checkout=await createCheckoutSession({gymId:g,kind:'payment',paymentId,amount,metadata:{purpose:'enrollment'}})"));
  assert.match(server,/status='pending'/);
  assert.ok(server.includes("if(!current)return reply.code(404).send({error:'Cobrança Pix não encontrada.'})"));
 });
