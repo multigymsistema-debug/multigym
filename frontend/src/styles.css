@@ -1079,3 +1079,28 @@
 
 @media(max-width:760px){.student-app .student-bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr))}}
 .student-app .student-reference-workouts .student-page-banner{background-image:linear-gradient(0deg,rgba(12,13,16,.95),rgba(12,13,16,.42)),url('/student-portal-hero.webp')!important;background-size:cover!important;background-position:65% 43%!important}
+.student-app .student-reference-home .student-reference-hero:after{width:24%!important;right:-5px!important;opacity:.92!important;clip-path:polygon(68% 0,100% 0,100% 100%,0 100%)!important;background:linear-gradient(130deg,transparent 41%,#c8102e 41%,#c8102e 57%,transparent 57%)!important}
+.student-app .student-reference-home .student-welcome-copy .student-primary{min-height:38px;padding:0 14px;font-size:11px}
+.student-app .student-reference-home .student-welcome-copy p{margin:13px 0 15px;font-size:13px}
+.student-app .student-reference-home .student-reference-progress{margin-top:-20px;padding:13px 15px 14px}
+.student-app .student-reference-progress h2{margin-bottom:10px;font-size:16px}
+.student-app .student-reference-activity-icon{width:82px;height:82px;border-width:7px}
+.student-app .student-reference-shortcuts button{min-height:64px;padding:8px 10px}
+.student-app .student-reference-motivation{min-height:61px;padding:9px 12px}
+.student-app .student-reference-motivation b{font-size:12px}
+.student-app .student-reference-trophy{font-size:23px}
+.student-app .student-reference-motivation>svg:nth-last-of-type(2){width:27px;height:27px}
+.student-app .student-reference-workouts .student-page-banner:after{clip-path:polygon(68% 0,100% 0,100% 100%,0 100%);background:linear-gradient(130deg,transparent 41%,#c8102e 41%,#c8102e 57%,transparent 57%)}
+.student-app .student-reference-workouts .student-page-banner h1:before{content:"";display:inline-block;width:20px;height:20px;margin-right:7px;vertical-align:-3px;background:url('/icon.svg') center/contain no-repeat}
+@media(max-width:760px){
+ .student-app .student-reference-home .student-reference-hero{min-height:302px;padding:30px 18px 47px}
+ .student-app .student-reference-home .student-welcome-copy .student-eyebrow{font-size:22px}
+ .student-app .student-reference-home .student-welcome-copy h1{font-size:18px}
+ .student-app .student-reference-progress{grid-template-columns:1fr auto;align-items:center}
+ .student-app .student-reference-progress h2{grid-column:1/-1}
+ .student-app .student-reference-progress-body{grid-column:1/-1}
+ .student-app .student-reference-activity-icon{width:74px;height:74px}
+ .student-app .student-reference-shortcuts{gap:7px}
+ .student-app .student-reference-motivation{min-height:55px}
+ .student-app .student-reference-motivation>svg:nth-last-of-type(2){margin-left:auto}
+}
