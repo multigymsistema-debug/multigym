@@ -141,7 +141,7 @@ document.querySelector('#studentCheckin')?.addEventListener('click', async () =>
 });
 document.querySelector('#studentLogout')?.addEventListener('click', async () => {
   try { await fetch(`${API}/student-api/logout`, { method:'POST', headers:{Authorization:`Bearer ${token()}`} }); } catch {}
-  sessionStorage.removeItem('multigym_student_token');sessionStorage.removeItem('multigym_offline_session');sessionStorage.removeItem('multigym_offline_logs'); localStorage.removeItem('multigym_student_token');localStorage.removeItem('multigym_offline_logs');
+  sessionStorage.removeItem('multigym_student_token');sessionStorage.removeItem('multigym_offline_session'); localStorage.removeItem('multigym_student_token');localStorage.removeItem('multigym_offline_logs');
   setAuthenticated(false);
 });
 document.addEventListener('click', event => {
