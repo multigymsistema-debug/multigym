@@ -1117,3 +1117,32 @@
 .student-app .student-reference-motivation{display:none!important}
 @media(min-width:761px){.student-app .student-reference-home{padding-top:76px!important}.student-app .student-header{height:76px!important;min-height:76px!important}}
 @media(max-width:760px){.student-app .student-reference-home{padding-top:60px!important}.student-app .student-reference-home .student-reference-hero{min-height:300px!important;background-position:center!important}}
+
+/* Requested student-portal refinements — current structure, visual-only except restored navigation. */
+.student-app.student-home-mode .student-header{background:linear-gradient(180deg,rgba(18,19,22,.82),rgba(18,19,22,.40) 78%,transparent)!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important}
+.student-app.student-home-mode .student-reference-home{padding-top:0!important}
+.student-app.student-home-mode .student-reference-home .student-reference-hero{min-height:290px!important;margin:0!important;padding:92px 22px 36px!important;border-radius:0 0 24px 24px!important;background-size:auto 265px!important;background-repeat:no-repeat!important;background-position:center top!important;background-color:#17191d!important;background-image:linear-gradient(180deg,rgba(16,17,20,.42),rgba(16,17,20,.18) 42%,#17191d 100%),url('/student-portal-hero.webp')!important}
+.student-app.student-home-mode .student-reference-home .student-reference-hero:after{display:none!important}
+.student-app.student-home-mode .student-reference-home .student-reference-progress{margin-top:-15px!important}
+.student-app .student-reference-workouts .student-page-banner{min-height:0!important;align-items:center!important;margin:0 12px 12px!important;padding:16px!important;border:1px solid #e5e5e9!important;border-radius:14px!important;background:#fff!important;box-shadow:none!important;color:#18181b!important}
+.student-app .student-reference-workouts .student-page-banner:after{display:none!important}
+.student-app .student-reference-workouts .student-page-banner-icon{width:42px!important;height:42px!important;display:grid!important;place-items:center!important;color:#c8102e!important;background:#fff0f2!important;border-radius:12px!important}
+.student-app .student-reference-workouts .student-page-banner>div{z-index:auto!important}
+.student-app .student-reference-workouts .student-page-banner .student-eyebrow{display:none!important}
+.student-app .student-reference-workouts .student-page-banner h1{margin:0 0 4px!important;color:#18181b!important;font-size:20px!important}
+.student-app .student-reference-workouts .student-page-banner p{margin:0!important;color:#65656c!important;font-size:12px!important}
+.student-app .student-reference-workouts .student-page-banner h1:before{display:none!important}
+.student-app .student-workout-list{margin:0 12px}
+.student-app .student-reference-home .student-reference-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}
+.student-app .student-assessment-list{display:grid;gap:12px}
+.student-app .student-assessment-card{padding:18px}
+.student-app .student-assessment-date{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid #ececf1}
+.student-app .student-assessment-date span{color:#c8102e;font-size:10px;font-weight:800;letter-spacing:.08em}
+.student-app .student-assessment-date strong{font-size:13px}
+.student-app .student-assessment-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;padding-top:14px}
+.student-app .student-assessment-metrics>div{display:grid;gap:4px;padding:10px;border-radius:10px;background:#f7f7f9}
+.student-app .student-assessment-metrics small{color:#73737b;font-size:11px}
+.student-app .student-assessment-metrics strong{color:#18181b;font-size:14px}
+.student-app .personal-analysis-action{display:flex;justify-content:flex-end;padding:14px;margin:12px 0}
+.student-app .personal-analysis-action .personal-history-analyze{min-height:46px}
+@media(max-width:760px){.student-app.student-home-mode .student-reference-home .student-reference-hero{min-height:280px!important;padding:82px 18px 34px!important;background-size:auto 250px!important;background-position:center top!important}.student-app .student-reference-workouts .student-page-banner{margin:0 10px 10px!important;padding:14px!important}.student-app .student-workout-list{margin:0 10px}.student-app .student-reference-workouts .student-page-banner h1{font-size:18px!important}.student-app .student-reference-workouts .student-page-banner p{font-size:11px!important}.student-app .personal-analysis-action{justify-content:stretch}.student-app .personal-analysis-action .personal-history-analyze{width:100%}}
