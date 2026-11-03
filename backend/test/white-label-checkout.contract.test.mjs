@@ -1,4 +1,25 @@
-import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
-const server=fs.readFileSync(new URL('../src/server.ts',import.meta.url),'utf8');const main=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),'utf8');const ui=fs.readFileSync(new URL('../../frontend/src/nutrigym.tsx',import.meta.url),'utf8');const schema=fs.readFileSync(new URL('../schema/042_multigym_checkout_sessions.sql',import.meta.url),'utf8');
-test('public MultiGym checkout uses random hashed expiring sessions and returns only minimal payment data',()=>{assert.ok(server.includes('hashToken(token)'));assert.ok(server.includes('expires_at>now()'));assert.ok(server.includes("app.get('/api/checkout/:token'"));assert.ok(server.includes("app.post('/api/checkout/:token/pay'"));assert.ok(schema.includes('token_hash text PRIMARY KEY'));assert.ok(schema.includes('expires_at timestamptz NOT NULL'));assert.ok(server.includes('UPDATE multigym_checkout_sessions SET status='submitted''));});
-test('all hosted payment entry points route to the branded MultiGym checkout page',()=>{assert.ok(main.includes('MultiGymCheckout'));assert.ok(main.includes('pagamento='));assert.ok(main.includes('checkout_url'));assert.ok(main.includes('Abrir checkout MultiGym'));assert.doesNotMatch(main,/Asaas/);assert.doesNotMatch(ui,/Asaas/);});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const server=fs.readFileSync(new URL('../src/server.ts',import.meta.url),'utf8');
+const main=fs.readFileSync(new URL('../../frontend/src/main.tsx',import.meta.url),'utf8');
+const ui=fs.readFileSync(new URL('../../frontend/src/nutrigym.tsx',import.meta.url),'utf8');
+const schema=fs.readFileSync(new URL('../schema/042_multigym_checkout_sessions.sql',import.meta.url),'utf8');
+test('public MultiGym checkout uses random hashed expiring sessions and returns minimal payment data',()=>{
+ assert.ok(server.includes('hashToken(token)'));
+ assert.ok(server.includes('expires_at>now()'));
+ assert.ok(server.includes("app.get('/api/checkout/:token'"));
+ assert.ok(server.includes("app.post('/api/checkout/:token/pay'"));
+ assert.ok(schema.includes('token_hash text PRIMARY KEY'));
+ assert.ok(schema.includes('expires_at timestamptz NOT NULL'));
+ assert.ok(server.includes("UPDATE multigym_checkout_sessions SET status='submitted'"));
+});
+test('hosted payment flows enter the branded MultiGym checkout and keep provider names off customer screens',()=>{
+ assert.ok(main.includes('MultiGymCheckout'));
+ assert.ok(main.includes("params.has('pagamento')"));
+ assert.ok(main.includes('checkout_url'));
+ assert.ok(main.includes('Pagar em ambiente MultiGym'));
+ assert.ok(main.includes('Abrir checkout MultiGym'));
+ assert.doesNotMatch(main,/Asaas/);
+ assert.doesNotMatch(ui,/Asaas/);
+});
