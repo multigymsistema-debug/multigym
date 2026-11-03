@@ -419,7 +419,7 @@
 .student-app .student-page-banner:after{content:"";position:absolute;right:-6px;top:0;width:145px;height:100%;background:linear-gradient(130deg,transparent 42%,#c8102e 42%,#c8102e 54%,transparent 54%);opacity:.92;pointer-events:none}
 .student-app .student-page-banner-icon{width:52px;height:52px;display:grid;place-items:center;flex:none;border:1px solid #6d2935;border-radius:16px;background:#321820;color:#fa3854}
 .student-app .student-page-banner>div{position:relative;z-index:1}.student-app .student-page-banner .student-eyebrow{color:#ff788b;font-size:9px}.student-app .student-page-banner h1{margin:4px 0;color:#fff;font-size:25px;letter-spacing:-.035em}.student-app .student-page-banner p{margin:0;color:#c7cbd2;font-size:12px}
-.student-app .student-fitness-hero{background-image:linear-gradient(90deg,rgba(17,19,22,.97) 0%,rgba(17,19,22,.93) 40%,rgba(17,19,22,.58) 72%,rgba(17,19,22,.18) 100%),url('/vendas/assets/academia-campanha.webp');background-size:cover;background-position:center 39%}
+.student-app .student-fitness-hero{background-image:linear-gradient(90deg,rgba(17,19,22,.97) 0%,rgba(17,19,22,.93) 40%,rgba(17,19,22,.58) 72%,rgba(17,19,22,.18) 100%),url('/student-portal-hero.webp');background-size:cover;background-position:center 39%}
 .student-app .student-welcome-hero:after{right:0;width:24%;opacity:.9}.student-app .student-welcome-mark{display:none}
 .student-app .student-welcome-facts{right:28px;bottom:15px;border:1px solid rgba(255,255,255,.18);border-radius:14px}
 .student-app .student-section-heading h2{color:#17191d}
@@ -457,7 +457,7 @@
 
 /* Final visual refinement against the user's reference: reduce competing boxes, increase glanceable hierarchy. */
 .student-app .student-logo img{width:145px;max-height:42px;object-fit:contain}
-.student-app .student-page-banner{background-image:linear-gradient(100deg,rgba(18,20,24,.98) 0%,rgba(27,29,34,.94) 68%,rgba(37,22,27,.86) 100%),url('/vendas/assets/academia-campanha.webp');background-size:cover;background-position:right 40%;border:0;border-radius:17px;box-shadow:0 8px 20px rgba(16,18,22,.13)}
+.student-app .student-page-banner{background-image:linear-gradient(100deg,rgba(18,20,24,.98) 0%,rgba(27,29,34,.94) 68%,rgba(37,22,27,.86) 100%),url('/student-portal-hero.webp');background-size:cover;background-position:right 40%;border:0;border-radius:17px;box-shadow:0 8px 20px rgba(16,18,22,.13)}
 .student-app .student-page-banner:after{width:115px;opacity:.75}
 .student-app .student-page-banner-icon{background:transparent;border:0;border-radius:10px;color:#ef233c}
 .student-app .student-page-banner.personal{background-image:linear-gradient(100deg,rgba(18,20,24,.98) 0%,rgba(27,29,34,.94) 68%,rgba(37,22,27,.86) 100%),url('/vendas/assets/treino-execucao.webp')}
@@ -549,7 +549,7 @@
 }
 /* Final aesthetic calibration: compact hierarchy inspired by supplied six-screen reference. */
 .student-app .student-logo img{width:145px;max-height:42px;object-fit:contain}
-.student-app .student-page-banner{background-image:linear-gradient(100deg,rgba(18,20,24,.98) 0%,rgba(27,29,34,.94) 68%,rgba(37,22,27,.86) 100%),url('/vendas/assets/academia-campanha.webp');background-size:cover;background-position:right 40%;border:0;border-radius:17px;box-shadow:0 8px 20px rgba(16,18,22,.13)}
+.student-app .student-page-banner{background-image:linear-gradient(100deg,rgba(18,20,24,.98) 0%,rgba(27,29,34,.94) 68%,rgba(37,22,27,.86) 100%),url('/student-portal-hero.webp');background-size:cover;background-position:right 40%;border:0;border-radius:17px;box-shadow:0 8px 20px rgba(16,18,22,.13)}
 .student-app .student-page-banner:after{width:115px;opacity:.75}
 .student-app .student-page-banner-icon{background:transparent;border:0;border-radius:10px;color:#ef233c}
 .student-app .student-page-banner.personal{background-image:linear-gradient(100deg,rgba(18,20,24,.98) 0%,rgba(27,29,34,.94) 68%,rgba(37,22,27,.86) 100%),url('/vendas/assets/treino-execucao.webp')}
@@ -983,7 +983,7 @@
 
 /* Portal aluno — composição mobile baseada diretamente nas referências enviadas. */
 .student-app .student-reference-home{max-width:760px;padding:0 0 28px;background:#f5f5f9}
-.student-app .student-reference-home .student-reference-hero{min-height:340px;margin:0 -14px 0;padding:44px 24px 62px;border-radius:0 0 25px 25px;background-image:linear-gradient(90deg,rgba(12,13,16,.97) 0%,rgba(12,13,16,.82) 54%,rgba(12,13,16,.2) 100%),url('/vendas/assets/academia-campanha.webp');background-size:cover;background-position:66% center;box-shadow:none}
+.student-app .student-reference-home .student-reference-hero{min-height:340px;margin:0 -14px 0;padding:44px 24px 62px;border-radius:0 0 25px 25px;background-image:linear-gradient(90deg,rgba(12,13,16,.97) 0%,rgba(12,13,16,.82) 54%,rgba(12,13,16,.2) 100%),url('/student-portal-hero.webp');background-size:cover;background-position:66% center;box-shadow:none}
 .student-app .student-reference-home .student-reference-hero:after{right:-18px;width:36%;opacity:.92}
 .student-app .student-reference-home .student-welcome-copy{position:relative;z-index:2;align-self:center}
 .student-app .student-reference-home .student-welcome-copy .student-eyebrow{color:#fff;font-size:25px;font-style:italic;text-transform:none;letter-spacing:-.03em}
@@ -1030,7 +1030,7 @@
 .student-app .student-reference-home .student-announcements{padding:15px;border-radius:16px;box-shadow:none}
 .student-app .student-reference-workout .student-primary{width:100%;min-height:44px;margin-top:10px;border-radius:999px;background:linear-gradient(100deg,#ef102b,#c90021);box-shadow:0 4px 11px #be001f30}
 .student-app .student-reference-workouts{max-width:760px;padding:0 0 30px;background:#f5f5f9}
-.student-app .student-reference-workouts .student-page-banner{min-height:190px;align-items:flex-end;margin:-1px -14px 0;padding:22px 18px;border:0;border-radius:0;background-image:linear-gradient(0deg,rgba(12,13,16,.95),rgba(12,13,16,.42)),url('/vendas/assets/academia-campanha.webp');background-size:cover;background-position:65% 43%;box-shadow:none}
+.student-app .student-reference-workouts .student-page-banner{min-height:190px;align-items:flex-end;margin:-1px -14px 0;padding:22px 18px;border:0;border-radius:0;background-image:linear-gradient(0deg,rgba(12,13,16,.95),rgba(12,13,16,.42)),url('/student-portal-hero.webp');background-size:cover;background-position:65% 43%;box-shadow:none}
 .student-app .student-reference-workouts .student-page-banner:after{right:-15px;width:29%;height:58%;top:auto;bottom:0}
 .student-app .student-reference-workouts .student-page-banner-icon{width:44px;height:44px;border:0;background:transparent;color:#e5092a}
 .student-app .student-reference-workouts .student-page-banner>div{z-index:1}
