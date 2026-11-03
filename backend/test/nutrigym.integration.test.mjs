@@ -1,3 +1,4 @@
+import {registerGym} from './helpers/humanChallenge.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
@@ -9,8 +10,8 @@ let adminA,adminB,studentA,studentB,tokenA,tokenB,mealA;
 
 test('unauthenticated NutriGym requests are rejected',async()=>{const r=await json('/student-api/nutrigym');assert.equal(r.status,401)});
 test('profiles, meals and tenant/student isolation work end to end',async()=>{
-  const a=await json('/api/auth/register',{method:'POST',body:JSON.stringify({gymName:`gym-a-${unique}`,name:'Admin A',email:`admin-a-${unique}@test.local`,password:'Testing@123'})});
-  const b=await json('/api/auth/register',{method:'POST',body:JSON.stringify({gymName:`gym-b-${unique}`,name:'Admin B',email:`admin-b-${unique}@test.local`,password:'Testing@123'})});
+  const a=await registerGym(base,{gymName:`gym-a-${unique}`,name:'Admin A',email:`admin-a-${unique}@test.local`,password:'Testing@123'});
+  const b=await registerGym(base,{gymName:`gym-b-${unique}`,name:'Admin B',email:`admin-b-${unique}@test.local`,password:'Testing@123'});
   assert.equal(a.status,200);assert.equal(b.status,200);adminA=a.data;adminB=b.data;
   const sa=await json('/api/students',{method:'POST',headers:auth(adminA.token),body:JSON.stringify({full_name:'Aluno A',email:`student-a-${unique}@test.local`})});
   const sb=await json('/api/students',{method:'POST',headers:auth(adminB.token),body:JSON.stringify({full_name:'Aluno B',email:`student-b-${unique}@test.local`})});

@@ -1,3 +1,4 @@
+import {registerGym} from './helpers/humanChallenge.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 const base=process.env.TEST_API_URL||'http://127.0.0.1:3000';
@@ -7,8 +8,8 @@ const unique=`memory-${Date.now()}`;
 
 test('memory CRUD, recency, agent/tenant isolation and conversational use; knowledge search returns sources by agent',async()=>{
  const [a,b]=await Promise.all([
-  json('/api/auth/register',{method:'POST',body:JSON.stringify({gymName:`${unique}-a`,name:'Memory Admin A',email:`${unique}-a@test.local`,password:'Testing@123'})}),
-  json('/api/auth/register',{method:'POST',body:JSON.stringify({gymName:`${unique}-b`,name:'Memory Admin B',email:`${unique}-b@test.local`,password:'Testing@123'})})
+  registerGym(base,{gymName:`${unique}-a`,name:'Memory Admin A',email:`${unique}-a@test.local`,password:'Testing@123'}),
+  registerGym(base,{gymName:`${unique}-b`,name:'Memory Admin B',email:`${unique}-b@test.local`,password:'Testing@123'})
  ]);assert.equal(a.status,200);assert.equal(b.status,200);
  const [sa,sb]=await Promise.all([
   json('/api/students',{method:'POST',headers:auth(a.data.token),body:JSON.stringify({full_name:'Memory Student A',email:`${unique}-sa@test.local`})}),
@@ -38,7 +39,7 @@ test('memory CRUD, recency, agent/tenant isolation and conversational use; knowl
 });
 
 test('questions do not auto-log meals or replace the active workout',async()=>{
- const r=await json('/api/auth/register',{method:'POST',body:JSON.stringify({gymName:`${unique}-guard`,name:'Guard Admin',email:`${unique}-guard@test.local`,password:'Testing@123'})});assert.equal(r.status,200);
+ const r=await registerGym(base,{gymName:`${unique}-guard`,name:'Guard Admin',email:`${unique}-guard@test.local`,password:'Testing@123'});assert.equal(r.status,200);
  const st=await json('/api/students',{method:'POST',headers:auth(r.data.token),body:JSON.stringify({full_name:'Guard Student',email:`${unique}-guard-student@test.local`})});assert.equal(st.status,201);
  assert.equal((await json(`/api/students/${st.data.id}/portal-access`,{method:'POST',headers:auth(r.data.token),body:JSON.stringify({email:`${unique}-guard-student@test.local`,password:'Student@123'})})).status,204);
  const login=await json('/student-auth/login',{method:'POST',body:JSON.stringify({gymSlug:`${unique}-guard`,email:`${unique}-guard-student@test.local`,password:'Student@123'})});assert.equal(login.status,200);const h=auth(login.data.token);
