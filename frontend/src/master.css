@@ -19,3 +19,12 @@
 
 /* Master profile: improve status separation and bring actions into the existing visual hierarchy. */
 .master-security-status{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 18px;margin:20px 0;border:1px solid #e4e7ea;border-radius:12px;background:#f7f8f9}.master-security-status>strong{margin-right:12px}.master-security-status>span{display:inline-flex;align-items:center;justify-content:center;min-width:92px;padding:6px 12px;border-radius:999px;background:#fff1f1;color:#922334;font-weight:750}.master-security-status>span.enabled{background:#eaf7ef;color:#17633a}.master-profile-form{display:grid;gap:14px}.master-profile-form button:not(.master-action){display:inline-flex;align-items:center;justify-content:center;width:fit-content;min-height:44px;border:0;border-radius:9px;background:#b51e30;color:#fff;padding:11px 18px;font:inherit;font-weight:750;cursor:pointer}.master-profile-form button:not(.master-action):hover{background:#96182a}.master-profile-form button:disabled{opacity:.6;cursor:not-allowed}
+
+/* Keep SaaS plan editor items in readable full-width rows instead of squeezing controls into chips. */
+.master-plan-list{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:18px}
+.master-plan-row{display:grid;grid-template-columns:minmax(220px,1.5fr) minmax(190px,1fr) auto;align-items:center;gap:10px;padding:14px;border:1px solid #e5e8ed;border-radius:12px;background:#fff}
+.master-plan-row>span{min-width:0;line-height:1.5;overflow-wrap:anywhere;background:transparent;padding:0}
+.master-plan-row select{width:100%;min-width:0;padding:10px;border:1px solid #d8dce4;border-radius:8px;background:#fff}
+.master-plan-row small{grid-column:1/-1;color:#697586}
+.master-plan-row .master-action{white-space:nowrap}
+@media(max-width:760px){.master-plan-row{grid-template-columns:minmax(0,1fr)}.master-plan-row small{grid-column:auto}.master-plan-row .master-action{width:100%}}
