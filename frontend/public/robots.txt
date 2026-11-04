@@ -1,5 +1,4 @@
 User-agent: *
-Allow: /vendas/
+Allow: /
 Disallow: /api/
-Disallow: /assets/
 Sitemap: https://multigym.com.br/sitemap.xml
